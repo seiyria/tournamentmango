@@ -1,0 +1,24 @@
+{
+  "extends": "kellyirc",
+  "parser": "babel-eslint",
+  "env": {
+    "node": true,
+    "es6": true,
+    "browser": true
+  },
+  "globals": {
+    "describe": true,
+    "beforeEach": true,
+    "it": true
+  },
+  "rules": {
+    "no-var": 2,
+    "prefer-const": 2,
+    "no-extra-parens": 0,
+    "no-sparse-arrays": 0,
+    "indent": [2, 2],
+    "no-undef": 2,
+    "no-unused-vars": [2, {"vars": "all", "args": "after-used"}],
+    "brace-style": [2, "1tbs", { "allowSingleLine": true }]
+  }
+}

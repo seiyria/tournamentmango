@@ -1,0 +1,4 @@
+# OpenChallenge [![Code Climate](https://codeclimate.com/github/seiyria/openchallenge/badges/gpa.svg)](https://codeclimate.com/github/seiyria/openchallenge) [![Dependency Status](https://gemnasium.com/seiyria/openchallenge.svg)](https://gemnasium.com/seiyria/openchallenge) [![bitHound Score](https://www.bithound.io/github/seiyria/openchallenge/badges/score.svg)](https://www.bithound.io/github/seiyria/openchallenge) [![Build Status](https://travis-ci.org/seiyria/openchallenge.svg)](https://travis-ci.org/seiyria/openchallenge) [![Codacy Badge](https://www.codacy.com/project/badge/895044758aa34b70a6f4c5c3436e6a8c)](https://www.codacy.com/app/seiyria/openchallenge)
+
+# TODO
+everything
