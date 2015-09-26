@@ -31,7 +31,8 @@ var ngAnnotate = require('gulp-ng-annotate');
 var uncss = require('gulp-uncss');
 var eslint = require('gulp-eslint');
 var autoprefixer = require('gulp-autoprefixer');
-var changed = require('gulp-changed');
+var cached = require('gulp-cached');
+var remember = require('gulp-remember');
 var mocha = require('gulp-mocha');
 
 var watching = false;
@@ -67,11 +68,12 @@ gulp.task('build:libcss', ['clean', 'compile:jade', 'compile:sass'], function() 
   var paths = getPaths();
 
   return gulp.src(paths.libcss)
-    .pipe(changed(paths.dist))
+    .pipe(cached('libcss'))
+    .pipe(remember('libcss'))
     .pipe(concat('lib.min.css'))
-    .pipe(uncss({
+    /*.pipe(uncss({
       html: paths.dist + 'index.html'
-    }))
+    }))*/
     .pipe(minifyCss({
       keepSpecialComments: false,
       removeEmpty: true
@@ -84,7 +86,8 @@ gulp.task('build:libjs', ['clean'], function() {
   var paths = getPaths();
 
   return gulp.src(paths.libjs)
-    .pipe(changed(paths.dist))
+    .pipe(cached('libjs'))
+    .pipe(remember('libjs'))
     .pipe(gulpif(!watching, uglify({ outSourceMaps: false })))
     .pipe(concat('lib.min.js'))
     .pipe(gulp.dest(paths.dist + 'js'))
@@ -127,7 +130,6 @@ gulp.task('eslint', function() {
   var paths = getPaths();
 
   return gulp.src(paths.js)
-    .pipe(changed(paths.dist))
     .pipe(eslint({ useEslintrc: true }))
     .pipe(eslint.format())
     .pipe(eslint.failOnError());
@@ -140,9 +142,9 @@ gulp.task('compile:sass', ['clean', 'compile:jade'], function() {
     .pipe(sourcemaps.init())
     .pipe(sass().on('error', sass.logError))
     .pipe(concat('css/main.css'))
-    .pipe(uncss({
+    /*.pipe(uncss({
       html: paths.dist + 'index.html'
-    }))
+    }))*/
     .pipe(autoprefixer({
       browsers: ['last 2 versions'],
       cascade: false

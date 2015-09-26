@@ -1,10 +1,21 @@
-doctype html
-html
-   head
-      title openchallenge
-      link(rel="stylesheet", href="css/lib.min.css")
-      link(rel="stylesheet", href="css/main.min.css")
 
-   body
-      script(src="js/lib.min.js")
-      script(src="js/main.min.js")
+html(ng-app='openchallenge', ng-controller="rootController")
+  head
+    title OpenChallenge
+    link(rel="stylesheet", href="css/lib.min.css")
+    link(rel="stylesheet", href="css/main.min.css")
+
+  body(layout="column")
+
+    md-toolbar(layout="row", ng-controller="navController")
+      .md-toolbar-tools
+        md-button(hide-gt-sm, ng-if="userStatus.loggedIn()", ng-click="toggleList()", aria-label="Toggle Menu")
+          ng-md-icon(icon="menu")
+        h1 OpenChallenge
+
+    div(layout="row", flex)
+      md-sidenav.md-sidenav-left.md-whiteframe-z2(layout="column", ng-if="userStatus.loggedIn()", md-is-locked-open="$mdMedia('gt-sm')", md-component-id="left", ui-view="sidebar")
+      div(layout="column", flex)
+        md-content(layout="column", layout-padding, flex, ui-view="content")
+
+    script(src='js/main.min.js')

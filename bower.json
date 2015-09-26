@@ -4,7 +4,5 @@
   "authors": [
     "Kyle Kemp <kyle@seiyria.com>"
   ],
-  "dependencies": {
-    "angular": "~1.4.3"
-  }
+  "dependencies": {}
 }
