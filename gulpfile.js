@@ -68,8 +68,8 @@ gulp.task('build:libcss', ['clean', 'compile:jade', 'compile:sass'], function() 
   var paths = getPaths();
 
   return gulp.src(paths.libcss)
-    .pipe(cached('libcss'))
-    .pipe(remember('libcss'))
+    //.pipe(cached('libcss'))
+    //.pipe(remember('libcss'))
     .pipe(concat('lib.min.css'))
     /*.pipe(uncss({
       html: paths.dist + 'index.html'
@@ -86,8 +86,8 @@ gulp.task('build:libjs', ['clean'], function() {
   var paths = getPaths();
 
   return gulp.src(paths.libjs)
-    .pipe(cached('libjs'))
-    .pipe(remember('libjs'))
+    //.pipe(cached('libjs'))
+    //.pipe(remember('libjs'))
     .pipe(gulpif(!watching, uglify({ outSourceMaps: false })))
     .pipe(concat('lib.min.js'))
     .pipe(gulp.dest(paths.dist + 'js'))

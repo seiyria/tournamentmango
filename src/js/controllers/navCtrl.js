@@ -1,9 +1,11 @@
 import site from '../app';
 
-site.controller('navController', ($scope, $mdSidenav, $state, UserStatus, WrappedFirebase, $firebaseAuth) => {
+site.controller('navController', ($scope, $mdSidenav, $state, UserStatus, WrappedFirebase, $firebaseAuth, SidebarManagement) => {
   $scope.toggleList = () => {
     $mdSidenav('left').toggle();
   };
+
+  $scope.sidebar = SidebarManagement;
 
   $scope.logins = [
     {

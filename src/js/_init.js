@@ -1,10 +1,3 @@
-import 'angular';
-import 'angular-ui-router';
-import 'angular-material';
-import 'angular-material-icons';
-import 'angular-material-data-table';
-import 'ngstorage';
-import 'angularfire';
 
 import './services/wrappedFirebase';
 import './services/userStatus';

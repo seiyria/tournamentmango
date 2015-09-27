@@ -1,7 +1,7 @@
 
 script(type="text/ng-template", id="navbar")
   .md-toolbar-tools
-    md-button(hide-gt-sm, ng-if="userStatus.loggedIn", ng-click="toggleList()", aria-label="Toggle Menu")
+    md-button(hide-gt-sm, ng-if="sidebar.hasSidebar", ng-click="toggleList()", aria-label="Toggle Menu")
       ng-md-icon(icon="menu")
     h1
       a(ui-sref="home") OpenChallenge
@@ -18,7 +18,7 @@ script(type="text/ng-template", id="navbar")
       md-menu-content
         md-menu-item
           md-button(ui-sref="userManage")
-            ng-md-icon(icon="assignment", size="24")
+            ng-md-icon(icon="group", size="24")
             span &nbsp;User Panel
         md-menu-item
           md-button(ng-click="doLogout()")
