@@ -2,6 +2,7 @@ import site from '../app';
 
 site.service('UserStatus', () => {
   return {
-    loggedIn: () => false
+    loggedIn: false,
+    displayName: ''
   };
 });

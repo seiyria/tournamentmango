@@ -1,6 +1,7 @@
 import site from '../app';
 
-site.controller('homeController', ($scope) => {
+site.controller('homeController', ($scope, SidebarManagement) => {
+  SidebarManagement.hasSidebar = false;
 
   $scope.blocks = [
     {

@@ -87,6 +87,8 @@
     "angular-material-icons": "^0.6.0",
     "angular-ui-router": "^0.2.15",
     "angularfire": "^1.1.2",
-    "lodash": "^3.10.1"
+    "firebase": "^2.3.0",
+    "lodash": "^3.10.1",
+    "ngstorage": "^0.3.9"
   }
 }

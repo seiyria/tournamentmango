@@ -1,0 +1,26 @@
+
+script(type="text/ng-template", id="navbar")
+  .md-toolbar-tools
+    md-button(hide-gt-sm, ng-if="userStatus.loggedIn", ng-click="toggleList()", aria-label="Toggle Menu")
+      ng-md-icon(icon="menu")
+    h1
+      a(ui-sref="home") OpenChallenge
+    span(flex)
+    md-menu(ng-if="!userStatus.loggedIn")
+      md-button.md-raised.md-hue-1(ng-click="$mdOpenMenu($event)") Login
+      md-menu-content
+        md-menu-item(ng-repeat="login in logins")
+          md-button(ng-click="doLogin(login.name)")
+            ng-md-icon(icon="{{login.icon}}", size="24")
+            span &nbsp;Login with {{login.name}}
+    md-menu(ng-if="userStatus.loggedIn")
+      md-button.md-raised.md-hue-1(ng-click="$mdOpenMenu($event)") {{userStatus.displayName}}
+      md-menu-content
+        md-menu-item
+          md-button(ui-sref="tournaments")
+            ng-md-icon(icon="assignment", size="24")
+            span &nbsp;Tournaments
+        md-menu-item
+          md-button(ng-click="doLogout()")
+            ng-md-icon(icon="logout", size="24")
+            span &nbsp;Logout

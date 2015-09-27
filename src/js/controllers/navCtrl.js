@@ -1,6 +1,6 @@
 import site from '../app';
 
-site.controller('navController', ($scope, $mdSidenav) => {
+site.controller('navController', ($scope, $mdSidenav, $state, UserStatus, WrappedFirebase, $firebaseAuth) => {
   $scope.toggleList = () => {
     $mdSidenav('left').toggle();
   };
@@ -15,12 +15,36 @@ site.controller('navController', ($scope, $mdSidenav) => {
       icon: 'twitter'
     },
     {
-      name: 'Google+',
+      name: 'Google',
       icon: 'google-plus'
     }
   ];
 
+  const auth = $firebaseAuth(WrappedFirebase);
+
+  const handleAuth = (authData) => {
+    const provider = authData.auth.provider;
+    UserStatus.displayName = authData[provider].displayName;
+    UserStatus.loggedIn = true;
+  };
+
+  const attemptAuth = auth.$getAuth();
+  if(attemptAuth) handleAuth(attemptAuth);
+
   $scope.doLogin = (service) => {
-    console.log(service);
+    auth.$authWithOAuthPopup(service.toLowerCase())
+    .then((authData) => {
+      handleAuth(authData);
+      $state.go('tournaments');
+    })
+    .catch((error) => {
+      console.error('Authentication failed', error);
+    });
+  };
+
+  $scope.doLogout = () => {
+    auth.$unauth();
+    UserStatus.loggedIn = false;
+    $state.go('home');
   };
 });

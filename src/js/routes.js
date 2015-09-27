@@ -8,7 +8,13 @@ site.config(($stateProvider, $urlRouterProvider) => {
     .state('home', {
       url: '/',
       views: {
-        'content@': { templateUrl: '/home', controller: 'homeController' },
+        'content@': { templateUrl: '/home', controller: 'homeController' }
+      }
+    })
+    .state('tournaments', {
+      url: '/tournaments',
+      views: {
+        'content@': { templateUrl: '/tournaments', controller: 'tournamentController' },
         'sidebar@': { templateUrl: '/sidebar' }
       }
     });
