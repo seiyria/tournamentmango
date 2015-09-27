@@ -9,7 +9,8 @@
   "globals": {
     "describe": true,
     "beforeEach": true,
-    "it": true
+    "it": true,
+    "angular": true
   },
   "rules": {
     "no-var": 2,
