@@ -35,7 +35,7 @@ site.controller('navController', ($scope, $mdSidenav, $state, UserStatus, Wrappe
     auth.$authWithOAuthPopup(service.toLowerCase())
     .then((authData) => {
       handleAuth(authData);
-      $state.go('tournaments');
+      $state.go('userManage');
     })
     .catch((error) => {
       console.error('Authentication failed', error);

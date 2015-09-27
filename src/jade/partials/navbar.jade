@@ -17,9 +17,9 @@ script(type="text/ng-template", id="navbar")
       md-button.md-raised.md-hue-1(ng-click="$mdOpenMenu($event)") {{userStatus.displayName}}
       md-menu-content
         md-menu-item
-          md-button(ui-sref="tournaments")
+          md-button(ui-sref="userManage")
             ng-md-icon(icon="assignment", size="24")
-            span &nbsp;Tournaments
+            span &nbsp;User Panel
         md-menu-item
           md-button(ng-click="doLogout()")
             ng-md-icon(icon="logout", size="24")
