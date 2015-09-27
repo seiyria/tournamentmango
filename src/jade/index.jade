@@ -5,13 +5,21 @@ html(ng-app='openchallenge', ng-controller="rootController")
     link(rel="stylesheet", href="css/lib.min.css")
     link(rel="stylesheet", href="css/main.min.css")
 
-  body(layout="column")
+  body(layout="column", ng-cloak)
 
     md-toolbar(layout="row", ng-controller="navController")
       .md-toolbar-tools
         md-button(hide-gt-sm, ng-if="userStatus.loggedIn()", ng-click="toggleList()", aria-label="Toggle Menu")
           ng-md-icon(icon="menu")
         h1 OpenChallenge
+        span(flex)
+        md-menu
+          md-button.md-raised.md-hue-1(ng-click="$mdOpenMenu($event)") Login
+          md-menu-content
+            md-menu-item(ng-repeat="login in logins")
+              md-button(ng-click="doLogin(login.name)")
+                ng-md-icon(icon="{{login.icon}}", size="24")
+                span &nbsp;Login with {{login.name}}
 
     div(layout="row", flex)
       md-sidenav.md-sidenav-left.md-whiteframe-z2(layout="column", ng-if="userStatus.loggedIn()", md-is-locked-open="$mdMedia('gt-sm')", md-component-id="left", ui-view="sidebar")
