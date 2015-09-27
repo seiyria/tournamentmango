@@ -1,0 +1,81 @@
+
+<html ng-app="openchallenge" ng-controller="rootController">
+  <head>
+    <title>OpenChallenge</title>
+    <link rel="stylesheet" href="css/lib.min.css"/>
+    <link rel="stylesheet" href="css/main.min.css"/>
+  </head>
+  <body layout="column" ng-cloak="ng-cloak">
+    <md-toolbar layout="row" ng-controller="navController" ng-include="'navbar'"></md-toolbar>
+    <div layout="row" flex="flex">
+      <md-sidenav layout="column" ng-if="sidebar.hasSidebar" md-is-locked-open="$mdMedia('gt-sm')" md-component-id="left" ui-view="sidebar" class="md-sidenav-left md-whiteframe-z2"></md-sidenav>
+      <div layout="column" flex="flex">
+        <md-content layout="column" layout-padding="layout-padding" flex="flex" ui-view="content"></md-content>
+      </div>
+    </div>
+    <script src="js/main.min.js"></script>
+  </body>
+</html>
+<script type="text/ng-template" id="/home">
+  <div layout="row" flex="flex">
+    <div flex="flex">
+      <div class="text-center">OpenChallenge is a great way to manage your tournaments. It supports many features.</div>
+    </div>
+  </div>
+  <div layout-gt-sm="row" layout="column" flex="flex" class="text-center">
+    <div flex-gt-sm="33" flex-sm="100" ng-repeat="block in blocks" class="text-center padding-50">
+      <ng-md-icon icon="{{block.icon}}" size="100"></ng-md-icon>
+      <div class="md-title">{{block.name}}</div>
+      <p>{{block.info}}</p>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="navbar">
+  <div class="md-toolbar-tools">
+    <md-button hide-gt-sm="hide-gt-sm" ng-if="sidebar.hasSidebar" ng-click="toggleList()" aria-label="Toggle Menu">
+      <ng-md-icon icon="menu"></ng-md-icon>
+    </md-button>
+    <h1><a ui-sref="home">OpenChallenge</a></h1><span flex="flex"></span>
+    <md-menu ng-if="!userStatus.loggedIn">
+      <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-hue-1">Login</md-button>
+      <md-menu-content>
+        <md-menu-item ng-repeat="login in logins">
+          <md-button ng-click="doLogin(login.name)">
+            <ng-md-icon icon="{{login.icon}}" size="24"></ng-md-icon><span>&nbsp;Login with {{login.name}}</span>
+          </md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
+    <md-menu ng-if="userStatus.loggedIn">
+      <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-hue-1">{{userStatus.displayName}}</md-button>
+      <md-menu-content>
+        <md-menu-item>
+          <md-button ui-sref="userManage">
+            <ng-md-icon icon="group" size="24"></ng-md-icon><span>&nbsp;User Panel</span>
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button ng-click="doLogout()">
+            <ng-md-icon icon="logout" size="24"></ng-md-icon><span>&nbsp;Logout</span>
+          </md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
+  </div>
+</script>
+<script type="text/ng-template" id="/tournament-sidebar">
+  <md-list>
+    <md-list-item ui-sref="userManage" class="md-2-line">
+      <div class="md-list-item-text">
+        <ng-md-icon icon="group" size="24"></ng-md-icon>
+        <h3>User Panel</h3>
+      </div>
+    </md-list-item>
+  </md-list>
+</script>
+<script type="text/ng-template" id="/tournaments">
+  <div>hi tourn</div>
+</script>
+<script type="text/ng-template" id="/user-manage">
+  <div>hi user</div>
+</script>
