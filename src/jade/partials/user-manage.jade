@@ -1,3 +1,53 @@
 
 script(type="text/ng-template", id="/user-manage")
-  div hi user
+  md-card
+    md-data-table-toolbar(ng-hide="selected.length || filter.show")
+      h2.md-title Player Management
+      div(flex)
+
+      md-button.md-icon-button(ng-click="filter.show = true", aria-label="search")
+        ng-md-icon(icon="search", size="24")
+
+      md-button.md-icon-button(ng-click="addItem($event)", aria-label="add user")
+        ng-md-icon(icon="group_add", size="24")
+
+    md-data-table-toolbar(ng-show="filter.show && !selected.length")
+      ng-md-icon(icon="search", size="24")
+      form(flex, name="filter.form")
+        input(type="text", ng-model="datatable.filter", ng-model-options="filter.options", placeholder="Search...")
+      md-button.md-icon-button(ng-click="hideSearch()", aria-label="hide search")
+        ng-md-icon(icon="close")
+
+    md-data-table-toolbar(ng-show="selected.length")
+      div {{selected.length}} {{selected.length > 1 ? 'people' : 'person'}} selected
+      div(flex)
+      md-button.md-raised.md-accent(ng-if="selected.length > 1")
+        | Start Tournament
+      md-button.md-icon-button(ng-if="selected.length == 1", aria-label="edit user")
+        ng-md-icon(icon="edit")
+      md-button.md-icon-button(ng-click, aria-label="delete users")
+        ng-md-icon(icon="delete")
+
+    md-data-table-container
+      table(md-data-table, md-row-select="selected", md-progress="deferred")
+        thead(md-order="datatable.order", md-trigger="onOrderChange")
+          tr
+            th(name="Name", order-by="name")
+            th(name="Location", order-by="location")
+            th(name="Aliases")
+            th(name="Wins", numeric, order-by="wins")
+            th(name="Losses", numeric, order-by="losses")
+            th(name="Points", numeric, order-by="points")
+
+        tbody
+          tr(md-auto-select, ng-repeat="user in users")
+            td {{user.name}}
+            td {{user.location}}
+            td
+              md-button.md-raised.md-accent
+                | View Aliases
+            td {{user.wins}}
+            td {{user.losses}}
+            td {{user.points}}
+
+    md-data-table-pagination(md-limit="datatable.limit", md-page="datatable.page", md-total="{{users.length}}", md-trigger="onPaginationChange")

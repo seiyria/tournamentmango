@@ -1,2 +1,2 @@
 
-export default angular.module('openchallenge', ['ngAria', 'ngAnimate', 'ngMaterial', 'ngMdIcons', 'ngStorage', 'ui.router', 'firebase']);
+export default angular.module('openchallenge', ['ngAria', 'ngAnimate', 'ngMaterial', 'ngMdIcons', 'ngStorage', 'ui.router', 'firebase', 'md.data.table']);

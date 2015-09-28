@@ -1,0 +1,35 @@
+
+script(type="text/ng-template", id="/dialog/adduser")
+  md-dialog
+
+    md-dialog-content
+      h2.md-title Add Player
+
+      p.md-warn(ng-if="item.form.$submitted && item.form.$invalid", layout="row", layout-align="start center")
+        ng-md-icon(icon="error")
+        span &nbsp;All fields are required.
+
+      form(name="item.form", ng-submit="addItem()")
+        .input-row(layout="row")
+          md-input-container(flex)
+            label Name
+            input(name="name", ng-model="item.name", md-maxlength="30", required)
+          md-input-container(flex)
+            label Location
+            input(name="location", ng-model="item.location", md-maxlength="30", required)
+
+        h3.md-subhead Aliases
+        .input-row(layout="row")
+          md-chips(ng-model="item.aliases", placeholder="Add aliases", secondary-placeholder="+Alias", required)
+
+        h3.md-subhead Games Played
+        .input-row(layout="row")
+          md-chips(ng-model="item.games", placeholder="Add games", secondary-placeholder="+Game")
+
+        h3.md-subhead Characters Used
+        .input-row(layout="row")
+          md-chips(ng-model="item.characters", placeholder="Add characters", secondary-placeholder="+Character")
+
+    .md-actions
+      md-button.md-primary(ng-click="addItem()", ng-disabled="item.form.$invalid") Add Player
+      md-button.md-primary(ng-click="cancel()") Cancel
