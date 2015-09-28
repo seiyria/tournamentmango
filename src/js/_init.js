@@ -1,4 +1,6 @@
 
+import './constants/firebaseURL';
+
 import './services/wrappedFirebase';
 import './services/userStatus';
 import './services/ensureLoggedIn';

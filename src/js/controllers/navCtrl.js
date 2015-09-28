@@ -24,14 +24,21 @@ site.controller('navController', ($scope, $mdSidenav, $state, UserStatus, Wrappe
 
   const auth = $firebaseAuth(WrappedFirebase);
 
-  const handleAuth = (authData) => {
+  const handleAuth = (authData, wipe = true) => {
     const provider = authData.auth.provider;
     UserStatus.displayName = authData[provider].displayName;
     UserStatus.loggedIn = true;
+    UserStatus.authData = authData;
+
+    if(!wipe) return;
+    WrappedFirebase.child('users').child(authData.uid).set({
+      provider: authData.auth.provider,
+      name: authData[authData.auth.provider].displayName
+    });
   };
 
   const attemptAuth = auth.$getAuth();
-  if(attemptAuth) handleAuth(attemptAuth);
+  if(attemptAuth) handleAuth(attemptAuth, false);
 
   $scope.doLogin = (service) => {
     auth.$authWithOAuthPopup(service.toLowerCase())

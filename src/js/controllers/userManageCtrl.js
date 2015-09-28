@@ -1,8 +1,10 @@
 import site from '../app';
+import Firebase from 'firebase';
+import { extend, clone, each } from 'lodash';
 
-site.controller('userManageController', ($scope, $mdDialog, SidebarManagement, EnsureLoggedIn) => {
+site.controller('userManageController', ($scope, $mdDialog, $mdToast, $firebaseArray, FirebaseURL, SidebarManagement, EnsureLoggedIn) => {
   SidebarManagement.hasSidebar = true;
-  EnsureLoggedIn.check();
+  const authData = EnsureLoggedIn.check();
 
   let bookmark = 1;
 
@@ -19,20 +21,64 @@ site.controller('userManageController', ($scope, $mdDialog, SidebarManagement, E
     }
   };
 
+  $scope.users = $firebaseArray(new Firebase(`${FirebaseURL}/users/${authData.uid}/players`));
+
   // const success = (users) => $scope.users = users;
 
   $scope.onChange = () => null; // return a promise
 
   const getUsers = () => $scope.deferred = $scope.onChange();
 
+  const defaultMdDialogOptions = {
+    clickOutsideToClose: true,
+    controller: 'userDialogController',
+    focusOnOpen: false,
+    templateUrl: '/dialog/adduser'
+  };
+
   $scope.addItem = (event) => {
-    $mdDialog.show({
-      clickOutsideToClose: true,
-      controller: 'userDialogController',
-      focusOnOpen: false,
-      targetEvent: event,
-      templateUrl: '/dialog/adduser'
-    }).then(getUsers);
+    const mdDialogOptions = clone(defaultMdDialogOptions);
+    mdDialogOptions.event = event;
+    mdDialogOptions.locals = { player: {} };
+    $mdDialog.show(mdDialogOptions).then(newPlayer => {
+      $scope.users.$add(newPlayer);
+    });
+  };
+
+  $scope.editItem = (event) => {
+    const mdDialogOptions = clone(defaultMdDialogOptions);
+    mdDialogOptions.event = event;
+    mdDialogOptions.locals = { player: $scope.selected[0] };
+    $mdDialog.show(mdDialogOptions).then(oldPlayer => {
+      const item = $scope.users.$getRecord(oldPlayer.$id);
+      extend(item, oldPlayer);
+      $scope.users.$save(item);
+    });
+  };
+
+  $scope.removeItem = (event) => {
+    const players = $scope.selected;
+    const dialog = $mdDialog.confirm()
+      .targetEvent(event)
+      .title('Remove Player')
+      .content(`Are you sure you want to remove ${players.length} players?`)
+      .ok('OK')
+      .cancel('Cancel');
+
+    $mdDialog.show(dialog).then(() => {
+
+      each(players, player => {
+        const item = $scope.users.$getRecord(player.$id);
+        $scope.users.$remove(item);
+      });
+
+      $mdToast.show($mdToast.simple()
+        .content(`Successfully removed ${players.length} players.`)
+        .action('OK')
+        .position('top right'));
+
+      $scope.selected = [];
+    });
   };
 
   $scope.hideSearch = () => {
@@ -42,16 +88,6 @@ site.controller('userManageController', ($scope, $mdDialog, SidebarManagement, E
       $scope.filter.form.$setPristine();
     }
   };
-
-  $scope.users = [
-    { name: 'James', aliases: [], wins: 10, losses: 5, points: 9000 },
-    { name: 'Zen', aliases: [], wins: 1, losses: 10, points: 0 },
-    { name: 'Shane', aliases: [], wins: 1, losses: 5, points: 5 },
-    { name: 'Alex', aliases: [], wins: 10, losses: 3, points: 1000 },
-    { name: 'Jan', aliases: [], wins: 10, losses: 1, points: 6 },
-    { name: 'Zell', aliases: [], wins: 3, losses: 5, points: 9000 },
-    { name: 'Apple', aliases: [], wins: 14, losses: 5, points: 100 }
-  ];
 
   $scope.selected = [];
 

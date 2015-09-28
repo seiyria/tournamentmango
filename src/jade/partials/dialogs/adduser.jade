@@ -3,7 +3,7 @@ script(type="text/ng-template", id="/dialog/adduser")
   md-dialog
 
     md-dialog-content
-      h2.md-title Add Player
+      h2.md-title {{label}} Player
 
       p.md-warn(ng-if="item.form.$submitted && item.form.$invalid", layout="row", layout-align="start center")
         ng-md-icon(icon="error")
@@ -31,5 +31,5 @@ script(type="text/ng-template", id="/dialog/adduser")
           md-chips(ng-model="item.characters", placeholder="Add characters", secondary-placeholder="+Character")
 
     .md-actions
-      md-button.md-primary(ng-click="addItem()", ng-disabled="item.form.$invalid") Add Player
-      md-button.md-primary(ng-click="cancel()") Cancel
+      md-button.md-primary(ng-click="addItem()", ng-disabled="item.form.$invalid", aria-label="submit") {{label}} Player
+      md-button.md-primary(ng-click="cancel()", aria-label="cancel") Cancel

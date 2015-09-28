@@ -1,7 +1,6 @@
 import site from '../app';
 
-site.controller('rootController', ($scope, UserStatus, WrappedFirebase, $firebaseObject, SidebarManagement) => {
+site.controller('rootController', ($scope, UserStatus, SidebarManagement) => {
   $scope.userStatus = UserStatus;
   $scope.sidebar = SidebarManagement;
-  $scope.data = $firebaseObject(WrappedFirebase);
 });

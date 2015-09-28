@@ -24,9 +24,9 @@ script(type="text/ng-template", id="/user-manage")
       md-button.md-raised.md-accent(ng-if="selected.length > 1")
         | Start Tournament
       md-button.md-icon-button(ng-if="selected.length == 1", aria-label="edit user")
-        ng-md-icon(icon="edit")
+        ng-md-icon(icon="edit", ng-click="editItem($event)")
       md-button.md-icon-button(ng-click, aria-label="delete users")
-        ng-md-icon(icon="delete")
+        ng-md-icon(icon="delete", ng-click="removeItem($event)")
 
     md-data-table-container
       table(md-data-table, md-row-select="selected", md-progress="deferred")
