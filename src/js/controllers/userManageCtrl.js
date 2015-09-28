@@ -1,8 +1,8 @@
 import site from '../app';
 import Firebase from 'firebase';
-import { extend, clone, each } from 'lodash';
+import _, { extend, clone, each } from 'lodash';
 
-site.controller('userManageController', ($scope, $mdDialog, $mdToast, $firebaseArray, FirebaseURL, SidebarManagement, EnsureLoggedIn) => {
+site.controller('userManageController', ($scope, $q, $mdDialog, $mdToast, $firebaseArray, FirebaseURL, SidebarManagement, EnsureLoggedIn) => {
   SidebarManagement.hasSidebar = true;
   const authData = EnsureLoggedIn.check();
 
@@ -11,7 +11,7 @@ site.controller('userManageController', ($scope, $mdDialog, $mdToast, $firebaseA
   $scope.datatable = {
     filter: '',
     order: 'name',
-    limit: 25,
+    limit: 5,
     page: 1
   };
 
@@ -23,11 +23,35 @@ site.controller('userManageController', ($scope, $mdDialog, $mdToast, $firebaseA
 
   $scope.users = $firebaseArray(new Firebase(`${FirebaseURL}/users/${authData.uid}/players`));
 
-  // const success = (users) => $scope.users = users;
+  $scope.getUsers = () => {
 
-  $scope.onChange = () => null; // return a promise
+    const filterArr = (user, arr) => user[arr] ? user[arr].join(' ').toLowerCase() : '';
+    const startIndex = $scope.datatable.limit * ($scope.datatable.page-1);
+    const endIndex = startIndex + $scope.datatable.limit;
+    const doReverse = $scope.datatable.order.charAt(0) === '-';
+    let order = $scope.datatable.order;
 
-  const getUsers = () => $scope.deferred = $scope.onChange();
+    if(doReverse) {
+      order = order.substring(1);
+    }
+
+    $scope.visibleUsers = _($scope.users)
+      .filter(user => {
+        const filter = $scope.datatable.filter.toLowerCase();
+        return filter.length === 0 ? true :
+          _.contains(user.name.toLowerCase(), filter) ||
+          _.contains(user.location.toLowerCase(), filter) ||
+          _.contains(filterArr(user, 'aliases'), filter) ||
+          _.contains(filterArr(user, 'games'), filter) ||
+          _.contains(filterArr(user, 'characters'), filter);
+      })
+      .sortByOrder([order], [doReverse ? 'asc' : 'desc'])
+      .slice(startIndex, endIndex)
+      .value();
+  };
+
+  $scope.users.$loaded($scope.getUsers);
+  $scope.users.$watch($scope.getUsers);
 
   const defaultMdDialogOptions = {
     clickOutsideToClose: true,
@@ -91,7 +115,7 @@ site.controller('userManageController', ($scope, $mdDialog, $mdToast, $firebaseA
 
   $scope.selected = [];
 
-  $scope.$watch('datatable.filter', (newValue, oldValue) => {
+  const callback = (newValue, oldValue) => {
     if(!oldValue) {
       bookmark = $scope.datatable.page;
     }
@@ -104,6 +128,8 @@ site.controller('userManageController', ($scope, $mdDialog, $mdToast, $firebaseA
       $scope.datatable.page = bookmark;
     }
 
-    getUsers();
-  });
+    $scope.getUsers();
+  };
+
+  $scope.$watch('datatable.filter', _.throttle(callback, 500));
 });

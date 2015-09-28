@@ -29,8 +29,8 @@ script(type="text/ng-template", id="/user-manage")
         ng-md-icon(icon="delete", ng-click="removeItem($event)")
 
     md-data-table-container
-      table(md-data-table, md-row-select="selected", md-progress="deferred")
-        thead(md-order="datatable.order", md-trigger="onOrderChange")
+      table(md-data-table, md-row-select="selected")
+        thead(md-order="datatable.order", md-trigger="getUsers")
           tr
             th(name="Name", order-by="name")
             th(name="Location", order-by="location")
@@ -40,14 +40,14 @@ script(type="text/ng-template", id="/user-manage")
             th(name="Points", numeric, order-by="points")
 
         tbody
-          tr(md-auto-select, ng-repeat="user in users")
+          tr(md-auto-select, ng-repeat="user in visibleUsers")
             td {{user.name}}
             td {{user.location}}
             td
               md-button.md-raised.md-accent
                 | View Aliases
-            td {{user.wins}}
-            td {{user.losses}}
-            td {{user.points}}
+            td {{user.wins || 0}}
+            td {{user.losses || 0}}
+            td {{user.points || 0}}
 
-    md-data-table-pagination(md-limit="datatable.limit", md-page="datatable.page", md-total="{{users.length}}", md-trigger="onPaginationChange")
+    md-data-table-pagination(md-limit="datatable.limit", md-page="datatable.page", md-total="{{users.length}}", md-trigger="getUsers")
