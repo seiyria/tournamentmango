@@ -77,6 +77,6 @@ site.controller('userManageController', ($scope, $firebaseArray, FirebaseURL, Si
     $scope.getUsers();
   };
 
-  $scope.$watch('datatable.filter', _.throttle(filterWatch, 500));
+  $scope.$watch('datatable.filter', filterWatch);
 
 });

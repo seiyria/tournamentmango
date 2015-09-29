@@ -1,6 +1,6 @@
 import site from '../app';
 
-site.service('UserManagement', (FirebaseURL, $mdDialog, Toaster) => {
+site.service('UserManagement', (FirebaseURL, $mdDialog, Toaster, FilterUtils) => {
 
   const defaultMdDialogOptions = {
     clickOutsideToClose: true,
@@ -46,45 +46,13 @@ site.service('UserManagement', (FirebaseURL, $mdDialog, Toaster) => {
   };
 
   const filterUsers = (users, datatable) => {
-
-    // allow multiple filters separated by a comma
-    const filter = _.compact(_.map(datatable.filter.toLowerCase().split(','), (m) => m.trim()));
-
-    // check if anything in the right is a substring in the left
-    const containsAny = (left, right) => _.some(right, (filterKey) => _.some(left, (string) => _.contains(string, filterKey)));
-
-    // get a filter array for user if they exist
-    const filterArr = (user, arr) => user[arr] ? _.map(user[arr], (s) => s.toLowerCase()) : [];
-
-    // pagination and stuff
-    const startIndex = datatable.limit * (datatable.page-1);
-    const endIndex = startIndex + datatable.limit;
-    const doReverse = datatable.order.charAt(0) === '-';
-    let order = datatable.order;
-
-    if(doReverse) {
-      order = order.substring(1);
-    }
-
-    return _(users)
-      .filter(user => {
-
-        // only show people that match all criteria
-        return filter.length === 0 ? true : _.reduce(
-          [
-            containsAny([user.name.toLowerCase()], filter),
-            containsAny([user.location.toLowerCase()], filter),
-            containsAny(filterArr(user, 'aliases'), filter),
-            containsAny(filterArr(user, 'games'), filter),
-            containsAny(filterArr(user, 'characters'), filter)
-          ],
-          (prev, cur) => prev + ~~cur,
-          0
-        ) >= filter.length;
-      })
-      .sortByOrder([order], [doReverse ? 'asc' : 'desc'])
-      .slice(startIndex, endIndex)
-      .value();
+    return FilterUtils.filterTable(users, datatable, user => [
+      [user.name.toLowerCase()],
+      [user.location.toLowerCase()],
+      FilterUtils.getFilterArr(user, 'aliases'),
+      FilterUtils.getFilterArr(user, 'games'),
+      FilterUtils.getFilterArr(user, 'characters')
+    ]);
   };
 
   return {
