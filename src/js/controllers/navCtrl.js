@@ -1,9 +1,19 @@
 import site from '../app';
 
-site.controller('navController', ($scope, $mdSidenav, $state, UserStatus, WrappedFirebase, $firebaseAuth, SidebarManagement) => {
+site.controller('navController', ($scope, $mdSidenav, $state, UserStatus, WrappedFirebase, $firebaseAuth, SidebarManagement, DisconnectNotifier) => {
   $scope.toggleList = () => {
     $mdSidenav('left').toggle();
   };
+
+  $scope.connected = true;
+
+  DisconnectNotifier.setCallback('on', () => {
+    $scope.connected = true;
+  });
+
+  DisconnectNotifier.setCallback('off', () => {
+    $scope.connected = false;
+  });
 
   $scope.sidebar = SidebarManagement;
 

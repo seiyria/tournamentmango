@@ -16,6 +16,10 @@ script(type="text/ng-template", id="navbar")
             ng-md-icon(icon="{{login.icon}}", size="24")
             span &nbsp;Login with {{login.name}}
 
+    span(ng-if="userStatus.loggedIn")
+      ng-md-icon(icon="{{ connected ? 'signal_wifi_4_bar' : 'signal_wifi_off'}}", size="24", style="fill: white")
+        md-tooltip Currently {{ connected ? 'online' : 'offline' }}
+
     md-menu(ng-if="userStatus.loggedIn")
       md-button(ng-click="$mdOpenMenu($event)") {{userStatus.displayName}}
       md-menu-content

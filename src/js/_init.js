@@ -5,7 +5,8 @@ import './services/wrappedFirebase';
 import './services/userStatus';
 import './services/ensureLoggedIn';
 import './services/sidebarManagement';
-import './services/userList';
+import './services/disconnectNotifier';
+import './services/toaster';
 
 import './controllers/rootCtrl';
 import './controllers/navCtrl';

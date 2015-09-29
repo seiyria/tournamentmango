@@ -2,7 +2,7 @@ import site from '../app';
 import Firebase from 'firebase';
 import _, { extend, clone, each } from 'lodash';
 
-site.controller('userManageController', ($scope, $q, $mdDialog, $mdToast, $firebaseArray, FirebaseURL, SidebarManagement, EnsureLoggedIn) => {
+site.controller('userManageController', ($scope, $q, $mdDialog, Toaster, $firebaseArray, FirebaseURL, SidebarManagement, EnsureLoggedIn) => {
   SidebarManagement.hasSidebar = true;
   const authData = EnsureLoggedIn.check();
 
@@ -25,7 +25,16 @@ site.controller('userManageController', ($scope, $q, $mdDialog, $mdToast, $fireb
 
   $scope.getUsers = () => {
 
-    const filterArr = (user, arr) => user[arr] ? user[arr].join(' ').toLowerCase() : '';
+    // allow multiple filters separated by a comma
+    const filter = _.compact(_.map($scope.datatable.filter.toLowerCase().split(','), (m) => m.trim()));
+
+    // check if anything in the right is a substring in the left
+    const containsAny = (left, right) => _.some(right, (filterKey) => _.some(left, (string) => _.contains(string, filterKey)));
+
+    // get a filter array for user if they exist
+    const filterArr = (user, arr) => user[arr] ? _.map(user[arr], (s) => s.toLowerCase()) : [];
+
+    // pagination and stuff
     const startIndex = $scope.datatable.limit * ($scope.datatable.page-1);
     const endIndex = startIndex + $scope.datatable.limit;
     const doReverse = $scope.datatable.order.charAt(0) === '-';
@@ -37,13 +46,19 @@ site.controller('userManageController', ($scope, $q, $mdDialog, $mdToast, $fireb
 
     $scope.visibleUsers = _($scope.users)
       .filter(user => {
-        const filter = $scope.datatable.filter.toLowerCase();
-        return filter.length === 0 ? true :
-          _.contains(user.name.toLowerCase(), filter) ||
-          _.contains(user.location.toLowerCase(), filter) ||
-          _.contains(filterArr(user, 'aliases'), filter) ||
-          _.contains(filterArr(user, 'games'), filter) ||
-          _.contains(filterArr(user, 'characters'), filter);
+
+        // only show people that match all criteria
+        return filter.length === 0 ? true : _.reduce(
+          [
+            containsAny([user.name.toLowerCase()], filter),
+            containsAny([user.location.toLowerCase()], filter),
+            containsAny(filterArr(user, 'aliases'), filter),
+            containsAny(filterArr(user, 'games'), filter),
+            containsAny(filterArr(user, 'characters'), filter)
+          ],
+          (prev, cur) => prev + ~~cur,
+          0
+        ) >= filter.length;
       })
       .sortByOrder([order], [doReverse ? 'asc' : 'desc'])
       .slice(startIndex, endIndex)
@@ -96,10 +111,7 @@ site.controller('userManageController', ($scope, $q, $mdDialog, $mdToast, $fireb
         $scope.users.$remove(item);
       });
 
-      $mdToast.show($mdToast.simple()
-        .content(`Successfully removed ${players.length} players.`)
-        .action('OK')
-        .position('top right'));
+      Toaster.show(`Successfully removed ${players.length} players.`);
 
       $scope.selected = [];
     });
