@@ -13,7 +13,8 @@
         <md-content layout="column" layout-padding="layout-padding" flex="flex" ui-view="content"></md-content>
       </div>
     </div>
-    <script src="js/main.min.js"></script>
+    <script src="js/lib.min.js"></script>
+    <script src="js/main.min.js"></script><script src="//cdnjs.cloudflare.com/ajax/libs/SVG-Morpheus/0.1.8/svg-morpheus.js"></script>
   </body>
 </html>
 <script type="text/ng-template" id="/home">
@@ -37,7 +38,7 @@
     </md-button>
     <h1><a ui-sref="home">OpenChallenge</a></h1><span flex="flex"></span>
     <md-menu ng-if="!userStatus.loggedIn">
-      <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-hue-1">Login</md-button>
+      <md-button ng-click="$mdOpenMenu($event)">Login</md-button>
       <md-menu-content>
         <md-menu-item ng-repeat="login in logins">
           <md-button ng-click="doLogin(login.name)">
@@ -45,13 +46,16 @@
           </md-button>
         </md-menu-item>
       </md-menu-content>
-    </md-menu>
+    </md-menu><span ng-if="userStatus.loggedIn">
+      <ng-md-icon icon="{{ connected ? 'signal_wifi_4_bar' : 'signal_wifi_off'}}" size="24" style="fill: white">
+        <md-tooltip>Currently {{ connected ? 'online' : 'offline' }}</md-tooltip>
+      </ng-md-icon></span>
     <md-menu ng-if="userStatus.loggedIn">
-      <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-hue-1">{{userStatus.displayName}}</md-button>
+      <md-button ng-click="$mdOpenMenu($event)">{{userStatus.displayName}}</md-button>
       <md-menu-content>
         <md-menu-item>
           <md-button ui-sref="userManage">
-            <ng-md-icon icon="group" size="24"></ng-md-icon><span>&nbsp;User Panel</span>
+            <ng-md-icon icon="group" size="24"></ng-md-icon><span>&nbsp;Player Panel</span>
           </md-button>
         </md-menu-item>
         <md-menu-item>
@@ -64,11 +68,28 @@
   </div>
 </script>
 <script type="text/ng-template" id="/tournament-sidebar">
+  <md-toolbar>
+    <div class="md-toolbar-tools">Navigation</div>
+  </md-toolbar>
   <md-list>
-    <md-list-item ui-sref="userManage" class="md-2-line">
-      <div class="md-list-item-text">
-        <ng-md-icon icon="group" size="24"></ng-md-icon>
-        <h3>User Panel</h3>
+    <md-list-item ng-click="navigateTo('userManage')" class="md-2-line">
+      <ng-md-icon icon="group" size="36" class="md-avatar"></ng-md-icon>
+      <div class="md-list-item-text"><span>Player Panel</span>
+        <p>Manage players</p>
+      </div>
+    </md-list-item>
+  </md-list>
+  <md-list ng-repeat="event in events">
+    <md-list-item class="md-2-line">
+      <ng-md-icon icon="assignment" size="36" class="md-avatar"></ng-md-icon>
+      <div class="md-list-item-text"><span>{{event.name}}</span>
+        <p>Created a while ago</p>
+      </div>
+    </md-list-item>
+    <md-list-item ng-repeat="tournament in event.tournaments" ng-if="!event._isCollapsed" class="md-2-line">
+      <div class="md-list-item-text md-offset">
+        <h3>{{tournament.name}}</h3>
+        <p>Smash 4</p>
       </div>
     </md-list-item>
   </md-list>
@@ -77,5 +98,108 @@
   <div>hi tourn</div>
 </script>
 <script type="text/ng-template" id="/user-manage">
-  <div>hi user</div>
+  <md-card>
+    <md-data-table-toolbar ng-hide="selected.length || filter.show">
+      <h2 class="md-title">Player Management</h2>
+      <div flex="flex"></div>
+      <md-button ng-click="filter.show = true" aria-label="search" class="md-icon-button">
+        <ng-md-icon icon="search" size="24"></ng-md-icon>
+      </md-button>
+      <md-button ng-click="addItem($event)" aria-label="add user" class="md-icon-button">
+        <ng-md-icon icon="group_add" size="24"></ng-md-icon>
+      </md-button>
+    </md-data-table-toolbar>
+    <md-data-table-toolbar ng-show="filter.show &amp;&amp; !selected.length">
+      <ng-md-icon icon="search" size="24"></ng-md-icon>
+      <form flex="flex" name="filter.form">
+        <input type="text" ng-model="datatable.filter" ng-model-options="filter.options" placeholder="Search..."/>
+      </form>
+      <md-button ng-click="hideSearch()" aria-label="hide search" class="md-icon-button">
+        <ng-md-icon icon="close"></ng-md-icon>
+      </md-button>
+    </md-data-table-toolbar>
+    <md-data-table-toolbar ng-show="selected.length">
+      <div>{{selected.length}} {{selected.length > 1 ? 'people' : 'person'}} selected</div>
+      <div flex="flex"></div>
+      <md-button ng-if="selected.length &gt; 1" class="md-raised md-primary">Start Tournament</md-button>
+      <md-button ng-if="selected.length == 1" aria-label="edit user" class="md-icon-button">
+        <ng-md-icon icon="edit" ng-click="editItem($event)"></ng-md-icon>
+      </md-button>
+      <md-button ng-click="ng-click" aria-label="delete users" class="md-icon-button">
+        <ng-md-icon icon="delete" ng-click="removeItem($event)"></ng-md-icon>
+      </md-button>
+    </md-data-table-toolbar>
+    <md-data-table-container>
+      <table md-data-table="md-data-table" md-row-select="selected">
+        <thead md-order="datatable.order" md-trigger="getUsers">
+          <tr>
+            <th name="Name" order-by="name"></th>
+            <th name="Location" order-by="location"></th>
+            <th name="Wins" numeric="numeric" order-by="wins"></th>
+            <th name="Losses" numeric="numeric" order-by="losses"></th>
+            <th name="Points" numeric="numeric" order-by="points"></th>
+            <th name="Aliases, Games, Characters"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr md-auto-select="md-auto-select" ng-repeat="user in visibleUsers">
+            <td>{{user.name}}</td>
+            <td>{{user.location}}</td>
+            <td>{{user.wins || 0}}</td>
+            <td>{{user.losses || 0}}</td>
+            <td>{{user.points || 0}}</td>
+            <td>
+              <md-button ng-click="viewItem($event, user)" class="md-raised md-accent">View Info</md-button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </md-data-table-container>
+    <md-data-table-pagination md-limit="datatable.limit" md-page="datatable.page" md-total="{{users.length}}" md-trigger="getUsers"></md-data-table-pagination>
+  </md-card>
+</script>
+<script type="text/ng-template" id="/dialog/adduser">
+  <md-dialog>
+    <md-dialog-content>
+      <h2 ng-if="!viewOnly" class="md-title">{{label}} Player</h2>
+      <h2 ng-if="viewOnly" class="md-title">{{item.name}} from {{item.location}}</h2>
+      <p ng-if="item.form.$submitted &amp;&amp; item.form.$invalid" layout="row" layout-align="start center" class="md-warn">
+        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
+      </p>
+      <form name="item.form" ng-submit="addItem()">
+        <div layout="row" ng-if="!viewOnly" class="input-row">
+          <md-input-container flex="flex">
+            <label>Name</label>
+            <input name="name" ng-model="item.name" md-maxlength="30" required="required"/>
+          </md-input-container>
+          <md-input-container flex="flex">
+            <label>Location</label>
+            <input name="location" ng-model="item.location" md-maxlength="30" required="required"/>
+          </md-input-container>
+        </div>
+        <h3 class="md-subhead">Aliases</h3>
+        <div layout="row" class="input-row">
+          <md-chips ng-model="item.aliases" placeholder="Add aliases" secondary-placeholder="+Alias" required="required" readonly="viewOnly"></md-chips>
+          <md-chip ng-if="item.aliases.length === 0">None</md-chip>
+        </div>
+        <h3 class="md-subhead">Games Played</h3>
+        <div layout="row" class="input-row">
+          <md-chips ng-model="item.games" placeholder="Add games" secondary-placeholder="+Game" readonly="viewOnly"></md-chips>
+          <md-chip ng-if="item.games.length === 0">None</md-chip>
+        </div>
+        <h3 class="md-subhead">Characters Used</h3>
+        <div layout="row" class="input-row">
+          <md-chips ng-model="item.characters" placeholder="Add characters" secondary-placeholder="+Character" readonly="viewOnly"></md-chips>
+          <md-chip ng-if="item.characters.length === 0">None</md-chip>
+        </div>
+      </form>
+    </md-dialog-content>
+    <div ng-if="!viewOnly" class="md-actions">
+      <md-button ng-click="addItem()" ng-disabled="item.form.$invalid" aria-label="submit" class="md-primary">{{label}} Player</md-button>
+      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
+    </div>
+    <div ng-if="viewOnly" class="md-actions">
+      <md-button ng-click="cancel()" aria-label="close" class="md-primary">Close</md-button>
+    </div>
+  </md-dialog>
 </script>
