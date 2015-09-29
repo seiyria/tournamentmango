@@ -9,11 +9,14 @@ site.controller('navController', ($scope, $mdSidenav, $state, UserStatus, Wrappe
 
   DisconnectNotifier.setCallback('on', () => {
     $scope.connected = true;
+    $scope.$digest();
   });
 
   DisconnectNotifier.setCallback('off', () => {
     $scope.connected = false;
+    $scope.$digest();
   });
+  
 
   $scope.sidebar = SidebarManagement;
 
