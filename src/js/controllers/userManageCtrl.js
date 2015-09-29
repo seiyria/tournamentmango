@@ -17,7 +17,7 @@ site.controller('userManageController', ($scope, $firebaseArray, FirebaseURL, Si
   $scope.visibleUsers = [];
   $scope.selected = [];
 
-  $scope.users = $firebaseArray(new Firebase(`${FirebaseURL}/users/${authData.uid}/players`));
+  $scope.users = UserManagement.users = $firebaseArray(new Firebase(`${FirebaseURL}/users/${authData.uid}/players`));
 
   $scope.addItem = (event) => {
     UserManagement.addItem(event, newPlayer => {

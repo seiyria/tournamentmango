@@ -9,14 +9,14 @@ script(type="text/ng-template", id="/tournament-sidebar")
         span Player Panel
         p Manage players
 
-  md-list(ng-repeat="event in events")
-    md-list-item.md-2-line
+    md-list-item.md-2-line(ng-click="navigateTo('eventManage')")
       ng-md-icon.md-avatar(icon="assignment", size="36")
       .md-list-item-text
-        span {{event.name}}
-        p Created a while ago
+        span Event Panel
+        p Manage events
 
-    md-list-item.md-2-line(ng-repeat="tournament in event.tournaments", ng-if="!event._isCollapsed")
-      .md-list-item-text.md-offset
-        h3 {{tournament.name}}
-        p Smash 4
+    md-list-item.md-2-line(ng-click="navigateTo('tournamentManage')")
+      ng-md-icon.md-avatar(icon="merge_type", size="36")
+      .md-list-item-text
+        span Tournament Panel
+        p Manage tournaments

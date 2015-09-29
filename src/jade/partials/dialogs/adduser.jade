@@ -15,9 +15,17 @@ script(type="text/ng-template", id="/dialog/adduser")
           md-input-container(flex)
             label Name
             input(name="name", ng-model="item.name", md-maxlength="30", required)
-          md-input-container(flex)
-            label Location
-            input(name="location", ng-model="item.location", md-maxlength="30", required)
+          md-autocomplete(flex, required,
+            md-input-name="location",
+            md-selected-item="item.location",
+            md-floating-label="Location",
+            md-search-text="searchText",
+            md-items="item in getLocations(searchText)",
+            md-item-text="item",
+            md-input-maxlength="30")
+            md-item-template
+              span(md-highlight-text="searchText") {{item}}
+            md-not-found No matches.
 
         h3.md-subhead Aliases
         .input-row(layout="row")
@@ -27,7 +35,7 @@ script(type="text/ng-template", id="/dialog/adduser")
         h3.md-subhead Games Played
         .input-row(layout="row")
           md-chips(ng-model="item.games", placeholder="Add games", secondary-placeholder="+Game", readonly="viewOnly")
-          md-chip(ng-if="item.games.length === 0&& viewOnly") None
+          md-chip(ng-if="item.games.length === 0 && viewOnly") None
 
         h3.md-subhead Characters Used
         .input-row(layout="row")

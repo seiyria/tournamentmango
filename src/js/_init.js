@@ -7,6 +7,7 @@ import './services/ensureLoggedIn';
 import './services/sidebarManagement';
 import './services/disconnectNotifier';
 import './services/toaster';
+import './services/filterUtils';
 import './services/auth';
 import './services/userManagement';
 
