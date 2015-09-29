@@ -21,7 +21,7 @@ script(type="text/ng-template", id="/user-manage")
     md-data-table-toolbar(ng-show="selected.length")
       div {{selected.length}} {{selected.length > 1 ? 'people' : 'person'}} selected
       div(flex)
-      md-button.md-raised.md-accent(ng-if="selected.length > 1")
+      md-button.md-raised.md-primary(ng-if="selected.length > 1")
         | Start Tournament
       md-button.md-icon-button(ng-if="selected.length == 1", aria-label="edit user")
         ng-md-icon(icon="edit", ng-click="editItem($event)")
