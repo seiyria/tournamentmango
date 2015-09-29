@@ -40,8 +40,8 @@
     <md-menu ng-if="!userStatus.loggedIn">
       <md-button ng-click="$mdOpenMenu($event)">Login</md-button>
       <md-menu-content>
-        <md-menu-item ng-repeat="login in logins">
-          <md-button ng-click="doLogin(login.name)">
+        <md-menu-item ng-repeat="login in auth.loginTypes">
+          <md-button ng-click="auth.doLogin(login.name)">
             <ng-md-icon icon="{{login.icon}}" size="24"></ng-md-icon><span>&nbsp;Login with {{login.name}}</span>
           </md-button>
         </md-menu-item>
@@ -59,7 +59,7 @@
           </md-button>
         </md-menu-item>
         <md-menu-item>
-          <md-button ng-click="doLogout()">
+          <md-button ng-click="auth.doLogout()">
             <ng-md-icon icon="logout" size="24"></ng-md-icon><span>&nbsp;Logout</span>
           </md-button>
         </md-menu-item>
@@ -78,18 +78,16 @@
         <p>Manage players</p>
       </div>
     </md-list-item>
-  </md-list>
-  <md-list ng-repeat="event in events">
-    <md-list-item class="md-2-line">
+    <md-list-item ng-click="navigateTo('eventManage')" class="md-2-line">
       <ng-md-icon icon="assignment" size="36" class="md-avatar"></ng-md-icon>
-      <div class="md-list-item-text"><span>{{event.name}}</span>
-        <p>Created a while ago</p>
+      <div class="md-list-item-text"><span>Event Panel</span>
+        <p>Manage events</p>
       </div>
     </md-list-item>
-    <md-list-item ng-repeat="tournament in event.tournaments" ng-if="!event._isCollapsed" class="md-2-line">
-      <div class="md-list-item-text md-offset">
-        <h3>{{tournament.name}}</h3>
-        <p>Smash 4</p>
+    <md-list-item ng-click="navigateTo('tournamentManage')" class="md-2-line">
+      <ng-md-icon icon="merge_type" size="36" class="md-avatar"></ng-md-icon>
+      <div class="md-list-item-text"><span>Tournament Panel</span>
+        <p>Manage tournaments</p>
       </div>
     </md-list-item>
   </md-list>
@@ -155,7 +153,7 @@
         </tbody>
       </table>
     </md-data-table-container>
-    <md-data-table-pagination md-limit="datatable.limit" md-page="datatable.page" md-total="{{users.length}}" md-trigger="getUsers"></md-data-table-pagination>
+    <md-data-table-pagination md-row-select="[10, 25, 50]" md-limit="datatable.limit" md-page="datatable.page" md-total="{{users.length}}" md-trigger="getUsers"></md-data-table-pagination>
   </md-card>
 </script>
 <script type="text/ng-template" id="/dialog/adduser">
@@ -172,25 +170,29 @@
             <label>Name</label>
             <input name="name" ng-model="item.name" md-maxlength="30" required="required"/>
           </md-input-container>
-          <md-input-container flex="flex">
-            <label>Location</label>
-            <input name="location" ng-model="item.location" md-maxlength="30" required="required"/>
-          </md-input-container>
+          <md-autocomplete flex="flex" required="required" md-input-name="location" md-selected-item="item.location" md-floating-label="Location" md-search-text="searchText" md-items="item in getLocations(searchText)" md-item-text="item" md-input-maxlength="30">
+            <md-item-template><span md-highlight-text="searchText">{{item}}</span></md-item-template>
+            <md-not-found>No matches.</md-not-found>
+          </md-autocomplete>
         </div>
         <h3 class="md-subhead">Aliases</h3>
         <div layout="row" class="input-row">
-          <md-chips ng-model="item.aliases" placeholder="Add aliases" secondary-placeholder="+Alias" required="required" readonly="viewOnly"></md-chips>
-          <md-chip ng-if="item.aliases.length === 0">None</md-chip>
+          <md-chips flex="flex" ng-model="item.aliases" secondary-placeholder="Add aliases" placeholder="+Alias" required="required" readonly="viewOnly"><span md-highlight-text="searchText">{{item}}</span></md-chips>
+          <md-chip ng-if="item.aliases.length === 0 &amp;&amp; viewOnly">None</md-chip>
         </div>
         <h3 class="md-subhead">Games Played</h3>
         <div layout="row" class="input-row">
-          <md-chips ng-model="item.games" placeholder="Add games" secondary-placeholder="+Game" readonly="viewOnly"></md-chips>
-          <md-chip ng-if="item.games.length === 0">None</md-chip>
+          <md-chips flex="flex" ng-model="item.games" secondary-placeholder="Add games" placeholder="+Game" required="required" md-autocomplete-snap="md-autocomplete-snap" readonly="viewOnly">
+            <md-autocomplete md-selected-item="selectedItem" md-search-text="searchText" md-items="item in getGames(searchText)" md-item-text="item" placeholder="+Game"><span md-highlight-text="searchText">{{item}}</span></md-autocomplete>
+          </md-chips>
+          <md-chip ng-if="item.games.length === 0 &amp;&amp; viewOnly">None</md-chip>
         </div>
         <h3 class="md-subhead">Characters Used</h3>
         <div layout="row" class="input-row">
-          <md-chips ng-model="item.characters" placeholder="Add characters" secondary-placeholder="+Character" readonly="viewOnly"></md-chips>
-          <md-chip ng-if="item.characters.length === 0">None</md-chip>
+          <md-chips ng-model="item.characters" secondary-placeholder="Add characters" placeholder="+Character" required="required" md-autocomplete-snap="md-autocomplete-snap" readonly="viewOnly">
+            <md-autocomplete md-selected-item="selectedItem" md-search-text="searchText" md-items="item in getCharacters(searchText)" md-item-text="item" placeholder="+Character"><span md-highlight-text="searchText">{{item}}</span></md-autocomplete>
+          </md-chips>
+          <md-chip ng-if="item.characters.length === 0&amp;&amp; viewOnly">None</md-chip>
         </div>
       </form>
     </md-dialog-content>
