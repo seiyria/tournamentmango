@@ -1,9 +1,10 @@
 import site from '../app';
 import { omit, extend, keys } from 'lodash';
 
-site.controller('userDialogController', ($scope, $mdDialog, player) => {
+site.controller('userDialogController', ($scope, $mdDialog, player, viewOnly) => {
 
   $scope.cancel = $mdDialog.cancel;
+  $scope.viewOnly = viewOnly;
 
   const success = (item) => $mdDialog.hide(item);
 

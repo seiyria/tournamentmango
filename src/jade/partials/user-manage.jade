@@ -34,20 +34,19 @@ script(type="text/ng-template", id="/user-manage")
           tr
             th(name="Name", order-by="name")
             th(name="Location", order-by="location")
-            th(name="Aliases")
             th(name="Wins", numeric, order-by="wins")
             th(name="Losses", numeric, order-by="losses")
             th(name="Points", numeric, order-by="points")
+            th(name="Aliases, Games, Characters")
 
         tbody
           tr(md-auto-select, ng-repeat="user in visibleUsers")
             td {{user.name}}
             td {{user.location}}
-            td
-              md-button.md-raised.md-accent
-                | View Aliases
             td {{user.wins || 0}}
             td {{user.losses || 0}}
             td {{user.points || 0}}
+            td
+              md-button.md-raised.md-accent(ng-click="viewItem($event, user)") View Info
 
     md-data-table-pagination(md-limit="datatable.limit", md-page="datatable.page", md-total="{{users.length}}", md-trigger="getUsers")

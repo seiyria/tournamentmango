@@ -3,14 +3,15 @@ script(type="text/ng-template", id="/dialog/adduser")
   md-dialog
 
     md-dialog-content
-      h2.md-title {{label}} Player
+      h2.md-title(ng-if="!viewOnly") {{label}} Player
+      h2.md-title(ng-if="viewOnly") {{item.name}} from {{item.location}}
 
       p.md-warn(ng-if="item.form.$submitted && item.form.$invalid", layout="row", layout-align="start center")
         ng-md-icon(icon="error")
         span &nbsp;All fields are required.
 
       form(name="item.form", ng-submit="addItem()")
-        .input-row(layout="row")
+        .input-row(layout="row", ng-if="!viewOnly")
           md-input-container(flex)
             label Name
             input(name="name", ng-model="item.name", md-maxlength="30", required)
@@ -20,16 +21,22 @@ script(type="text/ng-template", id="/dialog/adduser")
 
         h3.md-subhead Aliases
         .input-row(layout="row")
-          md-chips(ng-model="item.aliases", placeholder="Add aliases", secondary-placeholder="+Alias", required)
+          md-chips(ng-model="item.aliases", placeholder="Add aliases", secondary-placeholder="+Alias", required, readonly="viewOnly")
+          md-chip(ng-if="item.aliases.length === 0") None
 
         h3.md-subhead Games Played
         .input-row(layout="row")
-          md-chips(ng-model="item.games", placeholder="Add games", secondary-placeholder="+Game")
+          md-chips(ng-model="item.games", placeholder="Add games", secondary-placeholder="+Game", readonly="viewOnly")
+          md-chip(ng-if="item.games.length === 0") None
 
         h3.md-subhead Characters Used
         .input-row(layout="row")
-          md-chips(ng-model="item.characters", placeholder="Add characters", secondary-placeholder="+Character")
+          md-chips(ng-model="item.characters", placeholder="Add characters", secondary-placeholder="+Character", readonly="viewOnly")
+          md-chip(ng-if="item.characters.length === 0") None
 
-    .md-actions
+    .md-actions(ng-if="!viewOnly")
       md-button.md-primary(ng-click="addItem()", ng-disabled="item.form.$invalid", aria-label="submit") {{label}} Player
       md-button.md-primary(ng-click="cancel()", aria-label="cancel") Cancel
+
+    .md-actions(ng-if="viewOnly")
+      md-button.md-primary(ng-click="cancel()", aria-label="close") Close

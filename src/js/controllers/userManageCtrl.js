@@ -78,7 +78,7 @@ site.controller('userManageController', ($scope, $q, $mdDialog, Toaster, $fireba
   $scope.addItem = (event) => {
     const mdDialogOptions = clone(defaultMdDialogOptions);
     mdDialogOptions.event = event;
-    mdDialogOptions.locals = { player: {} };
+    mdDialogOptions.locals = { player: {}, viewOnly: false };
     $mdDialog.show(mdDialogOptions).then(newPlayer => {
       $scope.users.$add(newPlayer);
     });
@@ -87,7 +87,7 @@ site.controller('userManageController', ($scope, $q, $mdDialog, Toaster, $fireba
   $scope.editItem = (event) => {
     const mdDialogOptions = clone(defaultMdDialogOptions);
     mdDialogOptions.event = event;
-    mdDialogOptions.locals = { player: $scope.selected[0] };
+    mdDialogOptions.locals = { player: $scope.selected[0], viewOnly: false };
     $mdDialog.show(mdDialogOptions).then(oldPlayer => {
       const item = $scope.users.$getRecord(oldPlayer.$id);
       extend(item, oldPlayer);
@@ -114,6 +114,18 @@ site.controller('userManageController', ($scope, $q, $mdDialog, Toaster, $fireba
       Toaster.show(`Successfully removed ${players.length} players.`);
 
       $scope.selected = [];
+    });
+  };
+
+  $scope.viewItem = (event, player) => {
+    event.stopPropagation();
+    const mdDialogOptions = clone(defaultMdDialogOptions);
+    mdDialogOptions.event = event;
+    mdDialogOptions.locals = { player, viewOnly: true };
+    $mdDialog.show(mdDialogOptions).then(oldPlayer => {
+      const item = $scope.users.$getRecord(oldPlayer.$id);
+      extend(item, oldPlayer);
+      $scope.users.$save(item);
     });
   };
 
@@ -144,4 +156,5 @@ site.controller('userManageController', ($scope, $q, $mdDialog, Toaster, $fireba
   };
 
   $scope.$watch('datatable.filter', _.throttle(callback, 500));
+
 });
