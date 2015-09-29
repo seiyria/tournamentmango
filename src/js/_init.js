@@ -7,6 +7,7 @@ import './services/ensureLoggedIn';
 import './services/sidebarManagement';
 import './services/disconnectNotifier';
 import './services/toaster';
+import './services/auth';
 
 import './controllers/rootCtrl';
 import './controllers/navCtrl';

@@ -22,17 +22,17 @@ script(type="text/ng-template", id="/dialog/adduser")
         h3.md-subhead Aliases
         .input-row(layout="row")
           md-chips(ng-model="item.aliases", placeholder="Add aliases", secondary-placeholder="+Alias", required, readonly="viewOnly")
-          md-chip(ng-if="item.aliases.length === 0") None
+          md-chip(ng-if="item.aliases.length === 0 && viewOnly") None
 
         h3.md-subhead Games Played
         .input-row(layout="row")
           md-chips(ng-model="item.games", placeholder="Add games", secondary-placeholder="+Game", readonly="viewOnly")
-          md-chip(ng-if="item.games.length === 0") None
+          md-chip(ng-if="item.games.length === 0&& viewOnly") None
 
         h3.md-subhead Characters Used
         .input-row(layout="row")
           md-chips(ng-model="item.characters", placeholder="Add characters", secondary-placeholder="+Character", readonly="viewOnly")
-          md-chip(ng-if="item.characters.length === 0") None
+          md-chip(ng-if="item.characters.length === 0&& viewOnly") None
 
     .md-actions(ng-if="!viewOnly")
       md-button.md-primary(ng-click="addItem()", ng-disabled="item.form.$invalid", aria-label="submit") {{label}} Player

@@ -11,8 +11,8 @@ script(type="text/ng-template", id="navbar")
     md-menu(ng-if="!userStatus.loggedIn")
       md-button(ng-click="$mdOpenMenu($event)") Login
       md-menu-content
-        md-menu-item(ng-repeat="login in logins")
-          md-button(ng-click="doLogin(login.name)")
+        md-menu-item(ng-repeat="login in auth.loginTypes")
+          md-button(ng-click="auth.doLogin(login.name)")
             ng-md-icon(icon="{{login.icon}}", size="24")
             span &nbsp;Login with {{login.name}}
 
@@ -29,6 +29,6 @@ script(type="text/ng-template", id="navbar")
             span &nbsp;Player Panel
 
         md-menu-item
-          md-button(ng-click="doLogout()")
+          md-button(ng-click="auth.doLogout()")
             ng-md-icon(icon="logout", size="24")
             span &nbsp;Logout

@@ -1,23 +1,13 @@
 import site from '../app';
 import Firebase from 'firebase';
 
-site.service('DisconnectNotifier', (FirebaseURL) => {
+site.service('DisconnectNotifier', ($q, FirebaseURL) => {
   const firebase = new Firebase(`${FirebaseURL}/.info/connected`);
-
-  const callbacks = {
-    on: () => {},
-    off: () => {}
-  };
+  const defer = $q.defer();
 
   firebase.on('value', (snap) => {
-    if(snap.val()) {
-      callbacks.on();
-    } else {
-      callbacks.off();
-    }
+    defer.notify(snap.val());
   });
 
-  return {
-    setCallback: (key, callback) => callbacks[key] = callback
-  };
+  return defer.promise;
 });

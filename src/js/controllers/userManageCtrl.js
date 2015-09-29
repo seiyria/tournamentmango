@@ -11,7 +11,7 @@ site.controller('userManageController', ($scope, $q, $mdDialog, Toaster, $fireba
   $scope.datatable = {
     filter: '',
     order: '-name',
-    limit: 15,
+    limit: 10,
     page: 1
   };
 

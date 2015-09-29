@@ -49,4 +49,4 @@ script(type="text/ng-template", id="/user-manage")
             td
               md-button.md-raised.md-accent(ng-click="viewItem($event, user)") View Info
 
-    md-data-table-pagination(md-limit="datatable.limit", md-page="datatable.page", md-total="{{users.length}}", md-trigger="getUsers")
+    md-data-table-pagination(md-row-select="[10, 25, 50]", md-limit="datatable.limit", md-page="datatable.page", md-total="{{users.length}}", md-trigger="getUsers")
