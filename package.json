@@ -59,6 +59,8 @@
   "gulp": {
     "sass": "src/scss/*.scss",
     "libjs": [
+      "./bower_components/firebase/firebase.js",
+      "./bower_components/lodash/lodash.min.js",
       "./node_modules/angular/angular.min.js",
       "./node_modules/angular-aria/angular-aria.min.js",
       "./node_modules/angular-animate/angular-animate.min.js",
@@ -97,8 +99,6 @@
     "angular-material-icons": "^0.6.0",
     "angular-ui-router": "^0.2.15",
     "angularfire": "^1.1.2",
-    "firebase": "^2.3.0",
-    "lodash": "^3.10.1",
     "ngstorage": "^0.3.9"
   }
 }

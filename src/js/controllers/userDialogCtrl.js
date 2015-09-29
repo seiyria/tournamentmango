@@ -1,5 +1,4 @@
 import site from '../app';
-import { omit, extend, keys } from 'lodash';
 
 site.controller('userDialogController', ($scope, $mdDialog, player, viewOnly) => {
 
@@ -8,9 +7,9 @@ site.controller('userDialogController', ($scope, $mdDialog, player, viewOnly) =>
 
   const success = (item) => $mdDialog.hide(item);
 
-  $scope.label = keys(player).length > 0 ? 'Edit' : 'Add';
+  $scope.label = _.keys(player).length > 0 ? 'Edit' : 'Add';
 
-  $scope.item = extend({
+  $scope.item = _.extend({
     aliases: [],
     games: [],
     characters: []
@@ -20,7 +19,7 @@ site.controller('userDialogController', ($scope, $mdDialog, player, viewOnly) =>
     $scope.item.form.$setSubmitted();
 
     if($scope.item.form.$valid) {
-      success(omit($scope.item, 'form'));
+      success(_.omit($scope.item, 'form'));
     }
   };
 });

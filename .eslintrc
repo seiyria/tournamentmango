@@ -10,7 +10,9 @@
     "describe": true,
     "beforeEach": true,
     "it": true,
-    "angular": true
+    "angular": true,
+    "Firebase": true,
+    "_": true
   },
   "rules": {
     "no-var": 2,

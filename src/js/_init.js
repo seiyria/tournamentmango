@@ -8,6 +8,7 @@ import './services/sidebarManagement';
 import './services/disconnectNotifier';
 import './services/toaster';
 import './services/auth';
+import './services/userManagement';
 
 import './controllers/rootCtrl';
 import './controllers/navCtrl';
