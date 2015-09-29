@@ -3,7 +3,8 @@ import site from '../app';
 site.service('FilterUtils', () => {
 
   const filterByContains = (array, contains) => _.filter(array, (str) => _.contains(str.toLowerCase(), contains.toLowerCase()));
-  const getUniqueKeys = (array, key) => _.uniq(_.pluck(array, key));
+  const getUniqueKeys = (array, key) => _.compact(_.uniq(_.flatten([_.pluck(array, key)], true)));
+  const getAndFilter = (array, key, search = '') => filterByContains(getUniqueKeys(array, key), search);
 
   // get a filter array for user if they exist
   const getFilterArr = (user, arr) => user[arr] ? _.map(user[arr], (s) => s.toLowerCase()) : [];
@@ -47,6 +48,7 @@ site.service('FilterUtils', () => {
     containsAny,
     getFilterArr,
     getUniqueKeys,
+    getAndFilter,
     filterByContains,
     filterTable
   };

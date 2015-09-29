@@ -9,10 +9,9 @@ site.controller('userDialogController', ($scope, $mdDialog, player, viewOnly, Us
 
   $scope.label = _.keys(player).length > 0 ? 'Edit' : 'Add';
 
-  $scope.getLocations = (query = '') => {
-    const locations = FilterUtils.getUniqueKeys(UserManagement.users, 'location');
-    return FilterUtils.filterByContains(locations, query);
-  };
+  $scope.getLocations = (query = '') => FilterUtils.getAndFilter(UserManagement.users, 'location', query);
+  $scope.getGames = (query = '') => _.difference(FilterUtils.getAndFilter(UserManagement.users, 'games', query), $scope.item.games);
+  $scope.getCharacters = (query = '') => _.difference(FilterUtils.getAndFilter(UserManagement.users, 'characters', query), $scope.item.characters);
 
   $scope.item = _.extend({
     aliases: [],

@@ -29,17 +29,51 @@ script(type="text/ng-template", id="/dialog/adduser")
 
         h3.md-subhead Aliases
         .input-row(layout="row")
-          md-chips(ng-model="item.aliases", placeholder="Add aliases", secondary-placeholder="+Alias", required, readonly="viewOnly")
+          md-chips(flex,
+            ng-model="item.aliases",
+            secondary-placeholder="Add aliases",
+            placeholder="+Alias",
+            required,
+            readonly="viewOnly")
+              span(md-highlight-text="searchText") {{item}}
           md-chip(ng-if="item.aliases.length === 0 && viewOnly") None
 
         h3.md-subhead Games Played
         .input-row(layout="row")
-          md-chips(ng-model="item.games", placeholder="Add games", secondary-placeholder="+Game", readonly="viewOnly")
+          md-chips(flex,
+          ng-model="item.games",
+          secondary-placeholder="Add games",
+          placeholder="+Game",
+          required,
+          md-autocomplete-snap,
+          readonly="viewOnly")
+            md-autocomplete(
+            md-selected-item="selectedItem",
+            md-search-text="searchText",
+            md-items="item in getGames(searchText)"
+            md-item-text="item"
+            placeholder="+Game"
+            )
+              span(md-highlight-text="searchText") {{item}}
           md-chip(ng-if="item.games.length === 0 && viewOnly") None
 
         h3.md-subhead Characters Used
         .input-row(layout="row")
-          md-chips(ng-model="item.characters", placeholder="Add characters", secondary-placeholder="+Character", readonly="viewOnly")
+          md-chips(
+          ng-model="item.characters",
+          secondary-placeholder="Add characters",
+          placeholder="+Character",
+          required,
+          md-autocomplete-snap,
+          readonly="viewOnly")
+            md-autocomplete(
+            md-selected-item="selectedItem",
+            md-search-text="searchText",
+            md-items="item in getCharacters(searchText)"
+            md-item-text="item"
+            placeholder="+Character"
+            )
+              span(md-highlight-text="searchText") {{item}}
           md-chip(ng-if="item.characters.length === 0&& viewOnly") None
 
     .md-actions(ng-if="!viewOnly")
