@@ -20,7 +20,6 @@ site.service('ShareManagement', (UserStatus, FirebaseURL, $firebaseArray) => {
       const sharebase = $firebaseArray(new Firebase(`${FirebaseURL}/shares/${rem}/${me}`));
       sharebase.$loaded().then(() => {
         const item = _.findWhere(sharebase, { $value: docId });
-        console.log(item, sharebase.$keyAt(item.$id), sharebase.$indexFor(item.$id));
         sharebase.$remove(sharebase.$indexFor(item.$id));
       });
     });
