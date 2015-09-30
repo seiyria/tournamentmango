@@ -15,16 +15,17 @@ script(type="text/ng-template", id="/dialog/adduser")
           md-input-container(flex)
             label Name
             input(name="name", ng-model="item.name", md-maxlength="30", required)
+
           md-autocomplete(flex, required,
             md-input-name="location",
-            md-selected-item="item.location",
+            md-selected-item="selectedlocation",
             md-floating-label="Location",
-            md-search-text="searchText",
-            md-items="item in getLocations(searchText)",
-            md-item-text="item",
+            md-search-text="item.location",
+            md-items="place in getLocations(item.location)",
+            md-item-text="place",
             md-input-maxlength="30")
             md-item-template
-              span(md-highlight-text="searchText") {{item}}
+              span(md-highlight-text="searchText") {{place}}
             md-not-found No matches.
 
         h3.md-subhead Aliases
