@@ -7,9 +7,11 @@ script(type="text/ng-template", id="/user-manage")
 
       md-button.md-icon-button(ng-click="filter.show = true", aria-label="search")
         ng-md-icon(icon="search", size="24")
+          md-tooltip Search for users
 
       md-button.md-icon-button(ng-click="addItem($event)", aria-label="add user")
         ng-md-icon(icon="group_add", size="24")
+          md-tooltip Add new user
 
     md-data-table-toolbar(ng-show="filter.show && !selected.length")
       ng-md-icon(icon="search", size="24")
@@ -17,6 +19,7 @@ script(type="text/ng-template", id="/user-manage")
         input(type="text", ng-model="datatable.filter", ng-model-options="filter.options", placeholder="Search...")
       md-button.md-icon-button(ng-click="hideSearch()", aria-label="hide search")
         ng-md-icon(icon="close")
+          md-tooltip Close search
 
     md-data-table-toolbar(ng-show="selected.length")
       div {{selected.length}} {{selected.length > 1 ? 'people' : 'person'}} selected
@@ -25,8 +28,10 @@ script(type="text/ng-template", id="/user-manage")
         | Start Tournament
       md-button.md-icon-button(ng-if="selected.length == 1", aria-label="edit user")
         ng-md-icon(icon="edit", ng-click="editItem($event)")
-      md-button.md-icon-button(ng-click, aria-label="delete users")
+          md-tooltip Edit user
+      md-button.md-icon-button(ng-click, aria-label="remove users")
         ng-md-icon(icon="delete", ng-click="removeItem($event)")
+          md-tooltip Remove user
 
     md-data-table-container
       table(md-data-table, md-row-select="selected")

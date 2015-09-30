@@ -3,6 +3,7 @@ script(type="text/ng-template", id="navbar")
   .md-toolbar-tools
     md-button(hide-gt-sm, ng-if="sidebar.hasSidebar", ng-click="toggleList()", aria-label="Toggle Menu")
       ng-md-icon(icon="menu")
+        md-tooltip Open Navigation
     h1
       a(ui-sref="home") OpenChallenge
 
