@@ -1,6 +1,6 @@
 import site from '../app';
 
-site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject, FirebaseURL, InputPrompt, UserStatus, SetManagement, SidebarManagement, EnsureLoggedIn, UserManagement) => {
+site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject, FirebaseURL, InputPrompt, UserStatus, ShareManagement, SetManagement, SidebarManagement, EnsureLoggedIn, UserManagement) => {
 
   SidebarManagement.hasSidebar = true;
   const authData = EnsureLoggedIn.check();
@@ -89,6 +89,10 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
   $scope.setCurrentPlayerSet = (name = 'default') => {
     $scope.setObject = $firebaseObject(new Firebase(`${FirebaseURL}/users/${authData.uid}/players/${name}`));
     $scope.setObject.$loaded(() => {
+      if(!$scope.setObject._name) {
+        $scope.setObject._name = name;
+        $scope.setObject.$save();
+      }
       if(!$scope.setObject.realName) {
         $scope.setObject.realName = name;
         $scope.setObject.$save();
@@ -115,9 +119,24 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
 
   $scope.doOrOpen = (event) => $scope.isOpen ? $scope.doChange(event) : $scope.isOpen = true;
 
+  $scope.openShareDialog = (event) => SetManagement.shareSet(event, $scope.setObject.realName, $scope.setObject.sharedWith, $scope.updateShareSettings);
+
   $scope.changeSetFromRealname = (newSet) => $scope.changePlayerSet(_.findWhere($scope.listKeys, { realName: newSet }).short);
 
+  $scope.updateShareSettings = (shareData) => {
+    const oldSharedWith = $scope.setObject.shareIDs;
+
+    ShareManagement.manageSorting(oldSharedWith, shareData, $scope.setObject._name);
+
+    $scope.setObject.shareIDs = _.pluck(shareData, 'uid');
+    $scope.setObject.sharedWith = shareData;
+    $scope.setObject.$save();
+  };
+
   $scope.removeSet = () => {
+    const oldSharedWith = $scope.setObject.shareIDs;
+    ShareManagement.manageSorting(oldSharedWith, [], $scope.setObject._name);
+
     $scope.setObject.$remove().then(() => {
       $scope.changePlayerSet(_.sample($scope.listKeys).short);
     });

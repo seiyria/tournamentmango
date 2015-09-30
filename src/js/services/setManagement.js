@@ -1,6 +1,6 @@
 import site from '../app';
 
-site.service('SetManagement', (FirebaseURL, $mdDialog, InputPrompt, SelectPrompt, Toaster) => {
+site.service('SetManagement', (FirebaseURL, $mdDialog, InputPrompt, SelectPrompt, SharePrompt, Toaster) => {
 
   const newSet = (event, invalidValues, callback) => {
     InputPrompt.show(event, {
@@ -50,10 +50,21 @@ site.service('SetManagement', (FirebaseURL, $mdDialog, InputPrompt, SelectPrompt
     });
   };
 
+  const shareSet = (event, docName, defaultShared, callback) => {
+    SharePrompt.show(event, {
+      title: docName,
+      defaultValue: defaultShared || []
+    }, (data) => {
+      Toaster.show(`Successfully updated share settings`);
+      callback(data);
+    });
+  };
+
   return {
     newSet,
     renameSet,
     deleteSet,
+    shareSet,
     changeSet
   };
 });

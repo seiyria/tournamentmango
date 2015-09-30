@@ -1,0 +1,29 @@
+script(type="text/ng-template", id="/dialog/share-prompt")
+  md-dialog
+
+    md-dialog-content
+      h2.md-title Share "{{title}}"
+
+      form(name="form", ng-submit="submit()")
+        .input-row(layout="row")
+          md-chips(flex,
+          ng-model="sharedWith",
+          secondary-placeholder="Share with users",
+          placeholder="+User",
+          md-require-match="true",
+          md-autocomplete-snap)
+            md-autocomplete(flex, required,
+              md-selected-item="sharedwith",
+              md-search-text="searchKey",
+              md-items="user in getUser(searchKey)",
+              md-item-text="user.name")
+              md-item-template
+                span {{user.name}}
+              md-not-found No matches.
+
+            md-chip-template
+              span {{$chip.name}}
+
+    .md-actions
+      md-button.md-primary(ng-click="submit()", aria-label="submit") Submit
+      md-button.md-primary(ng-click="cancel()", aria-label="cancel") Cancel

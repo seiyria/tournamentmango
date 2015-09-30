@@ -13,6 +13,8 @@ import './services/userManagement';
 import './services/setManagement';
 import './services/inputPrompt';
 import './services/selectPrompt';
+import './services/sharePrompt';
+import './services/shareManagement';
 
 import './controllers/rootCtrl';
 import './controllers/navCtrl';
@@ -23,6 +25,7 @@ import './controllers/userSettingsCtrl';
 import './controllers/tournamentSidebarCtrl';
 import './controllers/dialogs/userDialogCtrl';
 import './controllers/dialogs/inputPromptCtrl';
+import './controllers/dialogs/sharePromptCtrl';
 import './controllers/dialogs/selectPromptCtrl';
 
 import './routes';
