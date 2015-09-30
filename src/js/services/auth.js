@@ -27,12 +27,16 @@ site.service('Auth', (WrappedFirebase, FirebaseURL, UserStatus, $state, $firebas
 
     UserStatus.firebase = $firebaseObject(new Firebase(`${FirebaseURL}/users/${authData.uid}`));
 
-    WrappedFirebase.child('users').once('value', (snapshot) => {
-      if(snapshot.hasChild(authData.uid)) return;
-      WrappedFirebase.child('users').set(authData.uid, {
-        provider: authData.auth.provider,
-        name: authData[authData.auth.provider].displayName
-      });
+    UserStatus.firebase.$loaded(() => {
+      if(!UserStatus.firebase.provider) {
+        UserStatus.firebase.provider = authData.auth.provider;
+        UserStatus.firebase.$save();
+      }
+
+      if(!UserStatus.firebase.name) {
+        UserStatus.firebase.name = authData[authData.auth.provider].displayName;
+        UserStatus.firebase.$save();
+      }
     });
   };
 
