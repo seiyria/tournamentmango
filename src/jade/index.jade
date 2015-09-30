@@ -11,7 +11,13 @@ html(ng-app='openchallenge', ng-controller="rootController")
     md-toolbar(layout="row", ng-controller="navController", ng-include="'navbar'")
 
     div(layout="row", flex)
-      md-sidenav.md-sidenav-left.md-whiteframe-z2(layout="column", ng-if="sidebar.hasSidebar", md-is-locked-open="$mdMedia('gt-sm')", md-component-id="left", ui-view="sidebar")
+      md-sidenav.md-sidenav-left.md-whiteframe-z2(
+        layout="column",
+        ng-if="sidebar.hasSidebar",
+        md-is-locked-open="$mdMedia('gt-sm')",
+        md-component-id="left",
+        ui-view="sidebar",
+        md-swipe-left="dismissSidebar()")
       div(layout="column", flex)
         md-content(layout="column", layout-padding, flex, ui-view="content")
 

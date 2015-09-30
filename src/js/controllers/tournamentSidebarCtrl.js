@@ -1,6 +1,6 @@
 import site from '../app';
 
-site.controller('tournamentSidebarController', ($scope, $state) => {
+site.controller('tournamentSidebarController', ($scope, $state, $mdSidenav) => {
   $scope.events = [
     {
       name: 'OGS Th 9/21',
@@ -15,5 +15,8 @@ site.controller('tournamentSidebarController', ($scope, $state) => {
     }
   ];
 
-  $scope.navigateTo = (state) => $state.go(state);
+  $scope.navigateTo = (state) => {
+    $state.go(state);
+    $mdSidenav('left').toggle();
+  };
 });
