@@ -1,6 +1,7 @@
 import site from '../app';
 
-site.controller('userManageController', ($scope, $firebaseArray, FirebaseURL, SidebarManagement, EnsureLoggedIn, UserManagement) => {
+site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject, FirebaseURL, InputPrompt, UserStatus, SetManagement, SidebarManagement, EnsureLoggedIn, UserManagement) => {
+
   SidebarManagement.hasSidebar = true;
   const authData = EnsureLoggedIn.check();
 
@@ -14,10 +15,12 @@ site.controller('userManageController', ($scope, $firebaseArray, FirebaseURL, Si
 
   $scope.filter = { options: { throttle: 500 } };
 
+  $scope.users = [];
   $scope.visibleUsers = [];
   $scope.selected = [];
+  $scope.listKeys = [];
 
-  $scope.users = UserManagement.users = $firebaseArray(new Firebase(`${FirebaseURL}/users/${authData.uid}/players`));
+  $scope.userData = UserStatus;
 
   $scope.addItem = (event) => {
     UserManagement.addItem(event, newPlayer => {
@@ -50,9 +53,6 @@ site.controller('userManageController', ($scope, $firebaseArray, FirebaseURL, Si
     $scope.visibleUsers = UserManagement.filterUsers($scope.users, $scope.datatable);
   };
 
-  $scope.users.$loaded($scope.getUsers);
-  $scope.users.$watch($scope.getUsers);
-
   $scope.hideSearch = () => {
     $scope.datatable.filter = '';
     $scope.filter.show = false;
@@ -78,5 +78,85 @@ site.controller('userManageController', ($scope, $firebaseArray, FirebaseURL, Si
   };
 
   $scope.$watch('datatable.filter', filterWatch);
+
+  $scope.changePlayerSet = (name = 'default') => {
+    UserStatus.firebase.playerSet = name;
+    UserStatus.firebase.$save();
+
+    $scope.setCurrentPlayerSet(name);
+  };
+
+  $scope.setCurrentPlayerSet = (name = 'default') => {
+    $scope.setObject = $firebaseObject(new Firebase(`${FirebaseURL}/users/${authData.uid}/players/${name}`));
+    $scope.setObject.$loaded(() => {
+      if(!$scope.setObject.realName) {
+        $scope.setObject.realName = name;
+        $scope.setObject.$save();
+      }
+      if(!$scope.setObject.owner) {
+        $scope.setObject.owner = authData.uid;
+        $scope.setObject.$save();
+      }
+      $scope.loadUserList();
+    });
+  };
+
+  $scope.hasMultipleSets = () => $scope.listKeys.length > 1;
+
+  $scope.ownsCurrentSet = () => $scope.setObject ? $scope.setObject.owner === authData.uid : false;
+
+  $scope.doNewSet = (event) => SetManagement.newSet(event, _.pluck($scope.listKeys, 'short'), $scope.changePlayerSet);
+
+  $scope.doRename = (event) => SetManagement.renameSet(event, $scope.setObject.realName, $scope.renameCurrentPlayerSet);
+
+  $scope.doDelete = (event) => SetManagement.deleteSet(event, $scope.removeSet);
+
+  $scope.doChange = (event) => SetManagement.changeSet(event, $scope.setObject.realName, _.pluck($scope.listKeys, 'realName'), $scope.changeSetFromRealname);
+
+  $scope.doOrOpen = (event) => $scope.isOpen ? $scope.doChange(event) : $scope.isOpen = true;
+
+  $scope.changeSetFromRealname = (newSet) => $scope.changePlayerSet(_.findWhere($scope.listKeys, { realName: newSet }).short);
+
+  $scope.removeSet = () => {
+    $scope.setObject.$remove().then(() => {
+      $scope.changePlayerSet(_.sample($scope.listKeys).short);
+    });
+  };
+
+  $scope.renameCurrentPlayerSet = (newName) => {
+    if(!newName) return;
+    $scope.setObject.realName = newName;
+    $scope.setObject.$save();
+  };
+
+  $scope.loadUserList = () => {
+    $scope.users = UserManagement.users = $firebaseArray($scope.setObject.$ref().child('list'));
+    $scope.users.$loaded($scope.getUsers);
+    $scope.users.$watch($scope.getUsers);
+  };
+
+  $scope.loadAllLists = () => {
+    $scope.allLists = $firebaseObject(new Firebase(`${FirebaseURL}/users/${authData.uid}/players`));
+    $scope.allLists.$watch(() => {
+      $scope.listKeys = _.reject(_.keys($scope.allLists), (key) => _.contains(key, '$'));
+      $scope.listKeys = _.map($scope.listKeys, (key) => {
+        return { realName: $scope.allLists[key].realName, short: key };
+      });
+    });
+  };
+
+  $scope.load = () => {
+    UserStatus.firebase.$loaded(() => {
+      if(!UserStatus.firebase.playerSet) {
+        $scope.changePlayerSet('default');
+      }
+      if(!$scope.setObject) {
+        $scope.setCurrentPlayerSet(UserStatus.firebase.playerSet);
+      }
+    });
+    $scope.loadAllLists();
+  };
+
+  $scope.load();
 
 });

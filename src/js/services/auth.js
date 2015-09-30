@@ -1,6 +1,6 @@
 import site from '../app';
 
-site.service('Auth', (WrappedFirebase, UserStatus, $state, $firebaseAuth) => {
+site.service('Auth', (WrappedFirebase, FirebaseURL, UserStatus, $state, $firebaseAuth, $firebaseObject) => {
 
   const loginTypes = [
     {
@@ -24,6 +24,8 @@ site.service('Auth', (WrappedFirebase, UserStatus, $state, $firebaseAuth) => {
     UserStatus.displayName = authData[provider].displayName;
     UserStatus.loggedIn = true;
     UserStatus.authData = authData;
+
+    UserStatus.firebase = $firebaseObject(new Firebase(`${FirebaseURL}/users/${authData.uid}`));
 
     WrappedFirebase.child('users').once('value', (snapshot) => {
       if(snapshot.hasChild(authData.uid)) return;

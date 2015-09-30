@@ -1,4 +1,4 @@
-import site from '../app';
+import site from '../../app';
 
 site.controller('userDialogController', ($scope, $mdDialog, player, viewOnly, UserManagement, FilterUtils) => {
 

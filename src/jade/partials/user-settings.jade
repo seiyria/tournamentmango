@@ -1,0 +1,11 @@
+
+script(type="text/ng-template", id="/user-settings")
+  md-card
+    md-list
+      md-subheader User Information
+      md-list-item.md-3-line
+        ng-md-icon.md-avatar(icon="local_offer", size="36")
+        .md-list-item-text(layout="column")
+          h3 User ID
+          h4 {{shareId}}
+          p Give this ID to others for them to share with you

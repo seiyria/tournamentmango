@@ -1,17 +1,18 @@
 
 script(type="text/ng-template", id="/user-manage")
+
   md-card
     md-data-table-toolbar(ng-hide="selected.length || filter.show")
-      h2.md-title Player Management
+      h2.md-title Player Management ({{setObject.realName || 'none'}})
       div(flex)
 
       md-button.md-icon-button(ng-click="filter.show = true", aria-label="search")
         ng-md-icon(icon="search", size="24")
-          md-tooltip Search for users
+          md-tooltip Search for players
 
       md-button.md-icon-button(ng-click="addItem($event)", aria-label="add user")
         ng-md-icon(icon="group_add", size="24")
-          md-tooltip Add new user
+          md-tooltip Add new player
 
     md-data-table-toolbar(ng-show="filter.show && !selected.length")
       ng-md-icon(icon="search", size="24")
@@ -28,10 +29,10 @@ script(type="text/ng-template", id="/user-manage")
         | Start Tournament
       md-button.md-icon-button(ng-if="selected.length == 1", aria-label="edit user")
         ng-md-icon(icon="edit", ng-click="editItem($event)")
-          md-tooltip Edit user
+          md-tooltip Edit player
       md-button.md-icon-button(ng-click, aria-label="remove users")
         ng-md-icon(icon="delete", ng-click="removeItem($event)")
-          md-tooltip Remove user
+          md-tooltip Remove player
 
     md-data-table-container
       table(md-data-table, md-row-select="selected")
@@ -55,3 +56,32 @@ script(type="text/ng-template", id="/user-manage")
               md-button.md-raised.md-accent(ng-click="viewItem($event, user)") View Info
 
     md-data-table-pagination(md-row-select="[10, 25, 50]", md-limit="datatable.limit", md-page="datatable.page", md-total="{{users.length}}", md-trigger="getUsers")
+
+  .abs-position-bottom-right
+    md-fab-speed-dial.md-scale(md-direction="up", md-open="isOpen", ng-mouseleave="isOpen = false")
+      md-fab-trigger.align-with-text
+
+        md-button.md-fab.md-primary(aria-label="menu or switch set", ng-click="doOrOpen($event)", ng-mouseenter="isOpen = true")
+          ng-md-icon(size="24", icon="{{isOpen && hasMultipleSets() ? 'my_library_books' : 'menu'}}", style="fill: white")
+          md-tooltip(md-direction="left", ng-if="hasMultipleSets()") Change current player set
+
+      md-fab-actions(ng-if="isOpen")
+        md-button.md-fab.md-raised.md-accent.md-hue-1(aria-label="new set", ng-click="doNewSet($event)")
+          ng-md-icon(size="24", icon="add_circle", style="fill: white")
+          md-tooltip(md-direction="left") Create new player set
+
+        md-button.md-fab.md-raised.md-accent.md-hue-1(aria-label="rename set", ng-click="doRename($event)", ng-if="ownsCurrentSet()")
+          ng-md-icon(size="24", icon="edit", style="fill: white")
+          md-tooltip(md-direction="left") Rename current player set
+
+        md-button.md-fab.md-raised.md-accent.md-hue-1(aria-label="export to set", ng-if="false")
+          ng-md-icon(size="24", icon="input", style="fill: white")
+          md-tooltip(md-direction="left") Export to another player set
+
+        md-button.md-fab.md-raised.md-warn.md-hue-1(aria-label="share set", ng-if="ownsCurrentSet()")
+          ng-md-icon(size="24", icon="share", style="fill: white")
+          md-tooltip(md-direction="left") Share this player set
+
+        md-button.md-fab.md-raised.md-warn.md-hue-1(aria-label="delete set", ng-click="doDelete($event)", ng-if="ownsCurrentSet() && hasMultipleSets()")
+          ng-md-icon(size="24", icon="delete", style="fill: white")
+          md-tooltip(md-direction="left") Remove this player set

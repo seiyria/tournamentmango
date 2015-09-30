@@ -10,13 +10,19 @@ import './services/toaster';
 import './services/filterUtils';
 import './services/auth';
 import './services/userManagement';
+import './services/setManagement';
+import './services/inputPrompt';
+import './services/selectPrompt';
 
 import './controllers/rootCtrl';
 import './controllers/navCtrl';
 import './controllers/homeCtrl';
 import './controllers/userManageCtrl';
 import './controllers/tournamentCtrl';
+import './controllers/userSettingsCtrl';
 import './controllers/tournamentSidebarCtrl';
-import './controllers/userDialogCtrl';
+import './controllers/dialogs/userDialogCtrl';
+import './controllers/dialogs/inputPromptCtrl';
+import './controllers/dialogs/selectPromptCtrl';
 
 import './routes';

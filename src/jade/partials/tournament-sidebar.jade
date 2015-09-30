@@ -20,3 +20,9 @@ script(type="text/ng-template", id="/tournament-sidebar")
       .md-list-item-text
         span Tournament Panel
         p Manage tournaments
+
+    md-list-item.md-2-line(ng-click="navigateTo('userSettings')")
+      ng-md-icon.md-avatar(icon="settings", size="36")
+      .md-list-item-text
+        span Settings
+        p User ID, Export, Import

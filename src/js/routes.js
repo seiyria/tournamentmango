@@ -24,5 +24,12 @@ site.config(($stateProvider, $urlRouterProvider) => {
         'content@': { templateUrl: '/tournaments', controller: 'tournamentController' },
         'sidebar@': { templateUrl: '/tournament-sidebar', controller: 'tournamentSidebarController' }
       }
+    })
+    .state('userSettings', {
+      url: '/settings',
+      views: {
+        'content@': { templateUrl: '/user-settings', controller: 'userSettingsController' },
+        'sidebar@': { templateUrl: '/tournament-sidebar', controller: 'tournamentSidebarController' }
+      }
     });
 });

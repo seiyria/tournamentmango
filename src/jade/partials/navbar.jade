@@ -19,8 +19,8 @@ script(type="text/ng-template", id="navbar")
 
     md-menu(ng-if="userStatus.loggedIn")
       md-button(ng-click="$mdOpenMenu($event)")
-        ng-md-icon.no-transform(hide-gt-sm, icon="{{ connected ? 'signal_wifi_4_bar' : 'signal_wifi_off'}}", size="24", style="fill: white")
-        ng-md-icon(hide-sm, icon="{{ connected ? 'signal_wifi_4_bar' : 'signal_wifi_off'}}", size="24", style="fill: white")
+        ng-md-icon.no-transform(hide-gt-sm, icon="{{ connected ? 'cloud' : 'cloud_off'}}", size="24", style="fill: white")
+        ng-md-icon(hide-sm, icon="{{ connected ? 'cloud' : 'cloud_off'}}", size="24", style="fill: white")
           md-tooltip Currently {{ connected ? 'online' : 'offline' }}
 
         span(hide-sm) &nbsp;{{userStatus.displayName}}
@@ -45,6 +45,11 @@ script(type="text/ng-template", id="navbar")
           md-button(ui-sref="tournamentManage")
             ng-md-icon(icon="merge_type", size="24")
             span &nbsp;Tournament Panel
+
+        md-menu-item
+          md-button(ui-sref="userSettingsCtrl")
+            ng-md-icon(icon="settings", size="24")
+            span &nbsp;Settings
 
         md-menu-item
           md-button(ng-click="auth.doLogout()")
