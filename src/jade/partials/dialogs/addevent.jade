@@ -1,0 +1,39 @@
+
+script(type="text/ng-template", id="/dialog/addevent")
+  md-dialog
+
+    md-dialog-content
+      h2.md-title {{label}} Event
+
+      p.md-warn(ng-if="item.form.$submitted && item.form.$invalid", layout="row", layout-align="start center")
+        ng-md-icon(icon="error")
+        span &nbsp;All fields are required.
+
+      form(name="item.form", ng-submit="addItem()")
+        .input-row(layout="row")
+          md-input-container(flex)
+            label Name
+            input(name="name", ng-model="item.name", required)
+
+          md-input-container(flex)
+            label Location
+            input(name="location", ng-model="item.location", required)
+
+
+        h3.md-subhead When
+        .input-row(layout="row")
+          md-datepicker(ng-model="item.date", md-placeholder="Enter date", required, style="margin-top: 14px")
+
+          md-input-container(flex)
+            label Time
+            input(name="time", type="time", ng-model="item.date")
+
+        h3.md-subhead Extra
+        .input-row(layout="row")
+          md-input-container(flex)
+            label Description
+            textarea(name="description", ng-model="item.description", md-maxlength="200")
+
+    .md-actions
+      md-button.md-primary(ng-click="addItem()", ng-disabled="item.form.$invalid", aria-label="submit") {{label}} Event
+      md-button.md-primary(ng-click="cancel()", aria-label="cancel") Cancel
