@@ -1,6 +1,6 @@
 import site from '../../app';
 
-site.controller('tournamentDialogController', ($scope, $mdDialog, tournament, CurrentEvents) => {
+site.controller('tournamentDialogController', ($scope, $mdDialog, tournament, CurrentEvents, TournamentStatus) => {
 
   $scope.cancel = $mdDialog.cancel;
 
@@ -16,6 +16,7 @@ site.controller('tournamentDialogController', ($scope, $mdDialog, tournament, Cu
 
     if($scope.item.form.$valid) {
       const newItem = _.omit($scope.item, 'form');
+      newItem.status = TournamentStatus.NOT_STARTED;
       success(newItem);
     }
   };

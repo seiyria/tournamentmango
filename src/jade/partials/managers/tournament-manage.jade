@@ -42,6 +42,8 @@ script(type="text/ng-template", id="/tournament-manage")
             th(name="Name", order-by="name")
             th(name="Game", order-by="game")
             th(name="Event")
+            th(name="Status", order-by="status")
+            th
 
         tbody
 
@@ -49,6 +51,11 @@ script(type="text/ng-template", id="/tournament-manage")
             td {{tournament.name}}
             td {{tournament.game}}
             td {{tournamentName(tournament.event)}}
+            td {{tournament.status}}
+            td(ng-if="tournament.status === tStatus.NOT_STARTED")
+              md-button.md-raised.md-primary(aria-label="start tournament") Start
+            td(ng-if="tournament.status !== tStatus.NOT_STARTED")
+              md-button.md-raised.md-accent(aria-label="view tournament") View
 
     md-data-table-pagination(md-row-select="[10, 25, 50]", md-limit="datatable.limit", md-page="datatable.page", md-total="{{users.length}}", md-trigger="getUsers")
 

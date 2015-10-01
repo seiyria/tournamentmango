@@ -1,5 +1,6 @@
 
 import './constants/firebaseURL';
+import './constants/tournamentStatus';
 
 import './services/userStatus';
 import './services/ensureLoggedIn';

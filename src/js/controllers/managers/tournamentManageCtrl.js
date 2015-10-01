@@ -1,8 +1,10 @@
 import site from '../../app';
 
-site.controller('tournamentManageController', ($scope, SidebarManagement, EnsureLoggedIn, TournamentManagement, CurrentTournaments) => {
+site.controller('tournamentManageController', ($scope, SidebarManagement, EnsureLoggedIn, TournamentManagement, CurrentTournaments, TournamentStatus) => {
   SidebarManagement.hasSidebar = true;
   EnsureLoggedIn.check();
+
+  $scope.tStatus = TournamentStatus;
 
   $scope.tournaments = [];
   $scope.visibleTournaments = [];
