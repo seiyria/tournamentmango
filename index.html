@@ -10,6 +10,8 @@
     <meta name="viewport" content="initial-scale=1"/>
     <meta name="viewport" content="width=device-width"/>
     <meta name="theme-color" content="#3F51B5"/>
+    <meta name="msapplication-navbutton-color" content="#3F51B5"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="#3F51B5"/>
   </head>
   <body layout="column" ng-cloak="ng-cloak">
     <md-toolbar layout="row" ng-controller="navController" ng-include="'navbar'"></md-toolbar>
@@ -57,8 +59,8 @@
     </md-menu>
     <md-menu ng-if="userStatus.loggedIn">
       <md-button ng-click="$mdOpenMenu($event)">
-        <ng-md-icon hide-gt-sm="hide-gt-sm" icon="{{ connected ? 'signal_wifi_4_bar' : 'signal_wifi_off'}}" size="24" style="fill: white" class="no-transform"></ng-md-icon>
-        <ng-md-icon hide-sm="hide-sm" icon="{{ connected ? 'signal_wifi_4_bar' : 'signal_wifi_off'}}" size="24" style="fill: white">
+        <ng-md-icon hide-gt-sm="hide-gt-sm" icon="{{ connected ? 'cloud' : 'cloud_off'}}" size="24" style="fill: white" class="no-transform"></ng-md-icon>
+        <ng-md-icon hide-sm="hide-sm" icon="{{ connected ? 'cloud' : 'cloud_off'}}" size="24" style="fill: white">
           <md-tooltip>Currently {{ connected ? 'online' : 'offline' }}</md-tooltip>
         </ng-md-icon><span hide-sm="hide-sm">&nbsp;{{userStatus.displayName}}</span>
       </md-button>
@@ -71,6 +73,21 @@
         <md-menu-item>
           <md-button ui-sref="userManage">
             <ng-md-icon icon="group" size="24"></ng-md-icon><span>&nbsp;Player Panel</span>
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button ui-sref="eventManage">
+            <ng-md-icon icon="assignment" size="24"></ng-md-icon><span>&nbsp;Event Panel</span>
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button ui-sref="tournamentManage">
+            <ng-md-icon icon="merge_type" size="24"></ng-md-icon><span>&nbsp;Tournament Panel</span>
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button ui-sref="userSettingsCtrl">
+            <ng-md-icon icon="settings" size="24"></ng-md-icon><span>&nbsp;Settings</span>
           </md-button>
         </md-menu-item>
         <md-menu-item>
@@ -105,6 +122,12 @@
         <p>Manage tournaments</p>
       </div>
     </md-list-item>
+    <md-list-item ng-click="navigateTo('userSettings')" class="md-2-line">
+      <ng-md-icon icon="settings" size="36" class="md-avatar"></ng-md-icon>
+      <div class="md-list-item-text"><span>Settings</span>
+        <p>User ID, Export, Import</p>
+      </div>
+    </md-list-item>
   </md-list>
 </script>
 <script type="text/ng-template" id="/tournaments">
@@ -113,16 +136,20 @@
 <script type="text/ng-template" id="/user-manage">
   <md-card>
     <md-data-table-toolbar ng-hide="selected.length || filter.show">
-      <h2 class="md-title">Player Management</h2>
+      <h2 class="md-title">
+        <ng-md-icon size="24" icon="warning" ng-if="!isMine">
+          <md-tooltip>This set was not made by you</md-tooltip>
+        </ng-md-icon>&nbsp;Player Management ({{setObject.realName || 'none'}})
+      </h2>
       <div flex="flex"></div>
       <md-button ng-click="filter.show = true" aria-label="search" class="md-icon-button">
         <ng-md-icon icon="search" size="24">
-          <md-tooltip>Search for users</md-tooltip>
+          <md-tooltip>Search for players</md-tooltip>
         </ng-md-icon>
       </md-button>
       <md-button ng-click="addItem($event)" aria-label="add user" class="md-icon-button">
         <ng-md-icon icon="group_add" size="24">
-          <md-tooltip>Add new user</md-tooltip>
+          <md-tooltip>Add new player</md-tooltip>
         </ng-md-icon>
       </md-button>
     </md-data-table-toolbar>
@@ -143,12 +170,12 @@
       <md-button ng-if="selected.length &gt; 1" class="md-raised md-primary">Start Tournament</md-button>
       <md-button ng-if="selected.length == 1" aria-label="edit user" class="md-icon-button">
         <ng-md-icon icon="edit" ng-click="editItem($event)">
-          <md-tooltip>Edit user</md-tooltip>
+          <md-tooltip>Edit player</md-tooltip>
         </ng-md-icon>
       </md-button>
       <md-button ng-click="ng-click" aria-label="remove users" class="md-icon-button">
         <ng-md-icon icon="delete" ng-click="removeItem($event)">
-          <md-tooltip>Remove user</md-tooltip>
+          <md-tooltip>Remove player</md-tooltip>
         </ng-md-icon>
       </md-button>
     </md-data-table-toolbar>
@@ -179,6 +206,53 @@
       </table>
     </md-data-table-container>
     <md-data-table-pagination md-row-select="[10, 25, 50]" md-limit="datatable.limit" md-page="datatable.page" md-total="{{users.length}}" md-trigger="getUsers"></md-data-table-pagination>
+  </md-card>
+  <div class="abs-position-bottom-right">
+    <md-fab-speed-dial md-direction="up" md-open="isOpen" ng-mouseleave="isOpen = false" class="md-scale">
+      <md-fab-trigger class="align-with-text">
+        <md-button aria-label="menu or switch set" ng-click="doOrOpen($event)" ng-mouseenter="isOpen = true" class="md-fab md-primary">
+          <ng-md-icon size="24" icon="{{isOpen &amp;&amp; hasMultipleSets() ? 'my_library_books' : 'menu'}}" style="fill: white"></ng-md-icon>
+          <md-tooltip md-direction="left" ng-if="hasMultipleSets()">Change current player set</md-tooltip>
+        </md-button>
+      </md-fab-trigger>
+      <md-fab-actions ng-if="isOpen">
+        <md-button aria-label="new set" ng-click="doNewSet($event)" class="md-fab md-raised md-accent md-hue-1">
+          <ng-md-icon size="24" icon="add_circle" style="fill: white"></ng-md-icon>
+          <md-tooltip md-direction="left">Create new player set</md-tooltip>
+        </md-button>
+        <md-button aria-label="rename set" ng-click="doRename($event)" ng-if="ownsCurrentSet()" class="md-fab md-raised md-accent md-hue-1">
+          <ng-md-icon size="24" icon="edit" style="fill: white"></ng-md-icon>
+          <md-tooltip md-direction="left">Rename current player set</md-tooltip>
+        </md-button>
+        <md-button aria-label="export to set" ng-if="false" class="md-fab md-raised md-accent md-hue-1">
+          <ng-md-icon size="24" icon="input" style="fill: white"></ng-md-icon>
+          <md-tooltip md-direction="left">Export to another player set</md-tooltip>
+        </md-button>
+        <md-button aria-label="share set" ng-click="openShareDialog($event)" ng-if="ownsCurrentSet()" class="md-fab md-raised md-warn md-hue-1">
+          <ng-md-icon size="24" icon="share" style="fill: white"></ng-md-icon>
+          <md-tooltip md-direction="left">Share this player set</md-tooltip>
+        </md-button>
+        <md-button aria-label="delete set" ng-click="doDelete($event)" ng-if="ownsCurrentSet() &amp;&amp; hasMultipleSets()" class="md-fab md-raised md-warn md-hue-1">
+          <ng-md-icon size="24" icon="delete" style="fill: white"></ng-md-icon>
+          <md-tooltip md-direction="left">Remove this player set</md-tooltip>
+        </md-button>
+      </md-fab-actions>
+    </md-fab-speed-dial>
+  </div>
+</script>
+<script type="text/ng-template" id="/user-settings">
+  <md-card>
+    <md-list>
+      <md-subheader>User Information</md-subheader>
+      <md-list-item class="md-3-line">
+        <ng-md-icon icon="local_offer" size="36" class="md-avatar"></ng-md-icon>
+        <div layout="column" class="md-list-item-text">
+          <h3>User ID</h3>
+          <h4>{{shareId}}</h4>
+          <p>Give this ID to others for them to share with you</p>
+        </div>
+      </md-list-item>
+    </md-list>
   </md-card>
 </script>
 <script type="text/ng-template" id="/dialog/adduser">
@@ -227,6 +301,79 @@
     </div>
     <div ng-if="viewOnly" class="md-actions">
       <md-button ng-click="cancel()" aria-label="close" class="md-primary">Close</md-button>
+    </div>
+  </md-dialog>
+</script>
+<script type="text/ng-template" id="/dialog/input-prompt">
+  <md-dialog>
+    <md-dialog-content>
+      <h2 class="md-title">{{title}}</h2>
+      <p ng-if="form.$submitted &amp;&amp; form.$invalid" layout="row" layout-align="start center" class="md-warn">
+        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
+      </p>
+      <p ng-if="!isValid()" layout="row" layout-align="start center" class="md-warn">
+        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;Set name taken.</span>
+      </p>
+      <form name="form" ng-submit="submit()">
+        <div layout="row" class="input-row">
+          <md-input-container flex="flex">
+            <label>{{label}}</label>
+            <input name="string" ng-model="string" md-maxlength="30" required="required"/>
+          </md-input-container>
+        </div>
+      </form>
+    </md-dialog-content>
+    <div class="md-actions">
+      <md-button ng-click="submit()" ng-disabled="form.$invalid || !isValid()" aria-label="submit" class="md-primary">Submit</md-button>
+      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
+    </div>
+  </md-dialog>
+</script>
+<script type="text/ng-template" id="/dialog/select-prompt">
+  <md-dialog>
+    <md-dialog-content>
+      <h2 class="md-title">{{title}}</h2>
+      <p ng-if="form.$submitted &amp;&amp; form.$invalid" layout="row" layout-align="start center" class="md-warn">
+        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
+      </p>
+      <form name="form" ng-submit="submit()">
+        <div layout="row" class="input-row">
+          <md-input-container flex="flex">
+            <label>{{label}}</label>
+            <md-select ng-model="string" required="required">
+              <md-optgroup ng-repeat="group in groups" label="{{group}}">
+                <md-option ng-repeat="value in selectableValues | filter:{group:group}">{{value.realName}}</md-option>
+              </md-optgroup>
+            </md-select>
+          </md-input-container>
+        </div>
+      </form>
+    </md-dialog-content>
+    <div class="md-actions">
+      <md-button ng-click="submit()" ng-disabled="form.$invalid" aria-label="submit" class="md-primary">Submit</md-button>
+      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
+    </div>
+  </md-dialog>
+</script>
+<script type="text/ng-template" id="/dialog/share-prompt">
+  <md-dialog>
+    <md-dialog-content>
+      <h2 class="md-title">Share "{{title}}"</h2>
+      <form name="form" ng-submit="submit()">
+        <div layout="row" class="input-row">
+          <md-chips flex="flex" ng-model="sharedWith" secondary-placeholder="Share with users" placeholder="+User" md-require-match="true" md-autocomplete-snap="md-autocomplete-snap">
+            <md-autocomplete flex="flex" required="required" md-selected-item="sharedwith" md-search-text="searchKey" md-items="user in getUser(searchKey)" md-item-text="user.name">
+              <md-item-template><span>{{user.name}}</span></md-item-template>
+              <md-not-found>No matches.</md-not-found>
+            </md-autocomplete>
+            <md-chip-template><span>{{$chip.name}}</span></md-chip-template>
+          </md-chips>
+        </div>
+      </form>
+    </md-dialog-content>
+    <div class="md-actions">
+      <md-button ng-click="submit()" aria-label="submit" class="md-primary">Submit</md-button>
+      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
     </div>
   </md-dialog>
 </script>
