@@ -3,7 +3,10 @@ script(type="text/ng-template", id="/user-manage")
 
   md-card
     md-data-table-toolbar(ng-hide="selected.length || filter.show")
-      h2.md-title Player Management ({{setObject.realName || 'none'}})
+      h2.md-title
+        ng-md-icon(size="24", icon="warning", ng-if="!isMine")
+          md-tooltip This set was not made by you
+        | &nbsp;Player Management ({{setObject.realName || 'none'}})
       div(flex)
 
       md-button.md-icon-button(ng-click="filter.show = true", aria-label="search")
@@ -46,6 +49,7 @@ script(type="text/ng-template", id="/user-manage")
             th(name="Aliases, Games, Characters")
 
         tbody
+
           tr(md-auto-select, ng-repeat="user in visibleUsers")
             td {{user.name}}
             td {{user.location}}

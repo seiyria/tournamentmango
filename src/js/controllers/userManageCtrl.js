@@ -19,6 +19,7 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
   $scope.visibleUsers = [];
   $scope.selected = [];
   $scope.listKeys = [];
+  $scope.sharedLists = [];
 
   $scope.userData = UserStatus;
 
@@ -80,17 +81,22 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
   $scope.$watch('datatable.filter', filterWatch);
 
   $scope.changePlayerSet = (name = 'default') => {
+
+    const mySet = _.findWhere($scope.listKeys, { short: name });
     UserStatus.firebase.playerSet = name;
+    UserStatus.firebase.playerSetUid = mySet.uid;
+
+    $scope.isMine = UserStatus.firebase.playerSetUid === authData.uid;
     UserStatus.firebase.$save();
 
     $scope.setCurrentPlayerSet(name);
   };
 
   $scope.setCurrentPlayerSet = (name = 'default') => {
-    $scope.setObject = $firebaseObject(new Firebase(`${FirebaseURL}/users/${authData.uid}/players/${name}`));
+    $scope.setObject = $firebaseObject(new Firebase(`${FirebaseURL}/users/${UserStatus.firebase.playerSetUid}/players/${name}`));
     $scope.setObject.$loaded(() => {
-      if(!$scope.setObject._name) {
-        $scope.setObject._name = name;
+      if(!$scope.setObject.basename) {
+        $scope.setObject.basename = name;
         $scope.setObject.$save();
       }
       if(!$scope.setObject.realName) {
@@ -115,7 +121,7 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
 
   $scope.doDelete = (event) => SetManagement.deleteSet(event, $scope.removeSet);
 
-  $scope.doChange = (event) => SetManagement.changeSet(event, $scope.setObject.realName, _.pluck($scope.listKeys, 'realName'), $scope.changeSetFromRealname);
+  $scope.doChange = (event) => SetManagement.changeSet(event, $scope.setObject.realName, $scope.listKeys, $scope.changeSetFromRealname);
 
   $scope.doOrOpen = (event) => $scope.isOpen ? $scope.doChange(event) : $scope.isOpen = true;
 
@@ -124,18 +130,21 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
   $scope.changeSetFromRealname = (newSet) => $scope.changePlayerSet(_.findWhere($scope.listKeys, { realName: newSet }).short);
 
   $scope.updateShareSettings = (shareData) => {
-    const oldSharedWith = $scope.setObject.shareIDs;
+    const oldSharedWith = _.keys($scope.setObject.shareIDs);
 
-    ShareManagement.manageSorting(oldSharedWith, shareData, $scope.setObject._name);
+    ShareManagement.manageSorting(oldSharedWith, shareData, $scope.setObject.basename);
 
-    $scope.setObject.shareIDs = _.pluck(shareData, 'uid');
+    $scope.setObject.shareIDs = _.reduce(_.pluck(shareData, 'uid'), (prev, cur) => {
+      prev[cur] = true;
+      return prev;
+    }, {});
     $scope.setObject.sharedWith = shareData;
     $scope.setObject.$save();
   };
 
   $scope.removeSet = () => {
-    const oldSharedWith = $scope.setObject.shareIDs;
-    ShareManagement.manageSorting(oldSharedWith, [], $scope.setObject._name);
+    const oldSharedWith = _.keys($scope.setObject.shareIDs);
+    ShareManagement.manageSorting(oldSharedWith, [], $scope.setObject.basename);
 
     $scope.setObject.$remove().then(() => {
       $scope.changePlayerSet(_.sample($scope.listKeys).short);
@@ -154,12 +163,38 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
     $scope.users.$watch($scope.getUsers);
   };
 
+  $scope.resetListKeys = () => {
+    $scope.listKeys = _.reject(_.keys($scope.allLists), (key) => _.contains(key, '$'));
+    $scope.listKeys = _.map($scope.listKeys, (key) => {
+      return { realName: $scope.allLists[key].realName, short: key, uid: authData.uid, group: 'Mine' };
+    });
+    $scope.listKeys = $scope.listKeys.concat($scope.sharedLists);
+  };
+
   $scope.loadAllLists = () => {
     $scope.allLists = $firebaseObject(new Firebase(`${FirebaseURL}/users/${authData.uid}/players`));
-    $scope.allLists.$watch(() => {
-      $scope.listKeys = _.reject(_.keys($scope.allLists), (key) => _.contains(key, '$'));
-      $scope.listKeys = _.map($scope.listKeys, (key) => {
-        return { realName: $scope.allLists[key].realName, short: key };
+    $scope.allLists.$watch($scope.resetListKeys);
+  };
+
+  $scope.loadSharedWithMe = () => {
+    const sharedWithMe = $firebaseObject(new Firebase(`${FirebaseURL}/shares/${authData.uid}`));
+    sharedWithMe.$watch(() => {
+      $scope.sharedLists = [];
+
+      _.each(_.keys(sharedWithMe), (sharer) => {
+
+        if(_.contains(sharer, '$')) return;
+        const sharedbase = $firebaseObject(new Firebase(`${FirebaseURL}/users/${sharer}`));
+
+        sharedbase.$loaded().then(() => {
+          _.each(sharedWithMe[sharer], doc => {
+            const sharename = sharedbase.name;
+            const realDoc = sharedbase.players[doc];
+            $scope.sharedLists.push({ realName: realDoc.realName, uid: sharer, short: realDoc.basename, group: `Shared by ${sharename}` });
+          });
+          $scope.resetListKeys();
+
+        });
       });
     });
   };
@@ -174,6 +209,7 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
       }
     });
     $scope.loadAllLists();
+    $scope.loadSharedWithMe();
   };
 
   $scope.load();

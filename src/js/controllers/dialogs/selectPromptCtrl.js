@@ -10,6 +10,9 @@ site.controller('selectPromptController', ($scope, $mdDialog, title, label, defa
   $scope.title = title;
   $scope.label = label;
   $scope.selectableValues = _.sortBy(selectableValues);
+  $scope.groups = _.uniq(_.pluck(selectableValues, 'group'));
+
+  console.log($scope.selectableValues, $scope.groups);
 
   $scope.submit = () => {
     $scope.form.$setSubmitted();

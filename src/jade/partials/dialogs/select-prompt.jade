@@ -13,7 +13,8 @@ script(type="text/ng-template", id="/dialog/select-prompt")
           md-input-container(flex)
             label {{label}}
             md-select(ng-model="string", required)
-              md-option(ng-repeat="value in selectableValues") {{value}}
+              md-optgroup(ng-repeat="group in groups", label="{{group}}")
+                md-option(ng-repeat="value in selectableValues | filter:{group:group}") {{value.realName}}
 
     .md-actions
       md-button.md-primary(ng-click="submit()", ng-disabled="form.$invalid", aria-label="submit") Submit
