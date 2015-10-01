@@ -3,31 +3,31 @@ import './constants/firebaseURL';
 
 import './services/userStatus';
 import './services/ensureLoggedIn';
-import './services/sidebarManagement';
+import './services/managers/sidebarManagement';
 import './services/disconnectNotifier';
 import './services/toaster';
 import './services/filterUtils';
 import './services/auth';
 
-import './services/currentEvents';
-import './services/currentTournaments';
+import './services/currents/currentEvents';
+import './services/currents/currentTournaments';
 
-import './services/userManagement';
-import './services/eventManagement';
-import './services/tournamentManagement';
-import './services/setManagement';
+import './services/managers/userManagement';
+import './services/managers/eventManagement';
+import './services/managers/tournamentManagement';
+import './services/managers/setManagement';
 
-import './services/inputPrompt';
-import './services/selectPrompt';
-import './services/sharePrompt';
-import './services/shareManagement';
+import './services/prompts/inputPrompt';
+import './services/prompts/selectPrompt';
+import './services/prompts/sharePrompt';
+import './services/managers/shareManagement';
 
 import './controllers/rootCtrl';
 import './controllers/navCtrl';
 import './controllers/homeCtrl';
-import './controllers/userManageCtrl';
-import './controllers/tournamentManageCtrl';
-import './controllers/eventManageCtrl';
+import './controllers/managers/userManageCtrl';
+import './controllers/managers/tournamentManageCtrl';
+import './controllers/managers/eventManageCtrl';
 import './controllers/userSettingsCtrl';
 import './controllers/tournamentSidebarCtrl';
 

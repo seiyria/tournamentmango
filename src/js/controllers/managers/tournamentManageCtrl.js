@@ -1,4 +1,4 @@
-import site from '../app';
+import site from '../../app';
 
 site.controller('tournamentManageController', ($scope, SidebarManagement, EnsureLoggedIn, TournamentManagement, CurrentTournaments) => {
   SidebarManagement.hasSidebar = true;

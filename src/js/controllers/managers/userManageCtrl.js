@@ -1,4 +1,4 @@
-import site from '../app';
+import site from '../../app';
 
 site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject, FirebaseURL, InputPrompt, UserStatus, ShareManagement, SetManagement, SidebarManagement, EnsureLoggedIn, UserManagement) => {
 

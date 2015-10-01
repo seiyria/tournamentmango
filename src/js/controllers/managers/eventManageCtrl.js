@@ -1,4 +1,4 @@
-import site from '../app';
+import site from '../../app';
 
 site.controller('eventManageController', ($scope, SidebarManagement, EnsureLoggedIn, EventManagement, CurrentEvents) => {
   SidebarManagement.hasSidebar = true;

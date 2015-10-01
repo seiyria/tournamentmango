@@ -1,4 +1,4 @@
-import site from '../app';
+import site from '../../app';
 
 site.service('SetManagement', (FirebaseURL, $mdDialog, InputPrompt, SelectPrompt, SharePrompt, Toaster) => {
 

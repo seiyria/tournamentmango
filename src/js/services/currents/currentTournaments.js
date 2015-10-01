@@ -1,4 +1,4 @@
-import site from '../app';
+import site from '../../app';
 
 site.service('CurrentTournaments', ($firebaseArray, FirebaseURL, EnsureLoggedIn) => {
   const authData = EnsureLoggedIn.check();
