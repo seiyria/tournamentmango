@@ -84,7 +84,7 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
 
     const mySet = _.findWhere($scope.listKeys, { short: name });
     UserStatus.firebase.playerSet = name;
-    UserStatus.firebase.playerSetUid = mySet.uid;
+    UserStatus.firebase.playerSetUid = mySet ? mySet.uid : authData.uid;
 
     $scope.isMine = UserStatus.firebase.playerSetUid === authData.uid;
     UserStatus.firebase.$save();
