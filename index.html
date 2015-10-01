@@ -22,9 +22,95 @@
       </div>
     </div>
     <script src="js/lib.min.js"></script>
-    <script src="js/main.min.js"></script><script src="//cdnjs.cloudflare.com/ajax/libs/SVG-Morpheus/0.1.8/svg-morpheus.js"></script>
+    <script src="js/main.min.js"></script>
   </body>
 </html>
+<script type="text/ng-template" id="/event-manage">
+  <md-card>
+    <md-data-table-toolbar ng-hide="selected.length || filter.show">
+      <h2 class="md-title">Event Management {{showArchived ? '(archived)' : ''}}</h2>
+      <div flex="flex"></div>
+      <md-button ng-click="filter.show = true" aria-label="search" class="md-icon-button">
+        <ng-md-icon icon="search" size="24">
+          <md-tooltip>Search for events</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+      <md-button ng-click="addItem($event)" aria-label="add event" class="md-icon-button">
+        <ng-md-icon icon="note_add" size="24">
+          <md-tooltip>Add new event</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+    </md-data-table-toolbar>
+    <md-data-table-toolbar ng-show="filter.show &amp;&amp; !selected.length">
+      <ng-md-icon icon="search" size="24"></ng-md-icon>
+      <form flex="flex" name="filter.form">
+        <input type="text" ng-model="datatable.filter" ng-model-options="filter.options" placeholder="Search..."/>
+      </form>
+      <md-button ng-click="hideSearch()" aria-label="hide search" class="md-icon-button">
+        <ng-md-icon icon="close">
+          <md-tooltip>Close search</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+    </md-data-table-toolbar>
+    <md-data-table-toolbar ng-show="selected.length">
+      <div>{{selected.length}} {{selected.length > 1 ? 'events' : 'event'}} selected</div>
+      <div flex="flex"></div>
+      <md-button ng-if="selected.length == 1" aria-label="edit event" class="md-icon-button">
+        <ng-md-icon icon="edit" ng-click="editItem($event)">
+          <md-tooltip>Edit tournament</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+      <md-button ng-click="ng-click" aria-label="archive events" class="md-icon-button">
+        <ng-md-icon icon="archive" ng-click="archiveItem($event)">
+          <md-tooltip>Archive event</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+      <md-button ng-click="ng-click" aria-label="remove events" class="md-icon-button">
+        <ng-md-icon icon="delete" ng-click="removeItem($event)">
+          <md-tooltip>Remove event</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+    </md-data-table-toolbar>
+    <md-data-table-container>
+      <table md-data-table="md-data-table" md-row-select="selected">
+        <thead md-order="datatable.order" md-trigger="getEvents">
+          <tr>
+            <th name="Name" order-by="name"></th>
+            <th name="Description" order-by="description"></th>
+            <th name="Location" order-by="location"></th>
+            <th name="Date" order-by="date" style="width: 170px"></th>
+            <th name="Time" style="width: 100px"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr md-auto-select="md-auto-select" ng-repeat="event in visibleEvents">
+            <td>{{event.name}}</td>
+            <td>{{event.description}}</td>
+            <td>{{event.location}}</td>
+            <td>{{event.date | date:'fullDate'}}</td>
+            <td>{{event.date | date:'shortTime'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </md-data-table-container>
+    <md-data-table-pagination md-row-select="[10, 25, 50]" md-limit="datatable.limit" md-page="datatable.page" md-total="{{events.length}}" md-trigger="getEvents"></md-data-table-pagination>
+  </md-card>
+  <div class="abs-position-bottom-right">
+    <md-fab-speed-dial md-direction="up" md-open="isOpen" ng-mouseleave="isOpen = false" class="md-scale">
+      <md-fab-trigger class="align-with-text">
+        <md-button aria-label="menu" ng-click="isOpen = true" ng-mouseenter="isOpen = true" class="md-fab md-primary">
+          <ng-md-icon size="24" icon="menu" style="fill: white"></ng-md-icon>
+        </md-button>
+      </md-fab-trigger>
+      <md-fab-actions ng-if="isOpen">
+        <md-button aria-label="toggle archived" ng-click="toggleShowArchived()" class="md-fab md-raised md-accent md-hue-1">
+          <ng-md-icon size="24" icon="archive" style="fill: white"></ng-md-icon>
+          <md-tooltip md-direction="left">{{showArchived ? 'Hide' : 'Show'}} archived events</md-tooltip>
+        </md-button>
+      </md-fab-actions>
+    </md-fab-speed-dial>
+  </div>
+</script>
 <script type="text/ng-template" id="/home">
   <div layout="row" flex="flex">
     <div flex="flex">
@@ -77,7 +163,7 @@
         </md-menu-item>
         <md-menu-item>
           <md-button ui-sref="eventManage">
-            <ng-md-icon icon="assignment" size="24"></ng-md-icon><span>&nbsp;Event Panel</span>
+            <ng-md-icon icon="description" size="24"></ng-md-icon><span>&nbsp;Event Panel</span>
           </md-button>
         </md-menu-item>
         <md-menu-item>
@@ -99,6 +185,88 @@
     </md-menu>
   </div>
 </script>
+<script type="text/ng-template" id="/tournament-manage">
+  <md-card>
+    <md-data-table-toolbar ng-hide="selected.length || filter.show">
+      <h2 class="md-title">Tournament Management {{showArchived ? '(archived)' : ''}}</h2>
+      <div flex="flex"></div>
+      <md-button ng-click="filter.show = true" aria-label="search" class="md-icon-button">
+        <ng-md-icon icon="search" size="24">
+          <md-tooltip>Search for tournaments</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+      <md-button ng-click="addItem($event)" aria-label="add tournament" class="md-icon-button">
+        <ng-md-icon icon="playlist_add" size="24">
+          <md-tooltip>Add new tournament</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+    </md-data-table-toolbar>
+    <md-data-table-toolbar ng-show="filter.show &amp;&amp; !selected.length">
+      <ng-md-icon icon="search" size="24"></ng-md-icon>
+      <form flex="flex" name="filter.form">
+        <input type="text" ng-model="datatable.filter" ng-model-options="filter.options" placeholder="Search..."/>
+      </form>
+      <md-button ng-click="hideSearch()" aria-label="hide search" class="md-icon-button">
+        <ng-md-icon icon="close">
+          <md-tooltip>Close search</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+    </md-data-table-toolbar>
+    <md-data-table-toolbar ng-show="selected.length">
+      <div>{{selected.length}} {{selected.length > 1 ? 'tournaments' : 'tournament'}} selected</div>
+      <div flex="flex"></div>
+      <md-button ng-if="selected.length == 1" aria-label="edit tournament" class="md-icon-button">
+        <ng-md-icon icon="edit" ng-click="editItem($event)">
+          <md-tooltip>Edit tournament</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+      <md-button ng-click="ng-click" aria-label="archive tournaments" class="md-icon-button">
+        <ng-md-icon icon="archive" ng-click="archiveItem($event)">
+          <md-tooltip>Archive tournament</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+      <md-button ng-click="ng-click" aria-label="remove tournaments" class="md-icon-button">
+        <ng-md-icon icon="delete" ng-click="removeItem($event)">
+          <md-tooltip>Remove tournament</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+    </md-data-table-toolbar>
+    <md-data-table-container>
+      <table md-data-table="md-data-table" md-row-select="selected">
+        <thead md-order="datatable.order" md-trigger="getTournaments">
+          <tr>
+            <th name="Name" order-by="name"></th>
+            <th name="Game" order-by="game"></th>
+            <th name="Event"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr md-auto-select="md-auto-select" ng-repeat="tournament in visibleTournaments">
+            <td>{{tournament.name}}</td>
+            <td>{{tournament.game}}</td>
+            <td>{{tournamentName(tournament.event)}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </md-data-table-container>
+    <md-data-table-pagination md-row-select="[10, 25, 50]" md-limit="datatable.limit" md-page="datatable.page" md-total="{{users.length}}" md-trigger="getUsers"></md-data-table-pagination>
+  </md-card>
+  <div class="abs-position-bottom-right">
+    <md-fab-speed-dial md-direction="up" md-open="isOpen" ng-mouseleave="isOpen = false" class="md-scale">
+      <md-fab-trigger class="align-with-text">
+        <md-button aria-label="menu" ng-click="isOpen = true" ng-mouseenter="isOpen = true" class="md-fab md-primary">
+          <ng-md-icon size="24" icon="menu" style="fill: white"></ng-md-icon>
+        </md-button>
+      </md-fab-trigger>
+      <md-fab-actions ng-if="isOpen">
+        <md-button aria-label="toggle archived" ng-click="toggleShowArchived()" class="md-fab md-raised md-accent md-hue-1">
+          <ng-md-icon size="24" icon="archive" style="fill: white"></ng-md-icon>
+          <md-tooltip md-direction="left">{{showArchived ? 'Hide' : 'Show'}} archived tournaments</md-tooltip>
+        </md-button>
+      </md-fab-actions>
+    </md-fab-speed-dial>
+  </div>
+</script>
 <script type="text/ng-template" id="/tournament-sidebar">
   <md-toolbar>
     <div class="md-toolbar-tools">Navigation</div>
@@ -111,7 +279,7 @@
       </div>
     </md-list-item>
     <md-list-item ng-click="navigateTo('eventManage')" class="md-2-line">
-      <ng-md-icon icon="assignment" size="36" class="md-avatar"></ng-md-icon>
+      <ng-md-icon icon="description" size="36" class="md-avatar"></ng-md-icon>
       <div class="md-list-item-text"><span>Event Panel</span>
         <p>Manage events</p>
       </div>
@@ -130,9 +298,6 @@
     </md-list-item>
   </md-list>
 </script>
-<script type="text/ng-template" id="/tournaments">
-  <div>hi tourn</div>
-</script>
 <script type="text/ng-template" id="/user-manage">
   <md-card>
     <md-data-table-toolbar ng-hide="selected.length || filter.show">
@@ -148,7 +313,7 @@
         </ng-md-icon>
       </md-button>
       <md-button ng-click="addItem($event)" aria-label="add user" class="md-icon-button">
-        <ng-md-icon icon="group_add" size="24">
+        <ng-md-icon icon="person_add" size="24">
           <md-tooltip>Add new player</md-tooltip>
         </ng-md-icon>
       </md-button>
@@ -245,15 +410,115 @@
     <md-list>
       <md-subheader>User Information</md-subheader>
       <md-list-item class="md-3-line">
-        <ng-md-icon icon="local_offer" size="36" class="md-avatar"></ng-md-icon>
+        <md-button id="copy-id" data-clipboard-text="{{shareId}}" aria-label="copy share id" class="md-avatar">
+          <ng-md-icon icon="local_offer" size="36"></ng-md-icon>
+        </md-button>
         <div layout="column" class="md-list-item-text">
           <h3>User ID</h3>
           <h4>{{shareId}}</h4>
-          <p>Give this ID to others for them to share with you</p>
+          <p>Give this ID to others for them to share with you.</p>
+        </div>
+      </md-list-item>
+      <md-subheader>Data Management</md-subheader>
+      <md-list-item class="md-3-line">
+        <md-button ng-click="save()" aria-label="download all data" class="md-avatar">
+          <ng-md-icon icon="file_download" size="36"></ng-md-icon>
+        </md-button>
+        <div layout="column" class="md-list-item-text">
+          <h3>Download data</h3>
+          <p>Download a copy of your data in OpenChallenges format.</p>
+          <p>WARNING: This will not preserve collaborators on documents. They will have to be manually re-added.</p>
+        </div>
+      </md-list-item>
+      <md-list-item class="md-3-line">
+        <md-button disabled="disabled" aria-label="upload old data" class="md-avatar">
+          <ng-md-icon icon="file_upload" size="36"></ng-md-icon>
+        </md-button>
+        <div layout="column" class="md-list-item-text">
+          <h3>Upload data</h3>
+          <p>Restore your data back to an older state. [not yet implemented]</p>
+          <p>WARNING: This will remove all of your existing data, and any changes made since this data was downloaded!</p>
         </div>
       </md-list-item>
     </md-list>
   </md-card>
+</script>
+<script type="text/ng-template" id="/dialog/addevent">
+  <md-dialog>
+    <md-dialog-content>
+      <h2 class="md-title">{{label}} Event</h2>
+      <p ng-if="item.form.$submitted &amp;&amp; item.form.$invalid" layout="row" layout-align="start center" class="md-warn">
+        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
+      </p>
+      <form name="item.form" ng-submit="addItem()">
+        <div layout="row" class="input-row">
+          <md-input-container flex="flex">
+            <label>Name</label>
+            <input name="name" ng-model="item.name" required="required"/>
+          </md-input-container>
+          <md-input-container flex="flex">
+            <label>Location</label>
+            <input name="location" ng-model="item.location" required="required"/>
+          </md-input-container>
+        </div>
+        <h3 class="md-subhead">When</h3>
+        <div layout="row" class="input-row">
+          <md-datepicker ng-model="item.date" md-placeholder="Enter date" required="required" style="margin-top: 14px"></md-datepicker>
+          <md-input-container flex="flex">
+            <label>Time</label>
+            <input name="time" type="time" ng-model="item.date"/>
+          </md-input-container>
+        </div>
+        <h3 class="md-subhead">Extra</h3>
+        <div layout="row" class="input-row">
+          <md-input-container flex="flex">
+            <label>Description</label>
+            <textarea name="description" ng-model="item.description" md-maxlength="200"></textarea>
+          </md-input-container>
+        </div>
+      </form>
+    </md-dialog-content>
+    <div class="md-actions">
+      <md-button ng-click="addItem()" ng-disabled="item.form.$invalid" aria-label="submit" class="md-primary">{{label}} Event</md-button>
+      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
+    </div>
+  </md-dialog>
+</script>
+<script type="text/ng-template" id="/dialog/addtournament">
+  <md-dialog>
+    <md-dialog-content>
+      <h2 class="md-title">{{label}} Tournament</h2>
+      <p ng-if="item.form.$submitted &amp;&amp; item.form.$invalid" layout="row" layout-align="start center" class="md-warn">
+        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
+      </p>
+      <form name="item.form" ng-submit="addItem()">
+        <div layout="row" class="input-row">
+          <md-input-container flex="flex">
+            <label>Name</label>
+            <input name="name" ng-model="item.name" required="required"/>
+          </md-input-container>
+        </div>
+        <div layout="row" class="input-row">
+          <md-input-container flex="flex">
+            <label>Event</label>
+            <md-select ng-model="item.event" required="required">
+              <md-option ng-repeat="event in allEvents" value="{{event.$id}}">{{event.name}}</md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+        <div layout="row" class="input-row">
+          <md-input-container flex="flex">
+            <label>Game</label>
+            <input name="game" ng-model="item.game" required="required"/>
+          </md-input-container>
+        </div>
+      </form>
+    </md-dialog-content>
+    <div class="md-actions">
+      <md-button ng-click="addItem()" ng-disabled="item.form.$invalid" aria-label="submit" class="md-primary">{{label}} Tournament</md-button>
+      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
+    </div>
+  </md-dialog>
 </script>
 <script type="text/ng-template" id="/dialog/adduser">
   <md-dialog>
