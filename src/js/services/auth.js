@@ -1,6 +1,6 @@
 import site from '../app';
 
-site.service('Auth', (WrappedFirebase, FirebaseURL, UserStatus, $state, $firebaseAuth, $firebaseObject) => {
+site.service('Auth', (FirebaseURL, UserStatus, $state, $firebaseAuth, $firebaseObject) => {
 
   const loginTypes = [
     {
@@ -17,7 +17,7 @@ site.service('Auth', (WrappedFirebase, FirebaseURL, UserStatus, $state, $firebas
     }
   ];
 
-  const authBase = $firebaseAuth(WrappedFirebase);
+  const authBase = $firebaseAuth(new Firebase(FirebaseURL));
 
   const handleAuth = (authData) => {
     const provider = authData.auth.provider;
