@@ -4,8 +4,26 @@ script(type="text/ng-template", id="/user-settings")
     md-list
       md-subheader User Information
       md-list-item.md-3-line
-        ng-md-icon.md-avatar(icon="local_offer", size="36")
+        md-button.md-avatar#copy-id(data-clipboard-text="{{shareId}}", aria-label="copy share id")
+          ng-md-icon(icon="local_offer", size="36")
         .md-list-item-text(layout="column")
           h3 User ID
           h4 {{shareId}}
-          p Give this ID to others for them to share with you
+          p Give this ID to others for them to share with you.
+
+      md-subheader Data Management
+      md-list-item.md-3-line
+        md-button.md-avatar(ng-click="save()", aria-label="download all data")
+          ng-md-icon(icon="file_download", size="36")
+        .md-list-item-text(layout="column")
+          h3 Download data
+          p Download a copy of your data in OpenChallenges format.
+          p WARNING: This will not preserve collaborators on documents. They will have to be manually re-added.
+
+      md-list-item.md-3-line
+        md-button.md-avatar(disabled, aria-label="upload old data")
+          ng-md-icon(icon="file_upload", size="36")
+        .md-list-item-text(layout="column")
+          h3 Upload data
+          p Restore your data back to an older state. [not yet implemented]
+          p WARNING: This will remove all of your existing data, and any changes made since this data was downloaded!
