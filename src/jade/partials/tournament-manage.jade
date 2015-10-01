@@ -1,0 +1,65 @@
+
+script(type="text/ng-template", id="/tournament-manage")
+
+  md-card
+    md-data-table-toolbar(ng-hide="selected.length || filter.show")
+      h2.md-title Tournament Management {{showArchived ? '(archived)' : ''}}
+      div(flex)
+
+      md-button.md-icon-button(ng-click="filter.show = true", aria-label="search")
+        ng-md-icon(icon="search", size="24")
+          md-tooltip Search for tournaments
+
+      md-button.md-icon-button(ng-click="addItem($event)", aria-label="add tournament")
+        ng-md-icon(icon="playlist_add", size="24")
+          md-tooltip Add new tournament
+
+    md-data-table-toolbar(ng-show="filter.show && !selected.length")
+      ng-md-icon(icon="search", size="24")
+      form(flex, name="filter.form")
+        input(type="text", ng-model="datatable.filter", ng-model-options="filter.options", placeholder="Search...")
+      md-button.md-icon-button(ng-click="hideSearch()", aria-label="hide search")
+        ng-md-icon(icon="close")
+          md-tooltip Close search
+
+    md-data-table-toolbar(ng-show="selected.length")
+      div {{selected.length}} {{selected.length > 1 ? 'tournaments' : 'tournament'}} selected
+      div(flex)
+      md-button.md-icon-button(ng-if="selected.length == 1", aria-label="edit tournament")
+        ng-md-icon(icon="edit", ng-click="editItem($event)")
+          md-tooltip Edit tournament
+      md-button.md-icon-button(ng-click, aria-label="archive tournaments")
+        ng-md-icon(icon="archive", ng-click="archiveItem($event)")
+          md-tooltip Archive tournament
+      md-button.md-icon-button(ng-click, aria-label="remove tournaments")
+        ng-md-icon(icon="delete", ng-click="removeItem($event)")
+          md-tooltip Remove tournament
+
+    md-data-table-container
+      table(md-data-table, md-row-select="selected")
+        thead(md-order="datatable.order", md-trigger="getTournaments")
+          tr
+            th(name="Name", order-by="name")
+            th(name="Game", order-by="game")
+            th(name="Event")
+
+        tbody
+
+          tr(md-auto-select, ng-repeat="tournament in visibleTournaments")
+            td {{tournament.name}}
+            td {{tournament.game}}
+            td {{tournamentName(tournament.event)}}
+
+    md-data-table-pagination(md-row-select="[10, 25, 50]", md-limit="datatable.limit", md-page="datatable.page", md-total="{{users.length}}", md-trigger="getUsers")
+
+  .abs-position-bottom-right
+    md-fab-speed-dial.md-scale(md-direction="up", md-open="isOpen", ng-mouseleave="isOpen = false")
+      md-fab-trigger.align-with-text
+
+        md-button.md-fab.md-primary(aria-label="menu", ng-click="isOpen = true", ng-mouseenter="isOpen = true")
+          ng-md-icon(size="24", icon="menu", style="fill: white")
+
+      md-fab-actions(ng-if="isOpen")
+        md-button.md-fab.md-raised.md-accent.md-hue-1(aria-label="toggle archived", ng-click="toggleShowArchived()")
+          ng-md-icon(size="24", icon="archive", style="fill: white")
+          md-tooltip(md-direction="left") {{showArchived ? 'Hide' : 'Show'}} archived tournaments
