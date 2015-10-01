@@ -12,16 +12,23 @@ site.config(($stateProvider, $urlRouterProvider) => {
       }
     })
     .state('userManage', {
-      url: '/panel',
+      url: '/players',
       views: {
         'content@': { templateUrl: '/user-manage', controller: 'userManageController' },
         'sidebar@': { templateUrl: '/tournament-sidebar', controller: 'tournamentSidebarController' }
       }
     })
-    .state('tournaments', {
+    .state('eventManage', {
+      url: '/events',
+      views: {
+        'content@': { templateUrl: '/event-manage', controller: 'eventManageController' },
+        'sidebar@': { templateUrl: '/tournament-sidebar', controller: 'tournamentSidebarController' }
+      }
+    })
+    .state('tournamentManage', {
       url: '/tournaments',
       views: {
-        'content@': { templateUrl: '/tournaments', controller: 'tournamentController' },
+        'content@': { templateUrl: '/tournament-manage', controller: 'tournamentManageController' },
         'sidebar@': { templateUrl: '/tournament-sidebar', controller: 'tournamentSidebarController' }
       }
     })

@@ -12,7 +12,9 @@
     "it": true,
     "angular": true,
     "Firebase": true,
-    "_": true
+    "_": true,
+    "Clipboard": true,
+    "saveAs": true
   },
   "rules": {
     "no-var": 2,

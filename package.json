@@ -61,6 +61,9 @@
     "libjs": [
       "./bower_components/firebase/firebase.js",
       "./bower_components/lodash/lodash.min.js",
+      "./bower_components/svg-morpheus/compile/minified/svg-morpheus.js",
+      "./bower_components/FileSaver.js/FileSaver.min.js",
+      "./bower_components/clipboard/dist/clipboard.min.js",
       "./node_modules/angular/angular.min.js",
       "./node_modules/angular-aria/angular-aria.min.js",
       "./node_modules/angular-animate/angular-animate.min.js",
