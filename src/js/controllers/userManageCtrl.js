@@ -21,6 +21,7 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
   $scope.listKeys = [];
   $scope.sharedLists = [];
 
+
   $scope.userData = UserStatus;
 
   $scope.addItem = (event) => {
@@ -207,6 +208,7 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
       if(!$scope.setObject) {
         $scope.setCurrentPlayerSet(UserStatus.firebase.playerSet);
       }
+      $scope.isMine = UserStatus.firebase.playerSetUid === authData.uid;
     });
     $scope.loadAllLists();
     $scope.loadSharedWithMe();
