@@ -6,7 +6,6 @@ site.controller('notStartedController', ($scope, EnsureLoggedIn, ShareToken, Tou
 
   $scope.bucket = CurrentPlayerBucket.get();
   CurrentPlayerBucket.watch.then(null, null, bucket => $scope.bucket = bucket);
-  console.log($scope.bucket);
 
   $scope.toCharacter = (num) => {
     let bucket = Math.ceil(num/2);
@@ -25,6 +24,7 @@ site.controller('notStartedController', ($scope, EnsureLoggedIn, ShareToken, Tou
   };
 
   if($scope.bucket.length === 0) return $state.go('userManage'); // don't refresh the page here, I guess
+
 
   $scope.getOptions = () => {
     const type = $scope.tournamentOptions.type;

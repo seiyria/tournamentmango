@@ -1,6 +1,6 @@
 script(type="text/ng-template", id="/tournaments/not-started")
   div(layout="row", flex)
-    md-card.almost-max-height(layout="column", flex="25")
+    md-card.almost-max-height(layout="column", flex="40")
       md-content(flex, md-scroll-y)
         md-list.player-bucket-list(flex, sv-root, sv-part="bucket")
           md-subheader Players ({{bucket.length}})
@@ -34,7 +34,7 @@ script(type="text/ng-template", id="/tournaments/not-started")
             md-input-container.auto-vert-margin(ng-if="player.aliases.length > 0")
               label Alias
               md-select(ng-model="player.chosenAlias", ng-disabled="player.aliases.length === 1")
-                md-option(ng-repeat="alias in player.aliases", value="alias", selected="chosenAlias === alias") {{alias}}
+                md-option(ng-repeat="alias in player.aliases", value="{{alias}}") {{alias}}
 
             .auto-vert-margin(style="width: 25px")
               ng-md-icon.pointer(size="24", icon="delete", ng-show="player._isDeleteVisible", ng-click="removeFromBucket(player)")
