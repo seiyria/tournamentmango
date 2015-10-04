@@ -103,10 +103,14 @@ site.controller('tournamentManageController', ($scope, $state, ShareToken, Sideb
   };
 
   $scope.loadTournaments = () => {
-    $scope.tournaments = CurrentTournaments;
+    $scope.tournaments = CurrentTournaments.get();
     $scope.tournaments.$loaded($scope.getTournaments);
     $scope.tournaments.$watch($scope.getTournaments);
   };
+
+  CurrentTournaments.watch.then(null, null, () => {
+    $scope.loadTournaments();
+  });
 
   $scope.loadTournaments();
 });

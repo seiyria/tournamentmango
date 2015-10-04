@@ -2,7 +2,7 @@ import site from '../../app';
 
 site.service('CurrentUsers', ($q, $firebaseObject, FirebaseURL, UserStatus) => {
 
-  let users = {};
+  let users = $firebaseObject(new Firebase(`${FirebaseURL}/users/${UserStatus.firebase.playerSetUid}/players/${UserStatus.firebase.playerSet}`));
   const defer = $q.defer();
 
   UserStatus.firebase.$watch(() => {

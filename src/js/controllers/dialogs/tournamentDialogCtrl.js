@@ -9,7 +9,7 @@ site.controller('tournamentDialogController', ($scope, $mdDialog, tournament, Cu
   $scope.label = _.keys(tournament).length > 0 ? 'Edit' : 'Add';
 
   $scope.item = _.extend({}, tournament);
-  $scope.allEvents = CurrentEvents;
+  $scope.allEvents = CurrentEvents.get();
 
   $scope.addItem = () => {
     $scope.item.form.$setSubmitted();

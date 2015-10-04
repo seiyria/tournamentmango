@@ -3,7 +3,7 @@ import site from '../../app';
 site.filter('inRound', () => (items, round) => _.filter(items, (i) => i.id.r === round));
 site.filter('inSection', () => (items, section) => _.filter(items, (i) => i.id.s === section));
 
-site.controller('inProgressController', ($scope, SidebarManagement, CurrentPlayerBucket, TournamentStatus, FirebaseURL, $firebaseObject, $state, $stateParams) => {
+site.controller('inProgressController', ($scope, SidebarManagement, CurrentPlayerBucket, UserStatus, TournamentStatus, FirebaseURL, $firebaseObject, $state, $stateParams) => {
 
   SidebarManagement.hasSidebar = false;
 
@@ -33,7 +33,7 @@ site.controller('inProgressController', ($scope, SidebarManagement, CurrentPlaye
     }
   };
 
-  const ref = $firebaseObject(new Firebase(`${FirebaseURL}/users/${atob($stateParams.userId)}/tournaments/${$stateParams.tournamentId}`));
+  const ref = $firebaseObject(new Firebase(`${FirebaseURL}/users/${atob($stateParams.userId)}/players/${$stateParams.setId}/tournaments/${$stateParams.tournamentId}`));
 
   ref.$watch(() => $scope.loadTournament(ref));
 

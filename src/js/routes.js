@@ -47,7 +47,7 @@ site.config(($stateProvider, $urlRouterProvider) => {
       }
     })
     .state('tournamentInProgress', {
-      url: '/tournaments/:userId/:tournamentId',
+      url: '/tournaments/:userId/:setId/:tournamentId',
       views: {
         'content@': { templateUrl: '/tournaments/in-progress', controller: 'inProgressController' }
       }

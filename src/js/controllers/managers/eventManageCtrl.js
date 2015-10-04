@@ -89,10 +89,14 @@ site.controller('eventManageController', ($scope, SidebarManagement, EnsureLogge
   };
 
   $scope.loadEvents = () => {
-    $scope.events = CurrentEvents;
+    $scope.events = CurrentEvents.get();
     $scope.events.$loaded($scope.getEvents);
     $scope.events.$watch($scope.getEvents);
   };
+
+  CurrentEvents.watch.then(null, null, () => {
+    $scope.loadEvents();
+  });
 
   $scope.loadEvents();
 });

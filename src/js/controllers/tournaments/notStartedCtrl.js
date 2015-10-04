@@ -1,6 +1,6 @@
 import site from '../../app';
 
-site.controller('notStartedController', ($scope, EnsureLoggedIn, ShareToken, TournamentStatus, FirebaseURL, $firebaseObject, CurrentPlayerBucket, CurrentTournament, $state, $stateParams) => {
+site.controller('notStartedController', ($scope, EnsureLoggedIn, UserStatus, ShareToken, TournamentStatus, FirebaseURL, $firebaseObject, CurrentPlayerBucket, CurrentTournament, $state, $stateParams) => {
 
   const authData = EnsureLoggedIn.check();
 
@@ -41,7 +41,8 @@ site.controller('notStartedController', ($scope, EnsureLoggedIn, ShareToken, Tou
   $scope.removeFromBucket = CurrentPlayerBucket.remove;
 
   $scope.start = () => {
-    const ref = $firebaseObject(new Firebase(`${FirebaseURL}/users/${authData.uid}/tournaments/${$stateParams.tournamentId}`));
+    const ref = $firebaseObject(new Firebase(`${FirebaseURL}/users/${UserStatus.firebase.playerSetUid}/players/${UserStatus.firebase.playerSet}/tournaments/${$stateParams.tournamentId}`));
+
     ref.$loaded().then(() => {
       ref.options = $scope.getOptions();
       ref.players = _.map($scope.bucket, (player) => {
@@ -54,7 +55,7 @@ site.controller('notStartedController', ($scope, EnsureLoggedIn, ShareToken, Tou
       ref.status = TournamentStatus.IN_PROGRESS;
       ref.$save().then(() => {
         CurrentPlayerBucket.clear();
-        $state.go('tournamentInProgress', { userId: ShareToken(authData.uid), tournamentId: $stateParams.tournamentId });
+        $state.go('tournamentInProgress', { userId: ShareToken(authData.uid), tournamentId: $stateParams.tournamentId, setId: UserStatus.firebase.playerSet });
       });
     });
   };
