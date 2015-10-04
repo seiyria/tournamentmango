@@ -17,12 +17,9 @@ site.controller('inProgressController', ($scope, SidebarManagement, CurrentPlaye
     return str;
   };
 
-  const ref = $firebaseObject(new Firebase(`${FirebaseURL}/users/${atob($stateParams.userId)}/tournaments/${$stateParams.tournamentId}`));
-
-  ref.$loaded().then(() => {
+  $scope.loadTournament = (ref) => {
     $scope.bucket = ref.players;
 
-    $scope.tournamentName = ref.name;
     const oldScores = _.cloneDeep(ref.trn);
 
     $scope.trn = ref.trn ? Duel.restore($scope.bucket.length, ref.options, ref.trn) : new Duel($scope.bucket.length, ref.options);
@@ -34,6 +31,16 @@ site.controller('inProgressController', ($scope, SidebarManagement, CurrentPlaye
         existingMatch.score = _.clone(match.score);
       });
     }
+  };
+
+  const ref = $firebaseObject(new Firebase(`${FirebaseURL}/users/${atob($stateParams.userId)}/tournaments/${$stateParams.tournamentId}`));
+
+  ref.$watch(() => $scope.loadTournament(ref));
+
+  ref.$loaded().then(() => {
+    $scope.tournamentName = ref.name;
+
+    $scope.loadTournament(ref);
 
     const horizMatches = _.max($scope.trn.matches, 'id.r').id.r; // these start at 1 I guess.
     const totalSections = _.max($scope.trn.matches, 'id.s').id.s; // get the highest section
