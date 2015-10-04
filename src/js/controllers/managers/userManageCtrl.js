@@ -1,6 +1,6 @@
 import site from '../../app';
 
-site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject, FirebaseURL, InputPrompt, UserStatus, CurrentPlayerBucket, ShareManagement, SetManagement, SidebarManagement, EnsureLoggedIn, UserManagement, Toaster) => {
+site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject, FirebaseURL, CurrentUsers, InputPrompt, UserStatus, CurrentPlayerBucket, ShareManagement, SetManagement, SidebarManagement, EnsureLoggedIn, UserManagement, Toaster) => {
 
   SidebarManagement.hasSidebar = true;
   const authData = EnsureLoggedIn.check();
@@ -89,12 +89,9 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
 
     $scope.isMine = UserStatus.firebase.playerSetUid === authData.uid;
     UserStatus.firebase.$save();
-
-    $scope.setCurrentPlayerSet(name);
   };
 
-  $scope.setCurrentPlayerSet = (name = 'default') => {
-    $scope.setObject = $firebaseObject(new Firebase(`${FirebaseURL}/users/${UserStatus.firebase.playerSetUid}/players/${name}`));
+  $scope.setCurrentPlayerSet = (name = UserStatus.firebase.playerSet) => {
     $scope.setObject.$loaded(() => {
       if(!$scope.setObject.basename) {
         $scope.setObject.basename = name;
@@ -111,6 +108,15 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
       $scope.loadUserList();
     });
   };
+
+  const initPlayerSet = (pSet) => {
+    $scope.setObject = pSet;
+    $scope.setCurrentPlayerSet();
+  };
+
+  CurrentUsers.watch.then(null, null, (list) => {
+    initPlayerSet(list);
+  });
 
   $scope.hasMultipleSets = () => $scope.listKeys.length > 1;
 
@@ -208,12 +214,13 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
 
   $scope.load = () => {
     UserStatus.firebase.$loaded(() => {
+
       if(!UserStatus.firebase.playerSet) {
         $scope.changePlayerSet('default');
       }
-      if(!$scope.setObject) {
-        $scope.setCurrentPlayerSet(UserStatus.firebase.playerSet);
-      }
+
+      initPlayerSet(CurrentUsers.get());
+
       $scope.isMine = UserStatus.firebase.playerSetUid === authData.uid;
     });
     $scope.loadAllLists();

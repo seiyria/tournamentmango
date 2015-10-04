@@ -15,6 +15,7 @@ import './services/filterUtils';
 import './services/auth';
 import './services/shareToken';
 
+import './services/currents/currentUsers';
 import './services/currents/currentEvents';
 import './services/currents/currentTournament';
 import './services/currents/currentTournaments';
