@@ -1,8 +1,10 @@
 import site from '../../app';
 
-site.controller('tournamentManageController', ($scope, SidebarManagement, EnsureLoggedIn, TournamentManagement, CurrentTournaments, TournamentStatus) => {
+site.controller('tournamentManageController', ($scope, $state, ShareToken, SidebarManagement, EnsureLoggedIn, TournamentManagement, CurrentTournaments, CurrentPlayerBucket, TournamentStatus) => {
   SidebarManagement.hasSidebar = true;
-  EnsureLoggedIn.check();
+  const authData = EnsureLoggedIn.check();
+
+  $scope.playersAvailable = CurrentPlayerBucket.get().length;
 
   $scope.tStatus = TournamentStatus;
 
@@ -90,6 +92,14 @@ site.controller('tournamentManageController', ($scope, SidebarManagement, Ensure
 
       $scope.selected = [];
     });
+  };
+
+  $scope.startTournament = (id) => {
+    $state.go('setupTournament', { tournamentId: id });
+  };
+
+  $scope.seeTournament = (id) => {
+    $state.go('tournamentInProgress', { userId: ShareToken(authData.uid), tournamentId: id });
   };
 
   $scope.loadTournaments = () => {

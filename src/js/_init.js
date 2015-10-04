@@ -2,6 +2,10 @@
 import './constants/firebaseURL';
 import './constants/tournamentStatus';
 
+import './directives/score';
+import './directives/draw-to';
+import './directives/scroll-observe';
+
 import './services/userStatus';
 import './services/ensureLoggedIn';
 import './services/managers/sidebarManagement';
@@ -9,9 +13,12 @@ import './services/disconnectNotifier';
 import './services/toaster';
 import './services/filterUtils';
 import './services/auth';
+import './services/shareToken';
 
 import './services/currents/currentEvents';
+import './services/currents/currentTournament';
 import './services/currents/currentTournaments';
+import './services/currents/currentPlayerBucket';
 
 import './services/managers/userManagement';
 import './services/managers/eventManagement';
@@ -31,6 +38,9 @@ import './controllers/managers/tournamentManageCtrl';
 import './controllers/managers/eventManageCtrl';
 import './controllers/userSettingsCtrl';
 import './controllers/tournamentSidebarCtrl';
+
+import './controllers/tournaments/notStartedCtrl';
+import './controllers/tournaments/inProgressCtrl';
 
 import './controllers/dialogs/userDialogCtrl';
 import './controllers/dialogs/eventDialogCtrl';

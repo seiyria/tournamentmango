@@ -2,6 +2,108 @@
   text-align: center;
 }
 
+.almost-max-height {
+  height: 85%;
+}
+
+$round-column-width: 300px;
+
+.round-header {
+  position: fixed;
+  width: 100px;
+  z-index: 150;
+  text-align: center;
+  background-color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.max-height {
+  height: 100%;
+}
+
+.match-area {
+  margin-top: 24px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.auto-vert-margin {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.match-column {
+  width: $round-column-width;
+  min-width: $round-column-width;
+  max-width: $round-column-width;
+
+
+  .match {
+    min-height: 60px;
+
+    &.unplayable {
+      color: red;
+    }
+
+    &.complete {
+      color: gray;
+    }
+
+    .round-type {
+      width: 60px;
+      min-width: 60px;
+      max-width: 60px;
+      text-align: center;
+    }
+
+    .match-name {
+      width: 100px;
+
+      .member {
+        width: 100px;
+        max-width: 100px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-align: center;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .confirm-score {
+      cursor: pointer;
+      width: 24px;
+      min-width: 24px;
+      max-width: 24px;
+    }
+
+    .score-container {
+      width: 25px;
+
+      .score-input {
+        width: 25px;
+        font-size: 12px;
+        margin: 0;
+        padding: 0;
+      }
+
+      .score-value {
+        text-align: right;
+      }
+    }
+  }
+}
+
+.player-bucket-list {
+  .highlight:not(.sv-helper) {
+  //md-list-item:not(.sv-helper):not(.sv-candidate):nth-child(4n),
+  //md-list-item:not(.sv-helper):not(.sv-candidate):nth-child(4n+1) {
+    background-color: #ccc;
+  }
+}
+
 md-menu ng-md-icon:not(.no-transform) svg, md-menu-item ng-md-icon:not(.no-transform) svg {
   transform: translate3d(-10%, 35%, 0);
   line-height: 1;

@@ -1,0 +1,58 @@
+script(type="text/ng-template", id="/tournaments/not-started")
+  div(layout="row", flex)
+    md-card.almost-max-height(layout="column", flex="25")
+      md-content(flex, md-scroll-y)
+        md-list.player-bucket-list(flex, sv-root, sv-part="bucket")
+          md-subheader Players ({{bucket.length}})
+          md-list-item.md-2-line(
+            ng-if="bucket.length === 0"
+          )
+            .md-list-item-text
+              h3 No players available
+              p
+                a(ui-sref="userManage") Add some more!
+
+          md-list-item.md-2-line(
+            ng-repeat="player in bucket",
+            sv-element,
+            layout="row",
+            layout-align="center center",
+            ng-class="{highlight: $index % 4 === 1 || $index % 4 === 0}",
+            ng-init="player._isDeleteVisible = false; player.chosenAlias = player.aliases[0]",
+            ng-mouseenter="player._isDeleteVisible = true",
+            ng-mouseleave="player._isDeleteVisible = false"
+            )
+            span.md-avatar(layout="row", layout-align="center center")
+              ng-md-icon(size="36", icon="reorder", sv-handle)
+
+              span {{ toCharacter($index+1) }}
+
+            .md-list-item-text(layout="column")
+              h3 {{player.name}}
+              p Record: {{player.wins || 0}}/{{player.losses || 0}}
+
+            md-input-container.auto-vert-margin(ng-if="player.aliases.length > 0")
+              label Alias
+              md-select(ng-model="player.chosenAlias", ng-disabled="player.aliases.length === 1")
+                md-option(ng-repeat="alias in player.aliases", value="alias", selected="chosenAlias === alias") {{alias}}
+
+            .auto-vert-margin(style="width: 25px")
+              ng-md-icon.pointer(size="24", icon="delete", ng-show="player._isDeleteVisible", ng-click="removeFromBucket(player)")
+
+    md-card(flex, layout-align="start start")
+      md-list(layout="column")
+        md-subheader Options
+
+        md-list-item
+          md-radio-group(ng-model="tournamentOptions.type", layout="row")
+            md-radio-button.md-primary(value="singles") Single Elimination
+            md-radio-button.md-primary(value="doubles") Double Elimination
+
+        md-list-item(ng-if="tournamentOptions.type === 'singles' || tournamentOptions.type === 'doubles'")
+          label &nbsp;
+          md-checkbox(ng-model="tournamentOptions.short", aria-label="Short") Short tournament (no bronze or double grand final)
+
+        md-list-item(flex)
+
+        md-list-item
+          md-button.md-primary.md-raised(ng-click="start()", ng-disabled="isInvalid()") Start

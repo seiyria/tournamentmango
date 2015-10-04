@@ -14,7 +14,9 @@
     "Firebase": true,
     "_": true,
     "Clipboard": true,
-    "saveAs": true
+    "saveAs": true,
+    "Duel": true,
+    "$": true
   },
   "rules": {
     "no-var": 2,

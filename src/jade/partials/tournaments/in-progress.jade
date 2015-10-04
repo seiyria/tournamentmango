@@ -1,0 +1,4 @@
+script(type="text/ng-template", id="/tournaments/in-progress")
+
+  .text-center.md-title {{tournamentName}}{{trn.isDone() ? ' (Complete)' : ' (' + matchesLeft() + ' matches left)'}}
+  md-content.scroller.duel-area(md-scroll, flex, layout="column", ng-include="'tournament-duel'")

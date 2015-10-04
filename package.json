@@ -59,12 +59,14 @@
   "gulp": {
     "sass": "src/scss/*.scss",
     "libjs": [
+      "./bower_components/tournament/dist/*.js",
       "./bower_components/firebase/firebase.js",
       "./bower_components/lodash/lodash.min.js",
       "./bower_components/svg-morpheus/compile/minified/svg-morpheus.js",
       "./bower_components/FileSaver.js/FileSaver.min.js",
       "./bower_components/clipboard/dist/clipboard.min.js",
       "./node_modules/angular/angular.min.js",
+      "./bower_components/jquery/dist/jquery.min.js",
       "./node_modules/angular-aria/angular-aria.min.js",
       "./node_modules/angular-animate/angular-animate.min.js",
       "./node_modules/angular-material/angular-material.min.js",
@@ -72,7 +74,8 @@
       "./node_modules/angular-material-icons/angular-material-icons.min.js",
       "./node_modules/angular-material-data-table/dist/md-data-table.min.js",
       "./node_modules/ngstorage/ngStorage.min.js",
-      "./node_modules/angularfire/dist/angularfire.min.js"
+      "./node_modules/angularfire/dist/angularfire.min.js",
+      "./bower_components/angular-sortable-view/src/angular-sortable-view.min.js"
     ],
     "libcss": [
       "./node_modules/angular-material/angular-material.css",
@@ -102,6 +105,7 @@
     "angular-material-icons": "^0.6.0",
     "angular-ui-router": "^0.2.15",
     "angularfire": "^1.1.2",
+    "duel": "^3.0.1",
     "ngstorage": "^0.3.9"
   }
 }

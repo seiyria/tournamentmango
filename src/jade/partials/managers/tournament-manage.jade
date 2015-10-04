@@ -53,9 +53,10 @@ script(type="text/ng-template", id="/tournament-manage")
             td {{tournamentName(tournament.event)}}
             td {{tournament.status}}
             td(ng-if="tournament.status === tStatus.NOT_STARTED")
-              md-button.md-raised.md-primary(aria-label="start tournament") Start
+              md-button.md-raised.md-primary(aria-label="start tournament", ng-disabled="playersAvailable < 2", ng-click="startTournament(tournament.$id)") Start
+                md-tooltip(ng-if="playersAvailable < 2", md-direction="left") You need more players to start a tournament
             td(ng-if="tournament.status !== tStatus.NOT_STARTED")
-              md-button.md-raised.md-accent(aria-label="view tournament") View
+              md-button.md-raised.md-accent(aria-label="view tournament", ng-click="seeTournament(tournament.$id)") View
 
     md-data-table-pagination(md-row-select="[10, 25, 50]", md-limit="datatable.limit", md-page="datatable.page", md-total="{{users.length}}", md-trigger="getUsers")
 

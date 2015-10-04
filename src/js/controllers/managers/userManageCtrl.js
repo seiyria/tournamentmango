@@ -1,6 +1,6 @@
 import site from '../../app';
 
-site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject, FirebaseURL, InputPrompt, UserStatus, ShareManagement, SetManagement, SidebarManagement, EnsureLoggedIn, UserManagement) => {
+site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject, FirebaseURL, InputPrompt, UserStatus, CurrentPlayerBucket, ShareManagement, SetManagement, SidebarManagement, EnsureLoggedIn, UserManagement, Toaster) => {
 
   SidebarManagement.hasSidebar = true;
   const authData = EnsureLoggedIn.check();
@@ -198,6 +198,12 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
         });
       });
     });
+  };
+
+  $scope.addToPlayerBucket = () => {
+    CurrentPlayerBucket.add($scope.selected);
+    Toaster.show(`Successfully added ${$scope.selected.length} players to bucket.`);
+    $scope.selected = [];
   };
 
   $scope.load = () => {

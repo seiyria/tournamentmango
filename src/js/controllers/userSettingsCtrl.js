@@ -1,11 +1,11 @@
 import site from '../app';
 
-site.controller('userSettingsController', ($scope, SidebarManagement, EnsureLoggedIn, FirebaseURL, $firebaseObject, Toaster) => {
+site.controller('userSettingsController', ($scope, SidebarManagement, EnsureLoggedIn, ShareToken, FirebaseURL, $firebaseObject, Toaster) => {
 
   SidebarManagement.hasSidebar = true;
   const authData = EnsureLoggedIn.check();
 
-  $scope.shareId = btoa(authData.uid);
+  $scope.shareId = ShareToken(authData.uid);
 
   const data = $firebaseObject(new Firebase(`${FirebaseURL}/users/${authData.uid}`));
 

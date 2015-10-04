@@ -38,5 +38,18 @@ site.config(($stateProvider, $urlRouterProvider) => {
         'content@': { templateUrl: '/user-settings', controller: 'userSettingsController' },
         'sidebar@': { templateUrl: '/tournament-sidebar', controller: 'tournamentSidebarController' }
       }
+    })
+    .state('setupTournament', {
+      url: '/tournaments/setup/:tournamentId',
+      views: {
+        'content@': { templateUrl: '/tournaments/not-started', controller: 'notStartedController' },
+        'sidebar@': { templateUrl: '/tournament-sidebar', controller: 'tournamentSidebarController' }
+      }
+    })
+    .state('tournamentInProgress', {
+      url: '/tournaments/:userId/:tournamentId',
+      views: {
+        'content@': { templateUrl: '/tournaments/in-progress', controller: 'inProgressController' }
+      }
     });
 });

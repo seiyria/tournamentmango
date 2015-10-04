@@ -7,7 +7,8 @@ script(type="text/ng-template", id="/tournament-sidebar")
       ng-md-icon.md-avatar(icon="group", size="36")
       .md-list-item-text
         span Player Panel
-        p Manage players
+        p(ng-if="playerBucket.length === 0") Manage players
+        p(ng-if="playerBucket.length") {{playerBucket.length}} players in your bucket
 
     md-list-item.md-2-line(ng-click="navigateTo('eventManage')")
       ng-md-icon.md-avatar(icon="description", size="36")
