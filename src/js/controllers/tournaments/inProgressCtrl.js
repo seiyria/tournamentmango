@@ -39,8 +39,8 @@ site.controller('inProgressController', ($scope, SidebarManagement, CurrentPlaye
 
   $scope.reset = (ev) => {
     const confirm = $mdDialog.confirm()
-      .title('Would you like to reset this bracket?')
-      .content('This is a permanent, irreversible action.')
+      .title('Reset Bracket')
+      .content('Would you like to reset this bracket? This is a permanent, irreversible action.')
       .targetEvent(ev)
       .ok('Yes')
       .cancel('No');
