@@ -21,6 +21,8 @@ site.directive('drawTo', ($timeout) => {
       const $targetRound = $baseTarget.find('.round-type');
       if(!$target.length || !$me.length) return;
 
+      // console.log($me, $baseTarget, $target);
+
       const meBounds = $me[0].getBoundingClientRect();
       const targetBounds = $target[0].getBoundingClientRect();
 

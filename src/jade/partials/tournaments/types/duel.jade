@@ -24,9 +24,9 @@ script(type="text/ng-template", id="tournament-duel")
         .match-data(ng-if="!noRender(match)", layout="row", layout-align="center center")
           .round-type {{match.id.s}}-{{toCharacter(getIdForMatch(match.id))}}
           .match-name.margin-left-10.margin-right-10(layout="column")
-            .member.member-0 {{getName(match.p[0]-1) || '-'}}
+            .member.member-0 {{getName(match.p[0]-1) || getString(match.id, 0)}}
               md-tooltip(ng-if="bucket[match.p[0]-1]") {{bucket[match.p[0]-1].alias || 'no alias'}}: {{bucket[match.p[0]-1].name}}
-            .member.member-1 {{getName(match.p[1]-1) || '-'}}
+            .member.member-1 {{getName(match.p[1]-1) || getString(match.id, 1)}}
               md-tooltip(ng-if="bucket[match.p[1]-1]") {{bucket[match.p[1]-1].alias || 'no alias'}}: {{bucket[match.p[1]-1].name}}
           div(layout="column", ng-if="!invalidMatch(match)")
             score(value="match.score[0]")
