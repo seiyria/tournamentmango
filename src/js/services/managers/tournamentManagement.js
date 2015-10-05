@@ -43,7 +43,11 @@ site.service('TournamentManagement', (FirebaseURL, $mdDialog, Toaster, $filter, 
     callback();
   };
 
-  const getTournamentNameFromId = (id) => _.findWhere(CurrentEvents.get(), { $id: id }).name;
+  const getTournamentNameFromId = (id) => {
+    const tournament = _.findWhere(CurrentEvents.get(), { $id: id });
+    if(!tournament) return null;
+    return tournament.name;
+  };
 
   const filterTournaments = (events, datatable, archived = false) => {
     const func = archived ? 'filter' : 'reject';
