@@ -1,6 +1,32 @@
 
 script(type="text/ng-template", id="/user-manage")
 
+  md-card(ng-if="anyCompletedTournaments()", layout="row")
+
+    h2.md-title.margin-left-25 Scoring
+
+    div(flex="5")
+
+    md-input-container
+      label Game
+      md-select(ng-model="userData.firebase.scoreGame", ng-change="saveFirebase()")
+        md-option(ng-repeat="tournament in allTournamentGames()", value="{{tournament.game}}") {{tournament.game}}
+
+    div(flex="5")
+
+    md-input-container
+      label Score Function
+      md-select(ng-model="userData.firebase.scoreFunc", ng-change="saveFirebase()")
+        md-option(value="simple") Simple (Win-Loss)
+        md-option(value="ell") ELL
+
+    md-button.md-warn(ng-click="recalculateScore()", ng-disabled="calculating") Force Recalculate
+
+    div(flex)
+
+    ng-md-icon.auto-vert-margin.margin-right-25(icon="refresh", ng-if="calculating")
+      md-tooltip Recalculating scores...
+
   md-card
     md-data-table-toolbar(ng-hide="selected.length || filter.show")
       h2.md-title

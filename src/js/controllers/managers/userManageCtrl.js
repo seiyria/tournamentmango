@@ -1,6 +1,6 @@
 import site from '../../app';
 
-site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject, FirebaseURL, CurrentUsers, InputPrompt, UserStatus, CurrentPlayerBucket, ShareManagement, SetManagement, SidebarManagement, EnsureLoggedIn, UserManagement, Toaster) => {
+site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject, FirebaseURL, CurrentUsers, InputPrompt, UserStatus, CurrentPlayerBucket, CurrentTournaments, ShareManagement, SetManagement, SidebarManagement, EnsureLoggedIn, UserManagement, TournamentStatus, Toaster) => {
 
   SidebarManagement.hasSidebar = true;
   const authData = EnsureLoggedIn.check();
@@ -20,7 +20,6 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
   $scope.selected = [];
   $scope.listKeys = [];
   $scope.sharedLists = [];
-
 
   $scope.userData = UserStatus;
 
@@ -206,6 +205,41 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
     CurrentPlayerBucket.add($scope.selected);
     Toaster.show(`Successfully added ${$scope.selected.length} players to bucket.`);
     $scope.selected = [];
+  };
+
+  $scope.tournaments = CurrentTournaments.get();
+  CurrentTournaments.watch.then(null, null, tournaments => $scope.tournaments = tournaments);
+
+  $scope.anyCompletedTournaments = () => _.any($scope.tournaments, t => t.status === TournamentStatus.COMPLETED);
+  $scope.allTournamentGames = () => _.uniq($scope.tournaments, t => t.game);
+
+  $scope.recalculateScore = () => {
+    $scope.calculating = true;
+    _.each(_.filter($scope.tournaments, t => t.status === TournamentStatus.COMPLETED), tournament => {
+      _.each(tournament.matches, match => {
+        if(_.any(match.p, id => id === -1)) return; // skip hidden matches
+
+        const result = _.findWhere(tournament.trn, { id: match.id });
+        _.each(match.p, (id, idx) => {
+          const player = tournament.players[id-1];
+          const ref = $scope.users.$getRecord(player.id);
+          const winScore = _.max(result.score);
+          const playerScore = result.score[idx];
+
+          const key = playerScore === winScore ? 'wins' : 'losses';
+          if(!ref[key]) ref[key] = 0;
+          ref[key]++;
+        });
+      });
+    });
+    $scope.users.$save().then(() => {
+      $scope.calculating = false;
+    });
+  };
+
+  $scope.saveFirebase = () => {
+    UserStatus.firebase.$save();
+    $scope.recalculateScore();
   };
 
   $scope.load = () => {

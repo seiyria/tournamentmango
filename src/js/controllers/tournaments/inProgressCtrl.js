@@ -100,6 +100,7 @@ site.controller('inProgressController', ($scope, SidebarManagement, CurrentPlaye
 
     $scope.save = () => {
       $scope.ref.trn = $scope.trn.state;
+      $scope.ref.matches = $scope.trn.matches;
       if($scope.trn.isDone()) $scope.ref.status = TournamentStatus.COMPLETED;
       $scope.ref.$save();
     };
