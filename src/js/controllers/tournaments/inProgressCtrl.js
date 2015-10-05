@@ -3,7 +3,7 @@ import site from '../../app';
 site.filter('inRound', () => (items, round) => _.filter(items, (i) => i.id.r === round));
 site.filter('inSection', () => (items, section) => _.filter(items, (i) => i.id.s === section));
 
-site.controller('inProgressController', ($scope, SidebarManagement, CurrentPlayerBucket, UserStatus, TournamentStatus, FirebaseURL, $firebaseObject, $state, $stateParams, $mdDialog) => {
+site.controller('inProgressController', ($scope, $timeout, SidebarManagement, CurrentPlayerBucket, UserStatus, TournamentStatus, FirebaseURL, $firebaseObject, $state, $stateParams, $mdDialog) => {
 
   SidebarManagement.hasSidebar = false;
 
@@ -35,6 +35,39 @@ site.controller('inProgressController', ($scope, SidebarManagement, CurrentPlaye
     }
   };
 
+  $scope.strings = [];
+  $scope.getString = (matchId, idx) => {
+    const obj = _.findWhere($scope.strings, { id: matchId });
+    if(!obj) return '-';
+    return obj.strings[idx];
+  };
+
+  $scope.loadTournamentWinnerStrings = () => {
+
+    const matchInfo = [
+      { prefix: 'Winner of', genFunction: $scope.trn.right },
+      { prefix: 'Loser of', genFunction: $scope.trn.down }
+    ];
+
+    _.each(matchInfo, info => {
+      _.each($scope.trn.matches, match => {
+        const nextMatchInfo = info.genFunction(match.id);
+        if(!nextMatchInfo || $scope.noRender(match)) return;
+
+        const nextMatch = _.findWhere($scope.trn.matches, { id: nextMatchInfo[0] });
+        if(!nextMatch || $scope.noRender(nextMatch)) return;
+
+        let stringObj = _.findWhere($scope.strings, { id: nextMatch.id });
+        if(!stringObj) {
+          stringObj = { id: nextMatch.id, strings: [] };
+          $scope.strings.push(stringObj);
+        }
+
+        stringObj.strings[nextMatchInfo[1]] = `${info.prefix} ${match.id.s}-${$scope.toCharacter($scope.getIdForMatch(match.id))}`;
+      });
+    });
+  };
+
   $scope.ref = $firebaseObject(new Firebase(`${FirebaseURL}/users/${atob($stateParams.userId)}/players/${$stateParams.setId}/tournaments/${$stateParams.tournamentId}`));
 
   $scope.reset = (ev) => {
@@ -46,7 +79,7 @@ site.controller('inProgressController', ($scope, SidebarManagement, CurrentPlaye
       .cancel('No');
     $mdDialog.show(confirm).then(() => {
       $scope.loadTournament($scope.ref, true);
-      $scope.ref.$save();
+      $scope.save();
     });
   };
 
@@ -85,7 +118,7 @@ site.controller('inProgressController', ($scope, SidebarManagement, CurrentPlaye
 
     $scope.getName = (idx) => {
       const user = $scope.bucket[idx];
-      if(!user) return '-';
+      if(!user) return;
       if(user.alias) return user.alias;
       return user.name;
     };
@@ -101,9 +134,12 @@ site.controller('inProgressController', ($scope, SidebarManagement, CurrentPlaye
     $scope.save = () => {
       $scope.ref.trn = $scope.trn.state;
       $scope.ref.matches = $scope.trn.matches;
+      console.log($scope.ref.trn, $scope.ref.matches);
       if($scope.trn.isDone()) $scope.ref.status = TournamentStatus.COMPLETED;
       $scope.ref.$save();
     };
+
+    $timeout($scope.loadTournamentWinnerStrings, 0);
   });
 
 });

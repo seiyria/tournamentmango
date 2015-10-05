@@ -10,7 +10,8 @@
   height: 85%;
 }
 
-$round-column-width: 300px;
+$round-column-width: 330px;
+$match-column-width: 130px;
 
 .subhead {
   font-size: 14px;
@@ -19,7 +20,7 @@ $round-column-width: 300px;
 
 .round-header {
   position: fixed;
-  width: 100px;
+  width: $match-column-width;
   z-index: 150;
   text-align: center;
   background-color: #fff;
@@ -78,11 +79,11 @@ $round-column-width: 300px;
     }
 
     .match-name {
-      width: 100px;
+      width: $match-column-width;
 
       .member {
-        width: 100px;
-        max-width: 100px;
+        width: $match-column-width;
+        max-width: $match-column-width;
         overflow: hidden;
         white-space: nowrap;
         text-align: center;

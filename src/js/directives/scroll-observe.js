@@ -6,7 +6,7 @@ site.directive('scrollObserve', () => {
   return (scope, element, attrs) => {
     const window = $('.scroller');
     const setSize = () => {
-      $(element).css('left', -window.scrollLeft()+300*(+attrs.scrollObserve)+'px');
+      $(element).css('left', -window.scrollLeft()+330*(+attrs.scrollObserve)+'px');
     };
     setSize();
     window.on('scroll', setSize);
