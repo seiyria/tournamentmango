@@ -18,7 +18,6 @@ script(type="text/ng-template", id="/user-manage")
       label Score Function
       md-select(ng-model="userData.firebase.scoreFunc", ng-change="saveFirebase()")
         md-option(value="simple") Simple (Win-Loss)
-        md-option(value="ell") ELL
 
     md-button.md-warn(ng-click="recalculateScore()", ng-disabled="calculating") Force Recalculate
 

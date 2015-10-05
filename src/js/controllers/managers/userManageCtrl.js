@@ -93,11 +93,11 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
   $scope.setCurrentPlayerSet = (setData, name = UserStatus.firebase.playerSet) => {
     $scope.setObject = setData;
     $scope.setObject.$loaded(() => {
-      if(!$scope.setObject.basename) {
+      if(!$scope.setObject.basename && name) {
         $scope.setObject.basename = name;
         $scope.setObject.$save();
       }
-      if(!$scope.setObject.realName) {
+      if(!$scope.setObject.realName && name) {
         $scope.setObject.realName = name;
         $scope.setObject.$save();
       }
@@ -213,8 +213,15 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
   $scope.anyCompletedTournaments = () => _.any($scope.tournaments, t => t.status === TournamentStatus.COMPLETED);
   $scope.allTournamentGames = () => _.uniq($scope.tournaments, t => t.game);
 
+  $scope.scoreFunctions = {
+    simple: (player) => player.wins - player.losses
+  };
+
   $scope.recalculateScore = () => {
     $scope.calculating = true;
+
+    _.each($scope.users, user => user.points = user.wins = user.losses = 0);
+
     _.each(_.filter($scope.tournaments, t => t.status === TournamentStatus.COMPLETED), tournament => {
       _.each(tournament.matches, match => {
         if(_.any(match.p, id => id === -1)) return; // skip hidden matches
@@ -232,9 +239,14 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
         });
       });
     });
-    $scope.users.$save().then(() => {
-      $scope.calculating = false;
+
+    _.each($scope.users, (user) => {
+      user.points = $scope.scoreFunctions[UserStatus.firebase.scoreFunc](user);
+
+      $scope.users.$save(user);
     });
+
+    $scope.calculating = false;
   };
 
   $scope.saveFirebase = () => {
