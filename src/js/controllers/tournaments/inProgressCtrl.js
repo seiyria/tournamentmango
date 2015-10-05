@@ -56,7 +56,6 @@ site.controller('inProgressController', ($scope, SidebarManagement, CurrentPlaye
   };
 
   $scope.savePublicity = () => {
-    console.log($scope.ref.public);
     $scope.ref.$save();
   };
 
