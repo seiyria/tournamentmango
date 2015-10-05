@@ -1,6 +1,6 @@
 import site from '../../app';
 
-site.controller('tournamentDialogController', ($scope, $mdDialog, tournament, CurrentEvents, TournamentStatus) => {
+site.controller('tournamentDialogController', ($scope, $mdDialog, tournament, CurrentEvents, CurrentUsers, FilterUtils, TournamentStatus) => {
 
   $scope.cancel = $mdDialog.cancel;
 
@@ -10,6 +10,9 @@ site.controller('tournamentDialogController', ($scope, $mdDialog, tournament, Cu
 
   $scope.item = _.extend({}, tournament);
   $scope.allEvents = CurrentEvents.get();
+
+  $scope.users = CurrentUsers.get();
+  $scope.getGames = (query = '') => FilterUtils.getAndFilter($scope.users.list, 'games', query);
 
   $scope.addItem = () => {
     $scope.item.form.$setSubmitted();

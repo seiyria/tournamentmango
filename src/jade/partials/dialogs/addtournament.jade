@@ -22,9 +22,17 @@ script(type="text/ng-template", id="/dialog/addtournament")
               md-option(ng-repeat="event in allEvents", value="{{event.$id}}") {{event.name}}
 
         .input-row(layout="row")
-          md-input-container(flex)
-            label Game
-            input(name="game", ng-model="item.game", required)
+          md-autocomplete(flex, required,
+          md-input-name="game",
+          md-selected-item="selectedGame",
+          md-floating-label="Game",
+          md-search-text="item.game",
+          md-items="game in getGames(item.game)",
+          md-item-text="game",
+          md-input-maxlength="30")
+            md-item-template
+              span(md-highlight-text="searchText") {{game}}
+            md-not-found No matches.
 
     .md-actions
       md-button.md-primary(ng-click="addItem()", ng-disabled="item.form.$invalid", aria-label="submit") {{label}} Tournament

@@ -1,6 +1,6 @@
 import site from '../../app';
 
-site.controller('eventDialogController', ($scope, $mdDialog, tEvent) => {
+site.controller('eventDialogController', ($scope, $mdDialog, tEvent, CurrentUsers, FilterUtils) => {
 
   $scope.cancel = $mdDialog.cancel;
 
@@ -10,6 +10,10 @@ site.controller('eventDialogController', ($scope, $mdDialog, tEvent) => {
 
   $scope.item = _.extend({}, tEvent);
   if($scope.item.date) $scope.item.date = new Date($scope.item.date);
+
+  $scope.users = CurrentUsers.get();
+
+  $scope.getLocations = (query = '') => FilterUtils.getAndFilter($scope.users.list, 'location', query);
 
   $scope.addItem = () => {
     $scope.item.form.$setSubmitted();
