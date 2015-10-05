@@ -12,19 +12,172 @@
     <meta name="theme-color" content="#3F51B5"/>
     <meta name="msapplication-navbutton-color" content="#3F51B5"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="#3F51B5"/>
+    <base href="/"/>
   </head>
   <body layout="column" ng-cloak="ng-cloak">
     <md-toolbar layout="row" ng-controller="navController" ng-include="'navbar'"></md-toolbar>
     <div layout="row" flex="flex">
       <md-sidenav layout="column" ng-if="sidebar.hasSidebar" md-is-locked-open="$mdMedia('gt-sm')" md-component-id="left" ui-view="sidebar" md-swipe-left="dismissSidebar()" class="md-sidenav-left md-whiteframe-z2"></md-sidenav>
       <div layout="column" flex="flex">
-        <md-content layout="column" layout-padding="layout-padding" flex="flex" ui-view="content"></md-content>
+        <md-content layout="column" flex="flex" ui-view="content"></md-content>
       </div>
     </div>
     <script src="js/lib.min.js"></script>
     <script src="js/main.min.js"></script>
   </body>
 </html>
+<script type="text/ng-template" id="/home">
+  <div layout="row" flex="flex">
+    <div flex="flex">
+      <div class="text-center">OpenChallenge is a great way to manage your tournaments. It supports many features.</div>
+    </div>
+  </div>
+  <div layout-gt-sm="row" layout="column" flex="flex" class="text-center">
+    <div flex-gt-sm="33" flex-sm="100" ng-repeat="block in blocks" class="text-center padding-50">
+      <ng-md-icon icon="{{block.icon}}" size="100"></ng-md-icon>
+      <div class="md-title">{{block.name}}</div>
+      <p>{{block.info}}</p>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="navbar">
+  <div class="md-toolbar-tools">
+    <md-button hide-gt-sm="hide-gt-sm" ng-if="sidebar.hasSidebar" ng-click="toggleList()" aria-label="Toggle Menu">
+      <ng-md-icon icon="menu" style="fill: white">
+        <md-tooltip>Open Navigation</md-tooltip>
+      </ng-md-icon>
+    </md-button>
+    <h1><a ui-sref="home">OpenChallenge</a></h1><span flex="flex"></span>
+    <md-menu ng-if="!userStatus.loggedIn">
+      <md-button ng-click="$mdOpenMenu($event)">Login</md-button>
+      <md-menu-content>
+        <md-menu-item ng-repeat="login in auth.loginTypes">
+          <md-button ng-click="auth.doLogin(login.name)">
+            <ng-md-icon icon="{{login.icon}}" size="24"></ng-md-icon><span>&nbsp;Login with {{login.name}}</span>
+          </md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
+    <md-menu ng-if="userStatus.loggedIn">
+      <md-button ng-click="$mdOpenMenu($event)">
+        <ng-md-icon hide-gt-sm="hide-gt-sm" icon="{{ connected ? 'cloud' : 'cloud_off'}}" size="24" style="fill: white" class="no-transform"></ng-md-icon>
+        <ng-md-icon hide-sm="hide-sm" icon="{{ connected ? 'cloud' : 'cloud_off'}}" size="24" style="fill: white">
+          <md-tooltip>Currently {{ connected ? 'online' : 'offline' }}</md-tooltip>
+        </ng-md-icon><span hide-sm="hide-sm">&nbsp;{{userStatus.displayName}}</span>
+      </md-button>
+      <md-menu-content>
+        <md-menu-item hide-gt-sm="hide-gt-sm" disabled="disabled">
+          <md-button disabled="disabled">
+            <ng-md-icon icon="account_circle" size="24"></ng-md-icon><span>&nbsp;{{userStatus.displayName}}</span>
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button ui-sref="userManage">
+            <ng-md-icon icon="group" size="24"></ng-md-icon><span>&nbsp;Player Panel</span>
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button ui-sref="eventManage">
+            <ng-md-icon icon="description" size="24"></ng-md-icon><span>&nbsp;Event Panel</span>
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button ui-sref="tournamentManage">
+            <ng-md-icon icon="merge_type" size="24"></ng-md-icon><span>&nbsp;Tournament Panel</span>
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button ui-sref="userSettingsCtrl">
+            <ng-md-icon icon="settings" size="24"></ng-md-icon><span>&nbsp;Settings</span>
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button ng-click="auth.doLogout()">
+            <ng-md-icon icon="logout" size="24"></ng-md-icon><span>&nbsp;Logout</span>
+          </md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
+  </div>
+</script>
+<script type="text/ng-template" id="/tournament-sidebar">
+  <md-toolbar>
+    <div class="md-toolbar-tools">Navigation</div>
+  </md-toolbar>
+  <md-list>
+    <md-list-item ng-click="navigateTo('userManage')" class="md-2-line">
+      <ng-md-icon icon="group" size="36" class="md-avatar"></ng-md-icon>
+      <div class="md-list-item-text"><span>Player Panel</span>
+        <p ng-if="playerBucket.length === 0">Manage players</p>
+        <p ng-if="playerBucket.length">{{playerBucket.length}} players in your bucket</p>
+      </div>
+    </md-list-item>
+    <md-list-item ng-click="navigateTo('eventManage')" class="md-2-line">
+      <ng-md-icon icon="description" size="36" class="md-avatar"></ng-md-icon>
+      <div class="md-list-item-text"><span>Event Panel</span>
+        <p>Manage events</p>
+      </div>
+    </md-list-item>
+    <md-list-item ng-click="navigateTo('tournamentManage')" class="md-2-line">
+      <ng-md-icon icon="merge_type" size="36" class="md-avatar"></ng-md-icon>
+      <div class="md-list-item-text"><span>Tournament Panel</span>
+        <p>Manage tournaments</p>
+      </div>
+    </md-list-item>
+    <md-list-item ng-click="navigateTo('userSettings')" class="md-2-line">
+      <ng-md-icon icon="settings" size="36" class="md-avatar"></ng-md-icon>
+      <div class="md-list-item-text"><span>Settings</span>
+        <p>User ID, Export, Import</p>
+      </div>
+    </md-list-item>
+  </md-list>
+</script>
+<script type="text/ng-template" id="/user-settings">
+  <md-card>
+    <md-list>
+      <md-subheader>User Information</md-subheader>
+      <md-list-item class="md-3-line">
+        <md-button id="copy-id" data-clipboard-text="{{shareId}}" aria-label="copy share id" class="md-avatar">
+          <ng-md-icon icon="local_offer" size="36"></ng-md-icon>
+        </md-button>
+        <div layout="column" class="md-list-item-text">
+          <h3>User ID</h3>
+          <h4>{{shareId}}</h4>
+          <p>Give this ID to others for them to share with you.</p>
+        </div>
+      </md-list-item>
+      <md-subheader>Data Management</md-subheader>
+      <md-list-item class="md-3-line">
+        <md-button ng-click="save()" aria-label="download all data" class="md-avatar">
+          <ng-md-icon icon="file_download" size="36"></ng-md-icon>
+        </md-button>
+        <div layout="column" class="md-list-item-text">
+          <h3>Download data</h3>
+          <p>Download a copy of your data in OpenChallenges format.</p>
+          <p>WARNING: This will not preserve collaborators on documents. They will have to be manually re-added.</p>
+        </div>
+      </md-list-item>
+      <md-list-item class="md-3-line">
+        <md-button disabled="disabled" aria-label="upload old data" class="md-avatar">
+          <ng-md-icon icon="file_upload" size="36"></ng-md-icon>
+        </md-button>
+        <div layout="column" class="md-list-item-text">
+          <h3>Upload data</h3>
+          <p>Restore your data back to an older state. [not yet implemented]</p>
+          <p>WARNING: This will remove all of your existing data, and any changes made since this data was downloaded!</p>
+        </div>
+      </md-list-item>
+    </md-list>
+  </md-card>
+</script>
+<script type="text/ng-template" id="score">
+  <div class="score-container">
+    <div ng-click="edit()" ng-if="!editing" class="score-value">{{editStuff.value || '-'}}</div>
+    <div ng-if="editing">
+      <input ng-model="editStuff.value" ng-blur="unedit()" ng-keydown="watchKeyPresses($event)" class="score-input"/>
+    </div>
+  </div>
+</script>
 <script type="text/ng-template" id="/event-manage">
   <md-card>
     <md-data-table-toolbar ng-hide="selected.length || filter.show">
@@ -111,80 +264,6 @@
     </md-fab-speed-dial>
   </div>
 </script>
-<script type="text/ng-template" id="/home">
-  <div layout="row" flex="flex">
-    <div flex="flex">
-      <div class="text-center">OpenChallenge is a great way to manage your tournaments. It supports many features.</div>
-    </div>
-  </div>
-  <div layout-gt-sm="row" layout="column" flex="flex" class="text-center">
-    <div flex-gt-sm="33" flex-sm="100" ng-repeat="block in blocks" class="text-center padding-50">
-      <ng-md-icon icon="{{block.icon}}" size="100"></ng-md-icon>
-      <div class="md-title">{{block.name}}</div>
-      <p>{{block.info}}</p>
-    </div>
-  </div>
-</script>
-<script type="text/ng-template" id="navbar">
-  <div class="md-toolbar-tools">
-    <md-button hide-gt-sm="hide-gt-sm" ng-if="sidebar.hasSidebar" ng-click="toggleList()" aria-label="Toggle Menu">
-      <ng-md-icon icon="menu" style="fill: white">
-        <md-tooltip>Open Navigation</md-tooltip>
-      </ng-md-icon>
-    </md-button>
-    <h1><a ui-sref="home">OpenChallenge</a></h1><span flex="flex"></span>
-    <md-menu ng-if="!userStatus.loggedIn">
-      <md-button ng-click="$mdOpenMenu($event)">Login</md-button>
-      <md-menu-content>
-        <md-menu-item ng-repeat="login in auth.loginTypes">
-          <md-button ng-click="auth.doLogin(login.name)">
-            <ng-md-icon icon="{{login.icon}}" size="24"></ng-md-icon><span>&nbsp;Login with {{login.name}}</span>
-          </md-button>
-        </md-menu-item>
-      </md-menu-content>
-    </md-menu>
-    <md-menu ng-if="userStatus.loggedIn">
-      <md-button ng-click="$mdOpenMenu($event)">
-        <ng-md-icon hide-gt-sm="hide-gt-sm" icon="{{ connected ? 'cloud' : 'cloud_off'}}" size="24" style="fill: white" class="no-transform"></ng-md-icon>
-        <ng-md-icon hide-sm="hide-sm" icon="{{ connected ? 'cloud' : 'cloud_off'}}" size="24" style="fill: white">
-          <md-tooltip>Currently {{ connected ? 'online' : 'offline' }}</md-tooltip>
-        </ng-md-icon><span hide-sm="hide-sm">&nbsp;{{userStatus.displayName}}</span>
-      </md-button>
-      <md-menu-content>
-        <md-menu-item hide-gt-sm="hide-gt-sm" disabled="disabled">
-          <md-button disabled="disabled">
-            <ng-md-icon icon="account_circle" size="24"></ng-md-icon><span>&nbsp;{{userStatus.displayName}}</span>
-          </md-button>
-        </md-menu-item>
-        <md-menu-item>
-          <md-button ui-sref="userManage">
-            <ng-md-icon icon="group" size="24"></ng-md-icon><span>&nbsp;Player Panel</span>
-          </md-button>
-        </md-menu-item>
-        <md-menu-item>
-          <md-button ui-sref="eventManage">
-            <ng-md-icon icon="description" size="24"></ng-md-icon><span>&nbsp;Event Panel</span>
-          </md-button>
-        </md-menu-item>
-        <md-menu-item>
-          <md-button ui-sref="tournamentManage">
-            <ng-md-icon icon="merge_type" size="24"></ng-md-icon><span>&nbsp;Tournament Panel</span>
-          </md-button>
-        </md-menu-item>
-        <md-menu-item>
-          <md-button ui-sref="userSettingsCtrl">
-            <ng-md-icon icon="settings" size="24"></ng-md-icon><span>&nbsp;Settings</span>
-          </md-button>
-        </md-menu-item>
-        <md-menu-item>
-          <md-button ng-click="auth.doLogout()">
-            <ng-md-icon icon="logout" size="24"></ng-md-icon><span>&nbsp;Logout</span>
-          </md-button>
-        </md-menu-item>
-      </md-menu-content>
-    </md-menu>
-  </div>
-</script>
 <script type="text/ng-template" id="/tournament-manage">
   <md-card>
     <md-data-table-toolbar ng-hide="selected.length || filter.show">
@@ -238,6 +317,8 @@
             <th name="Name" order-by="name"></th>
             <th name="Game" order-by="game"></th>
             <th name="Event"></th>
+            <th name="Status" order-by="status"></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -245,6 +326,15 @@
             <td>{{tournament.name}}</td>
             <td>{{tournament.game}}</td>
             <td>{{tournamentName(tournament.event)}}</td>
+            <td>{{tournament.status}}</td>
+            <td ng-if="tournament.status === tStatus.NOT_STARTED">
+              <md-button aria-label="start tournament" ng-disabled="playersAvailable &lt; 2" ng-click="startTournament(tournament.$id)" class="md-raised md-primary">Start
+                <md-tooltip ng-if="playersAvailable &lt; 2" md-direction="left">You need more players to start a tournament</md-tooltip>
+              </md-button>
+            </td>
+            <td ng-if="tournament.status !== tStatus.NOT_STARTED">
+              <md-button aria-label="view tournament" ng-click="seeTournament(tournament.$id)" class="md-raised md-accent">View</md-button>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -267,38 +357,29 @@
     </md-fab-speed-dial>
   </div>
 </script>
-<script type="text/ng-template" id="/tournament-sidebar">
-  <md-toolbar>
-    <div class="md-toolbar-tools">Navigation</div>
-  </md-toolbar>
-  <md-list>
-    <md-list-item ng-click="navigateTo('userManage')" class="md-2-line">
-      <ng-md-icon icon="group" size="36" class="md-avatar"></ng-md-icon>
-      <div class="md-list-item-text"><span>Player Panel</span>
-        <p>Manage players</p>
-      </div>
-    </md-list-item>
-    <md-list-item ng-click="navigateTo('eventManage')" class="md-2-line">
-      <ng-md-icon icon="description" size="36" class="md-avatar"></ng-md-icon>
-      <div class="md-list-item-text"><span>Event Panel</span>
-        <p>Manage events</p>
-      </div>
-    </md-list-item>
-    <md-list-item ng-click="navigateTo('tournamentManage')" class="md-2-line">
-      <ng-md-icon icon="merge_type" size="36" class="md-avatar"></ng-md-icon>
-      <div class="md-list-item-text"><span>Tournament Panel</span>
-        <p>Manage tournaments</p>
-      </div>
-    </md-list-item>
-    <md-list-item ng-click="navigateTo('userSettings')" class="md-2-line">
-      <ng-md-icon icon="settings" size="36" class="md-avatar"></ng-md-icon>
-      <div class="md-list-item-text"><span>Settings</span>
-        <p>User ID, Export, Import</p>
-      </div>
-    </md-list-item>
-  </md-list>
-</script>
 <script type="text/ng-template" id="/user-manage">
+  <md-card ng-if="anyCompletedTournaments()" layout="row">
+    <h2 class="md-title margin-left-25">Scoring</h2>
+    <div flex="5"></div>
+    <md-input-container>
+      <label>Game</label>
+      <md-select ng-model="userData.firebase.scoreGame" ng-change="saveFirebase()">
+        <md-option ng-repeat="tournament in allTournamentGames()" value="{{tournament.game}}">{{tournament.game}}</md-option>
+      </md-select>
+    </md-input-container>
+    <div flex="5"></div>
+    <md-input-container>
+      <label>Score Function</label>
+      <md-select ng-model="userData.firebase.scoreFunc" ng-change="saveFirebase()">
+        <md-option value="simple">Simple (Win-Loss)</md-option>
+      </md-select>
+    </md-input-container>
+    <md-button ng-click="recalculateScore()" ng-disabled="calculating" class="md-warn">Force Recalculate</md-button>
+    <div flex="flex"></div>
+    <ng-md-icon icon="refresh" ng-if="calculating" class="auto-vert-margin margin-right-25">
+      <md-tooltip>Recalculating scores...</md-tooltip>
+    </ng-md-icon>
+  </md-card>
   <md-card>
     <md-data-table-toolbar ng-hide="selected.length || filter.show">
       <h2 class="md-title">
@@ -332,7 +413,11 @@
     <md-data-table-toolbar ng-show="selected.length">
       <div>{{selected.length}} {{selected.length > 1 ? 'people' : 'person'}} selected</div>
       <div flex="flex"></div>
-      <md-button ng-if="selected.length &gt; 1" class="md-raised md-primary">Start Tournament</md-button>
+      <md-button aria-label="add to player bucket" class="md-icon-button">
+        <ng-md-icon icon="group_add" ng-click="addToPlayerBucket()">
+          <md-tooltip>Add to player bucket</md-tooltip>
+        </ng-md-icon>
+      </md-button>
       <md-button ng-if="selected.length == 1" aria-label="edit user" class="md-icon-button">
         <ng-md-icon icon="edit" ng-click="editItem($event)">
           <md-tooltip>Edit player</md-tooltip>
@@ -405,43 +490,76 @@
     </md-fab-speed-dial>
   </div>
 </script>
-<script type="text/ng-template" id="/user-settings">
-  <md-card>
-    <md-list>
-      <md-subheader>User Information</md-subheader>
-      <md-list-item class="md-3-line">
-        <md-button id="copy-id" data-clipboard-text="{{shareId}}" aria-label="copy share id" class="md-avatar">
-          <ng-md-icon icon="local_offer" size="36"></ng-md-icon>
-        </md-button>
-        <div layout="column" class="md-list-item-text">
-          <h3>User ID</h3>
-          <h4>{{shareId}}</h4>
-          <p>Give this ID to others for them to share with you.</p>
-        </div>
-      </md-list-item>
-      <md-subheader>Data Management</md-subheader>
-      <md-list-item class="md-3-line">
-        <md-button ng-click="save()" aria-label="download all data" class="md-avatar">
-          <ng-md-icon icon="file_download" size="36"></ng-md-icon>
-        </md-button>
-        <div layout="column" class="md-list-item-text">
-          <h3>Download data</h3>
-          <p>Download a copy of your data in OpenChallenges format.</p>
-          <p>WARNING: This will not preserve collaborators on documents. They will have to be manually re-added.</p>
-        </div>
-      </md-list-item>
-      <md-list-item class="md-3-line">
-        <md-button disabled="disabled" aria-label="upload old data" class="md-avatar">
-          <ng-md-icon icon="file_upload" size="36"></ng-md-icon>
-        </md-button>
-        <div layout="column" class="md-list-item-text">
-          <h3>Upload data</h3>
-          <p>Restore your data back to an older state. [not yet implemented]</p>
-          <p>WARNING: This will remove all of your existing data, and any changes made since this data was downloaded!</p>
-        </div>
-      </md-list-item>
-    </md-list>
-  </md-card>
+<script type="text/ng-template" id="/tournaments/in-progress">
+  <div layout="row" class="header-bar">
+    <div flex="flex" layout="row" layout-align="center center">
+      <div flex="flex">
+        <md-button ng-click="reset($event)" aria-label="reset" class="md-warn md-raised">Reset</md-button>
+      </div>
+      <div flex="flex" ng-if="false">
+        <md-button flex="flex" ng-click="toPDF()" aria-label="pdf" class="md-accent md-raised">PDF</md-button>
+      </div>
+      <md-switch flex="flex" ng-model="ref.public" ng-change="savePublicity()" aria-label="public">Public</md-switch>
+    </div>
+    <div flex="flex" class="text-center md-title">{{tournamentName}}{{trn.isDone() ? ' (Complete)' : ' (' + matchesLeft() + ' matches left)'}}</div>
+    <div flex="flex" layout="row" layout-align="end center" class="text-right auto-vert-margin"><a target="_blank" ng-href="https://twitter.com/home?status={{url}}">
+        <ng-md-icon size="20" icon="twitter" class="pointer margin-left-10"></ng-md-icon></a><a target="_blank" ng-href="https://www.facebook.com/sharer/sharer.php?u={{url}}">
+        <ng-md-icon size="20" icon="facebook" class="pointer margin-left-10"></ng-md-icon></a><a target="_blank" ng-href="https://plus.google.com/share?url={{url}}">
+        <ng-md-icon size="20" icon="google-plus" class="pointer margin-left-10 margin-right-10"></ng-md-icon></a></div>
+  </div>
+  <md-content md-scroll="md-scroll" flex="flex" layout="column" ng-include="'tournament-duel'" class="scroller duel-area"></md-content>
+</script>
+<script type="text/ng-template" id="/tournaments/not-started">
+  <div layout="row" flex="flex">
+    <md-card layout="column" flex="40" class="almost-max-height">
+      <md-content flex="flex" md-scroll-y="md-scroll-y">
+        <md-list flex="flex" sv-root="sv-root" sv-part="bucket" class="player-bucket-list">
+          <md-subheader>Players ({{bucket.length}})</md-subheader>
+          <md-list-item ng-if="bucket.length === 0" class="md-2-line">
+            <div class="md-list-item-text">
+              <h3>No players available</h3>
+              <p><a ui-sref="userManage">Add some more!</a></p>
+            </div>
+          </md-list-item>
+          <md-list-item ng-repeat="player in bucket" sv-element="sv-element" layout="row" layout-align="center center" ng-class="{highlight: $index % 4 === 1 || $index % 4 === 0}" ng-init="player._isDeleteVisible = false; player.chosenAlias = player.aliases[0]" ng-mouseenter="player._isDeleteVisible = true" ng-mouseleave="player._isDeleteVisible = false" class="md-2-line"><span layout="row" layout-align="center center" class="md-avatar">
+              <ng-md-icon size="36" icon="reorder" sv-handle="sv-handle"></ng-md-icon><span>{{ toCharacter($index+1) }}</span></span>
+            <div layout="column" class="md-list-item-text">
+              <h3>{{player.name}}</h3>
+              <p>Record: {{player.wins || 0}}/{{player.losses || 0}}</p>
+            </div>
+            <md-input-container ng-if="player.aliases.length &gt; 0" class="auto-vert-margin">
+              <label>Alias</label>
+              <md-select ng-model="player.chosenAlias" ng-disabled="player.aliases.length === 1">
+                <md-option ng-repeat="alias in player.aliases" value="{{alias}}">{{alias}}</md-option>
+              </md-select>
+            </md-input-container>
+            <div style="width: 25px" class="auto-vert-margin">
+              <ng-md-icon size="24" icon="delete" ng-show="player._isDeleteVisible" ng-click="removeFromBucket(player)" class="pointer"></ng-md-icon>
+            </div>
+          </md-list-item>
+        </md-list>
+      </md-content>
+    </md-card>
+    <md-card flex="flex" layout-align="start start">
+      <md-list layout="column">
+        <md-subheader>Options</md-subheader>
+        <md-list-item>
+          <md-radio-group ng-model="tournamentOptions.type" layout="row">
+            <md-radio-button value="singles" class="md-primary">Single Elimination</md-radio-button>
+            <md-radio-button value="doubles" class="md-primary">Double Elimination</md-radio-button>
+          </md-radio-group>
+        </md-list-item>
+        <md-list-item ng-if="tournamentOptions.type === 'singles' || tournamentOptions.type === 'doubles'">
+          <label>&nbsp;</label>
+          <md-checkbox ng-model="tournamentOptions.short" aria-label="Short">Short tournament (no bronze or double grand final)</md-checkbox>
+        </md-list-item>
+        <md-list-item flex="flex"></md-list-item>
+        <md-list-item>
+          <md-button ng-click="start()" ng-disabled="isInvalid()" class="md-primary md-raised">Start</md-button>
+        </md-list-item>
+      </md-list>
+    </md-card>
+  </div>
 </script>
 <script type="text/ng-template" id="/dialog/addevent">
   <md-dialog>
@@ -454,14 +572,14 @@
         <div layout="row" class="input-row">
           <md-input-container flex="flex">
             <label>Name</label>
-            <input name="name" ng-model="item.name" required="required"/>
+            <input name="name" ng-model="item.name" md-maxlength="30" required="required"/>
           </md-input-container>
-          <md-input-container flex="flex">
-            <label>Location</label>
-            <input name="location" ng-model="item.location" required="required"/>
-          </md-input-container>
+          <md-autocomplete flex="flex" required="required" md-input-name="location" md-selected-item="selectedlocation" md-floating-label="Location" md-search-text="item.location" md-items="place in getLocations(item.location)" md-item-text="place" md-input-maxlength="30">
+            <md-item-template><span md-highlight-text="searchText">{{place}}</span></md-item-template>
+            <md-not-found>No matches.</md-not-found>
+          </md-autocomplete>
         </div>
-        <h3 class="md-subhead">When</h3>
+        <h3 class="md-subhead subhead">When</h3>
         <div layout="row" class="input-row">
           <md-datepicker ng-model="item.date" md-placeholder="Enter date" required="required" style="margin-top: 14px"></md-datepicker>
           <md-input-container flex="flex">
@@ -469,7 +587,7 @@
             <input name="time" type="time" ng-model="item.date"/>
           </md-input-container>
         </div>
-        <h3 class="md-subhead">Extra</h3>
+        <h3 class="md-subhead subhead">Extra</h3>
         <div layout="row" class="input-row">
           <md-input-container flex="flex">
             <label>Description</label>
@@ -495,7 +613,7 @@
         <div layout="row" class="input-row">
           <md-input-container flex="flex">
             <label>Name</label>
-            <input name="name" ng-model="item.name" required="required"/>
+            <input name="name" ng-model="item.name" md-maxlength="30" required="required"/>
           </md-input-container>
         </div>
         <div layout="row" class="input-row">
@@ -507,10 +625,10 @@
           </md-input-container>
         </div>
         <div layout="row" class="input-row">
-          <md-input-container flex="flex">
-            <label>Game</label>
-            <input name="game" ng-model="item.game" required="required"/>
-          </md-input-container>
+          <md-autocomplete flex="flex" required="required" md-input-name="game" md-selected-item="selectedGame" md-floating-label="Game" md-search-text="item.game" md-items="game in getGames(item.game)" md-item-text="game" md-input-maxlength="30">
+            <md-item-template><span md-highlight-text="searchText">{{game}}</span></md-item-template>
+            <md-not-found>No matches.</md-not-found>
+          </md-autocomplete>
         </div>
       </form>
     </md-dialog-content>
@@ -539,24 +657,24 @@
             <md-not-found>No matches.</md-not-found>
           </md-autocomplete>
         </div>
-        <h3 class="md-subhead">Aliases</h3>
+        <h3 class="md-subhead subhead">Aliases</h3>
         <div layout="row" class="input-row">
-          <md-chips flex="flex" ng-model="item.aliases" secondary-placeholder="Add aliases" placeholder="+Alias" required="required" readonly="viewOnly"><span md-highlight-text="searchText">{{item}}</span></md-chips>
+          <md-chips ng-model="item.aliases" secondary-placeholder="Add aliases" placeholder="+Alias" required="required" readonly="viewOnly"><span md-highlight-text="searchText">{{item}}</span></md-chips>
           <md-chip ng-if="item.aliases.length === 0 &amp;&amp; viewOnly">None</md-chip>
         </div>
-        <h3 class="md-subhead">Games Played</h3>
+        <h3 class="md-subhead subhead">Games Played</h3>
         <div layout="row" class="input-row">
-          <md-chips flex="flex" ng-model="item.games" secondary-placeholder="Add games" placeholder="+Game" required="required" md-autocomplete-snap="md-autocomplete-snap" readonly="viewOnly">
+          <md-chips ng-model="item.games" secondary-placeholder="Add games" placeholder="+Game" required="required" md-autocomplete-snap="md-autocomplete-snap" readonly="viewOnly">
             <md-autocomplete md-selected-item="selectedItem" md-search-text="searchText" md-items="item in getGames(searchText)" md-item-text="item" placeholder="+Game"><span md-highlight-text="searchText">{{item}}</span></md-autocomplete>
           </md-chips>
           <md-chip ng-if="item.games.length === 0 &amp;&amp; viewOnly">None</md-chip>
         </div>
-        <h3 class="md-subhead">Characters Used</h3>
+        <h3 class="md-subhead subhead">Characters Used</h3>
         <div layout="row" class="input-row">
           <md-chips ng-model="item.characters" secondary-placeholder="Add characters" placeholder="+Character" required="required" md-autocomplete-snap="md-autocomplete-snap" readonly="viewOnly">
             <md-autocomplete md-selected-item="selectedItem" md-search-text="searchText" md-items="item in getCharacters(searchText)" md-item-text="item" placeholder="+Character"><span md-highlight-text="searchText">{{item}}</span></md-autocomplete>
           </md-chips>
-          <md-chip ng-if="item.characters.length === 0&amp;&amp; viewOnly">None</md-chip>
+          <md-chip ng-if="item.characters.length === 0 &amp;&amp; viewOnly">None</md-chip>
         </div>
       </form>
     </md-dialog-content>
@@ -641,4 +759,42 @@
       <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
     </div>
   </md-dialog>
+</script>
+<script type="text/ng-template" id="tournament-duel">
+  <div layout="row">
+    <div ng-repeat="match in maxMatches track by $index" scroll-observe="{{$index}}" class="match-column round-header md-subhead subhead">Round {{$index+1}}</div>
+  </div>
+  <div layout="row" class="match-area">
+    <div ng-repeat="match in maxMatches track by $index" ng-init="thisIndex=$index+1" flex="flex" layout="column" layout-align="space-around center" class="match-column">
+      <div data-match-id="{{match.id}}" draw-to="{{nextMatch(match.id)}}" ng-repeat="match in trn.matches | inRound:thisIndex" ng-init="match.score = match.score || []" ng-class="{ unplayable: invalidMatch(match), complete: match.m }" class="match">
+        <div ng-if="noRender(match)" flex="flex"></div>
+        <div ng-if="!noRender(match)" layout="row" layout-align="center center" class="match-data">
+          <div class="round-type">{{match.id.s}}-{{toCharacter(getIdForMatch(match.id))}}</div>
+          <div layout="column" class="match-name margin-left-10 margin-right-10">
+            <div class="member member-0">{{getName(match.p[0]-1) || '-'}}
+              <md-tooltip ng-if="bucket[match.p[0]-1]">{{bucket[match.p[0]-1].alias || 'no alias'}}: {{bucket[match.p[0]-1].name}}</md-tooltip>
+            </div>
+            <div class="member member-1">{{getName(match.p[1]-1) || '-'}}
+              <md-tooltip ng-if="bucket[match.p[1]-1]">{{bucket[match.p[1]-1].alias || 'no alias'}}: {{bucket[match.p[1]-1].name}}</md-tooltip>
+            </div>
+          </div>
+          <div layout="column" ng-if="!invalidMatch(match)">
+            <score value="match.score[0]"></score>
+            <score value="match.score[1]"></score>
+          </div>
+          <div layout="column" ng-if="invalidMatch(match)">
+            <div class="score-container">
+              <div class="score-value">-</div>
+            </div>
+            <div class="score-container">
+              <div class="score-value">-</div>
+            </div>
+          </div>
+          <div class="margin-left-10 confirm-score">
+            <ng-md-icon size="24" icon="check_circle" ng-click="confirmScore(match)" ng-if="!invalidMatch(match) &amp;&amp; !scoresEqual(match)" style="fill: {{match.m ? '#ccc' : '#000'}}"></ng-md-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </script>
