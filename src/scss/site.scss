@@ -12,14 +12,17 @@
 
 $round-column-width: 300px;
 
+.subhead {
+  font-size: 14px;
+  font-weight: 500;
+}
+
 .round-header {
   position: fixed;
   width: 100px;
   z-index: 150;
   text-align: center;
   background-color: #fff;
-  font-size: 14px;
-  font-weight: 500;
 }
 
 .max-height {

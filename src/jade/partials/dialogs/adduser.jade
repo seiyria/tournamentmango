@@ -28,9 +28,9 @@ script(type="text/ng-template", id="/dialog/adduser")
               span(md-highlight-text="searchText") {{place}}
             md-not-found No matches.
 
-        h3.md-subhead Aliases
+        h3.md-subhead.subhead Aliases
         .input-row(layout="row")
-          md-chips(flex,
+          md-chips(
             ng-model="item.aliases",
             secondary-placeholder="Add aliases",
             placeholder="+Alias",
@@ -39,9 +39,9 @@ script(type="text/ng-template", id="/dialog/adduser")
               span(md-highlight-text="searchText") {{item}}
           md-chip(ng-if="item.aliases.length === 0 && viewOnly") None
 
-        h3.md-subhead Games Played
+        h3.md-subhead.subhead Games Played
         .input-row(layout="row")
-          md-chips(flex,
+          md-chips(
           ng-model="item.games",
           secondary-placeholder="Add games",
           placeholder="+Game",
@@ -58,7 +58,7 @@ script(type="text/ng-template", id="/dialog/adduser")
               span(md-highlight-text="searchText") {{item}}
           md-chip(ng-if="item.games.length === 0 && viewOnly") None
 
-        h3.md-subhead Characters Used
+        h3.md-subhead.subhead Characters Used
         .input-row(layout="row")
           md-chips(
           ng-model="item.characters",
@@ -75,7 +75,7 @@ script(type="text/ng-template", id="/dialog/adduser")
             placeholder="+Character"
             )
               span(md-highlight-text="searchText") {{item}}
-          md-chip(ng-if="item.characters.length === 0&& viewOnly") None
+          md-chip(ng-if="item.characters.length === 0 && viewOnly") None
 
     .md-actions(ng-if="!viewOnly")
       md-button.md-primary(ng-click="addItem()", ng-disabled="item.form.$invalid", aria-label="submit") {{label}} Player

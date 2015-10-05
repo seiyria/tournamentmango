@@ -2,7 +2,7 @@
 script(type="text/ng-template", id="tournament-duel")
 
   div(layout="row")
-    .match-column.round-header.md-subhead(ng-repeat="match in maxMatches track by $index", scroll-observe="{{$index}}") Round {{$index+1}}
+    .match-column.round-header.md-subhead.subhead(ng-repeat="match in maxMatches track by $index", scroll-observe="{{$index}}") Round {{$index+1}}
 
   .match-area(layout="row")
 
