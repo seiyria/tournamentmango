@@ -25,7 +25,6 @@ site.directive('drawTo', ($timeout) => {
       const targetBounds = $target[0].getBoundingClientRect();
 
       const headerBarOffset = $('.header-bar').height();
-      console.log(headerBarOffset);
 
       // element + an offset
       const x1 = meBounds.left + meBounds.width + 10;
