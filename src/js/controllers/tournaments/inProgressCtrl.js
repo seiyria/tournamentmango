@@ -51,7 +51,8 @@ site.controller('inProgressController', ($scope, SidebarManagement, CurrentPlaye
   };
 
   $scope.toPDF = () => {
-
+    const pdf = new jsPDF();
+    pdf.fromHTML($('.duel-area').get(0), 15, 15);
   };
 
   $scope.savePublicity = () => {

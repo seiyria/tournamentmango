@@ -4,7 +4,7 @@ script(type="text/ng-template", id="/tournaments/in-progress")
     div(flex, layout="row", layout-align="center center")
       div(flex)
         md-button.md-warn.md-raised(ng-click="reset($event)", aria-label="reset") Reset
-      div(flex)
+      div(flex, ng-if="false")
         md-button.md-accent.md-raised(flex, ng-click="toPDF()", aria-label="pdf") PDF
       md-switch(flex, ng-model="ref.public", ng-change="savePublicity()", aria-label="public") Public
 

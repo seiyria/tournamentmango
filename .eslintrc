@@ -16,7 +16,8 @@
     "Clipboard": true,
     "saveAs": true,
     "Duel": true,
-    "$": true
+    "$": true,
+    "jsPDF": true
   },
   "rules": {
     "no-var": 2,
