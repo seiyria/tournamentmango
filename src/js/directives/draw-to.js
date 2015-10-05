@@ -1,15 +1,22 @@
 import site from '../app';
 
+const getId = (str) => {
+  const chars = ['[', ']', '{', '}', '"', ':', ','];
+  _.each(chars, char => str = str.split(char).join('-'));
+  return str;
+};
+
 site.directive('drawTo', ($timeout) => {
   return (scope, element, attrs) => {
     const drawTo = JSON.parse(attrs.drawTo);
+    if(!drawTo || $(`#line-${getId(JSON.stringify(drawTo))}`).length > 0) return;
 
     const drawLine = (x1, y1, x2, y2, thickness = 1, color = '#000') => {
       const length = Math.sqrt(((x2-x1) * (x2-x1)) + ((y2-y1) * (y2-y1)));
       const cx = ((x1 + x2) / 2) - (length / 2);
       const cy = ((y1 + y2) / 2) - (thickness / 2);
       const angle = Math.atan2((y1-y2),(x1-x2))*(180/Math.PI);
-      const htmlLine = `<div style='padding:0; margin:0; height: ${thickness}px; background-color:${color}; line-height:1px; position:absolute; left: ${cx}px; top: ${cy}px; width: ${length}px; transform:rotate(${angle}deg);' />`;
+      const htmlLine = `<div id='line-${getId(JSON.stringify(drawTo))}' style='padding:0; margin:0; height: ${thickness}px; background-color:${color}; line-height:1px; position:absolute; left: ${cx}px; top: ${cy}px; width: ${length}px; transform:rotate(${angle}deg);' />`;
 
       $('.duel-area').append($(htmlLine));
     };
