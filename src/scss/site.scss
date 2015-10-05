@@ -2,6 +2,10 @@
   text-align: center;
 }
 
+.text-right {
+  text-align: right;
+}
+
 .almost-max-height {
   height: 85%;
 }
@@ -21,6 +25,17 @@ $round-column-width: 300px;
 .max-height {
   height: 100%;
 }
+
+.header-bar {
+  height: 70px;
+
+  .md-title {
+    margin-top: 10px;
+  }
+}
+
+.pull-right { float: right; }
+.pull-left { float: left; }
 
 .match-area {
   margin-top: 24px;

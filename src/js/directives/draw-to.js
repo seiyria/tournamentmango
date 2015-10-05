@@ -24,13 +24,16 @@ site.directive('drawTo', ($timeout) => {
       const meBounds = $me[0].getBoundingClientRect();
       const targetBounds = $target[0].getBoundingClientRect();
 
+      const headerBarOffset = $('.header-bar').height();
+      console.log(headerBarOffset);
+
       // element + an offset
       const x1 = meBounds.left + meBounds.width + 10;
-      const y1 = meBounds.top - (meBounds.height / 2) - 53;
+      const y1 = meBounds.top - (meBounds.height / 2) - 30 - headerBarOffset;
 
       // element - an offset
       const x2 = targetBounds.left - $targetRound.width() - 20;
-      const y2 = targetBounds.top - (targetBounds.height) - 61;
+      const y2 = targetBounds.top - (targetBounds.height) - 35 - headerBarOffset;
 
       const mid = x1+((x2-x1)/2);
 

@@ -2,6 +2,8 @@
 import './constants/firebaseURL';
 import './constants/tournamentStatus';
 
+import './configs/location';
+
 import './directives/score';
 import './directives/draw-to';
 import './directives/scroll-observe';

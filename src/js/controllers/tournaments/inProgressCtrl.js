@@ -3,9 +3,11 @@ import site from '../../app';
 site.filter('inRound', () => (items, round) => _.filter(items, (i) => i.id.r === round));
 site.filter('inSection', () => (items, section) => _.filter(items, (i) => i.id.s === section));
 
-site.controller('inProgressController', ($scope, SidebarManagement, CurrentPlayerBucket, UserStatus, TournamentStatus, FirebaseURL, $firebaseObject, $state, $stateParams) => {
+site.controller('inProgressController', ($scope, SidebarManagement, CurrentPlayerBucket, UserStatus, TournamentStatus, FirebaseURL, $firebaseObject, $state, $stateParams, $mdDialog) => {
 
   SidebarManagement.hasSidebar = false;
+
+  $scope.url = window.location.href;
 
   $scope.toCharacter = (round) => {
     let str = '';
@@ -17,14 +19,14 @@ site.controller('inProgressController', ($scope, SidebarManagement, CurrentPlaye
     return str;
   };
 
-  $scope.loadTournament = (ref) => {
+  $scope.loadTournament = (ref, makeNew = false) => {
     $scope.bucket = ref.players;
 
     const oldScores = _.cloneDeep(ref.trn);
 
-    $scope.trn = ref.trn ? Duel.restore($scope.bucket.length, ref.options, ref.trn) : new Duel($scope.bucket.length, ref.options);
+    $scope.trn = ref.trn && !makeNew ? Duel.restore($scope.bucket.length, ref.options, ref.trn) : new Duel($scope.bucket.length, ref.options);
 
-    if(ref.trn) {
+    if(ref.trn && !makeNew) {
       _.each(oldScores, match => {
         const existingMatch = _.findWhere($scope.trn.matches, { id: match.id });
         if(!existingMatch) return;
@@ -33,14 +35,36 @@ site.controller('inProgressController', ($scope, SidebarManagement, CurrentPlaye
     }
   };
 
-  const ref = $firebaseObject(new Firebase(`${FirebaseURL}/users/${atob($stateParams.userId)}/players/${$stateParams.setId}/tournaments/${$stateParams.tournamentId}`));
+  $scope.ref = $firebaseObject(new Firebase(`${FirebaseURL}/users/${atob($stateParams.userId)}/players/${$stateParams.setId}/tournaments/${$stateParams.tournamentId}`));
 
-  ref.$watch(() => $scope.loadTournament(ref));
+  $scope.reset = (ev) => {
+    const confirm = $mdDialog.confirm()
+      .title('Would you like to reset this bracket?')
+      .content('This is a permanent, irreversible action.')
+      .targetEvent(ev)
+      .ok('Yes')
+      .cancel('No');
+    $mdDialog.show(confirm).then(() => {
+      $scope.loadTournament($scope.ref, true);
+      $scope.ref.$save();
+    });
+  };
 
-  ref.$loaded().then(() => {
-    $scope.tournamentName = ref.name;
+  $scope.toPDF = () => {
 
-    $scope.loadTournament(ref);
+  };
+
+  $scope.savePublicity = () => {
+    console.log($scope.ref.public);
+    $scope.ref.$save();
+  };
+
+  $scope.ref.$watch(() => $scope.loadTournament($scope.ref));
+
+  $scope.ref.$loaded().then(() => {
+    $scope.tournamentName = $scope.ref.name;
+
+    $scope.loadTournament($scope.ref);
 
     const horizMatches = _.max($scope.trn.matches, 'id.r').id.r; // these start at 1 I guess.
     const totalSections = _.max($scope.trn.matches, 'id.s').id.s; // get the highest section
@@ -75,9 +99,9 @@ site.controller('inProgressController', ($scope, SidebarManagement, CurrentPlaye
     };
 
     $scope.save = () => {
-      ref.trn = $scope.trn.state;
-      if($scope.trn.isDone()) ref.status = TournamentStatus.COMPLETED;
-      ref.$save();
+      $scope.ref.trn = $scope.trn.state;
+      if($scope.trn.isDone()) $scope.ref.status = TournamentStatus.COMPLETED;
+      $scope.ref.$save();
     };
   });
 
