@@ -50,7 +50,7 @@ script(type="text/ng-template", id="/tournament-manage")
           tr(md-auto-select, ng-repeat="tournament in visibleTournaments")
             td {{tournament.name}}
             td {{tournament.game}}
-            td {{tournamentName(tournament.event)}}
+            td(ng-class="{empty: !tournament.event}") {{tournamentName(tournament.event)}}
             td {{tournament.status}}
             td(ng-if="tournament.status === tStatus.NOT_STARTED")
               md-button.md-raised.md-primary(aria-label="start tournament", ng-disabled="playersAvailable < 2", ng-click="startTournament(tournament.$id)") Start

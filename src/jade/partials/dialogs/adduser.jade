@@ -4,7 +4,7 @@ script(type="text/ng-template", id="/dialog/adduser")
 
     md-dialog-content
       h2.md-title(ng-if="!viewOnly") {{label}} Player
-      h2.md-title(ng-if="viewOnly") {{item.name}} from {{item.location}}
+      h2.md-title(ng-if="viewOnly") {{item.name}} {{item.location ? 'from ' + item.location : ''}}
 
       p.md-warn(ng-if="item.form.$submitted && item.form.$invalid", layout="row", layout-align="start center")
         ng-md-icon(icon="error")

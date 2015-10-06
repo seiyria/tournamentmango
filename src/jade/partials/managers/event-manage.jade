@@ -49,7 +49,7 @@ script(type="text/ng-template", id="/event-manage")
 
           tr(md-auto-select, ng-repeat="event in visibleEvents")
             td {{event.name}}
-            td {{event.description}}
+            td(ng-class="{empty: !event.description}") {{event.description}}
             td {{event.location}}
             td {{event.date | date:'fullDate'}}
             td {{event.date | date:'shortTime'}}

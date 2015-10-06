@@ -156,6 +156,12 @@ md-menu ng-md-icon:not(.no-transform) svg, md-menu-item ng-md-icon:not(.no-trans
   line-height: 1;
 }
 
+td[md-table-cell].empty:before {
+  content: 'None';
+  color: #aaa;
+  font-style: italic;
+}
+
 md-data-table-toolbar > form {
   margin-left: 16px;
   margin-top: 25px;
