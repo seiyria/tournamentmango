@@ -92,6 +92,7 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
 
   $scope.setCurrentPlayerSet = (setData, name = UserStatus.firebase.playerSet) => {
     $scope.setObject = setData;
+    CurrentPlayerBucket.clear();
     $scope.setObject.$loaded(() => {
       if(!$scope.setObject.basename && name) {
         $scope.setObject.basename = name;
