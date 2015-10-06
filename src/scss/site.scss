@@ -71,6 +71,12 @@ $match-column-width: 130px;
       color: gray;
     }
 
+    &.walkover {
+      .confirm-score, .scores {
+        visibility: hidden;
+      }
+    }
+
     .round-type {
       width: 60px;
       min-width: 60px;
