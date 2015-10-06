@@ -177,77 +177,6 @@
     </md-list>
   </md-card>
 </script>
-<script type="text/ng-template" id="/tournaments/in-progress">
-  <div layout="row" class="header-bar">
-    <div flex="flex" layout="row" layout-align="center center">
-      <div flex="flex">
-        <md-button ng-click="reset($event)" aria-label="reset" class="md-warn md-raised">Reset</md-button>
-      </div>
-      <div flex="flex" ng-if="false">
-        <md-button flex="flex" ng-click="toPDF()" aria-label="pdf" class="md-accent md-raised">PDF</md-button>
-      </div>
-      <md-switch flex="flex" ng-model="ref.public" ng-change="savePublicity()" aria-label="public">Public</md-switch>
-    </div>
-    <div flex="flex" class="text-center md-title">{{tournamentName}}{{trn.isDone() ? ' (Complete)' : ' (' + matchesLeft() + ' matches left)'}}</div>
-    <div flex="flex" layout="row" layout-align="end center" class="text-right auto-vert-margin"><a target="_blank" ng-href="https://twitter.com/home?status={{url}}">
-        <ng-md-icon size="20" icon="twitter" class="pointer margin-left-10"></ng-md-icon></a><a target="_blank" ng-href="https://www.facebook.com/sharer/sharer.php?u={{url}}">
-        <ng-md-icon size="20" icon="facebook" class="pointer margin-left-10"></ng-md-icon></a><a target="_blank" ng-href="https://plus.google.com/share?url={{url}}">
-        <ng-md-icon size="20" icon="google-plus" class="pointer margin-left-10 margin-right-10"></ng-md-icon></a></div>
-  </div>
-  <md-content md-scroll="md-scroll" flex="flex" layout="column" ng-include="'tournament-duel'" class="scroller duel-area"></md-content>
-</script>
-<script type="text/ng-template" id="/tournaments/not-started">
-  <div layout="row" flex="flex">
-    <md-card layout="column" flex="40" class="almost-max-height">
-      <md-content flex="flex" md-scroll-y="md-scroll-y">
-        <md-list flex="flex" sv-root="sv-root" sv-part="bucket" class="player-bucket-list">
-          <md-subheader>Players ({{bucket.length}})</md-subheader>
-          <md-list-item ng-if="bucket.length === 0" class="md-2-line">
-            <div class="md-list-item-text">
-              <h3>No players available</h3>
-              <p><a ui-sref="userManage">Add some more!</a></p>
-            </div>
-          </md-list-item>
-          <md-list-item ng-repeat="player in bucket" sv-element="sv-element" layout="row" layout-align="center center" ng-class="{highlight: $index % 4 === 1 || $index % 4 === 0}" ng-init="player._isDeleteVisible = false; player.chosenAlias = player.aliases[0]" ng-mouseenter="player._isDeleteVisible = true" ng-mouseleave="player._isDeleteVisible = false" class="md-2-line"><span layout="row" layout-align="center center" class="md-avatar">
-              <ng-md-icon size="36" icon="reorder" sv-handle="sv-handle"></ng-md-icon><span>{{ toCharacter($index+1) }}</span></span>
-            <div layout="column" class="md-list-item-text">
-              <h3>{{player.name}}</h3>
-              <p>Record: {{player.wins || 0}}/{{player.losses || 0}} ({{player.points || 0}} points)</p>
-            </div>
-            <md-input-container ng-if="player.aliases.length &gt; 0" class="auto-vert-margin">
-              <label>Alias</label>
-              <md-select ng-model="player.chosenAlias" ng-disabled="player.aliases.length === 1">
-                <md-option ng-repeat="alias in player.aliases" value="{{alias}}">{{alias}}</md-option>
-              </md-select>
-            </md-input-container>
-            <div style="width: 25px" class="auto-vert-margin">
-              <ng-md-icon size="24" icon="delete" ng-show="player._isDeleteVisible" ng-click="removeFromBucket(player)" class="pointer"></ng-md-icon>
-            </div>
-          </md-list-item>
-        </md-list>
-      </md-content>
-    </md-card>
-    <md-card flex="flex" layout-align="start start">
-      <md-list layout="column">
-        <md-subheader>Options</md-subheader>
-        <md-list-item>
-          <md-radio-group ng-model="tournamentOptions.type" layout="row">
-            <md-radio-button value="singles" class="md-primary">Single Elimination</md-radio-button>
-            <md-radio-button value="doubles" class="md-primary">Double Elimination</md-radio-button>
-          </md-radio-group>
-        </md-list-item>
-        <md-list-item ng-if="tournamentOptions.type === 'singles' || tournamentOptions.type === 'doubles'">
-          <label>&nbsp;</label>
-          <md-checkbox ng-model="tournamentOptions.short" aria-label="Short">Short tournament (no bronze or double grand final)</md-checkbox>
-        </md-list-item>
-        <md-list-item flex="flex"></md-list-item>
-        <md-list-item>
-          <md-button ng-click="start()" ng-disabled="isInvalid()" class="md-primary md-raised">Start</md-button>
-        </md-list-item>
-      </md-list>
-    </md-card>
-  </div>
-</script>
 <script type="text/ng-template" id="/dialog/addevent">
   <md-dialog>
     <md-dialog-content>
@@ -759,6 +688,80 @@
     </md-fab-speed-dial>
   </div>
 </script>
+<script type="text/ng-template" id="/tournaments/in-progress">
+  <div layout="row" class="header-bar">
+    <div flex="flex" layout="row" layout-align="center center">
+      <div flex="flex">
+        <md-button ng-show="hasAccess" ng-click="reset($event)" aria-label="reset" class="md-warn md-raised">Reset</md-button>
+      </div>
+      <div flex="flex" ng-if="false">
+        <md-button flex="flex" ng-click="toPDF()" aria-label="pdf" class="md-accent md-raised">PDF</md-button>
+      </div>
+      <md-switch flex="flex" ng-show="hasAccess" ng-model="ref.public" ng-change="savePublicity()" aria-label="public">Public</md-switch>
+    </div>
+    <div flex="flex" class="text-center md-title"><span ng-show="!ref.public &amp;&amp; !hasAccess">Unavailable</span><span ng-show="ref.public || hasAccess">{{tournamentName}}{{trn.isDone() ? ' (Complete)' : ' (' + matchesLeft() + ' matches left)'}}</span></div>
+    <div flex="flex" layout="row" layout-align="end center" class="text-right auto-vert-margin">
+      <div ng-show="ref.public &amp;&amp; hasAccess" class="hide-underline"><a target="_blank" ng-href="https://twitter.com/home?status={{url}}">
+          <ng-md-icon size="20" icon="twitter" class="pointer margin-left-10"></ng-md-icon></a><a target="_blank" ng-href="https://www.facebook.com/sharer/sharer.php?u={{url}}">
+          <ng-md-icon size="20" icon="facebook" class="pointer margin-left-10"></ng-md-icon></a><a target="_blank" ng-href="https://plus.google.com/share?url={{url}}">
+          <ng-md-icon size="20" icon="google-plus" class="pointer margin-left-10 margin-right-10"></ng-md-icon></a></div>
+    </div>
+  </div>
+  <md-content md-scroll="md-scroll" flex="flex" layout="column" ng-include="'tournament-duel'" ng-if="hasAccess || ref.public" class="scroller duel-area"></md-content>
+  <md-content flex="flex" layout="row" layout-align="center center" ng-include="'tournament-noaccess'" ng-if="!hasAccess &amp;&amp; !ref.public"></md-content>
+</script>
+<script type="text/ng-template" id="/tournaments/not-started">
+  <div layout="row" flex="flex">
+    <md-card layout="column" flex="40" class="almost-max-height">
+      <md-content flex="flex" md-scroll-y="md-scroll-y">
+        <md-list flex="flex" sv-root="sv-root" sv-part="bucket" class="player-bucket-list">
+          <md-subheader>Players ({{bucket.length}})</md-subheader>
+          <md-list-item ng-if="bucket.length === 0" class="md-2-line">
+            <div class="md-list-item-text">
+              <h3>No players available</h3>
+              <p><a ui-sref="userManage">Add some more!</a></p>
+            </div>
+          </md-list-item>
+          <md-list-item ng-repeat="player in bucket" sv-element="sv-element" layout="row" layout-align="center center" ng-class="{highlight: $index % 4 === 1 || $index % 4 === 0}" ng-init="player._isDeleteVisible = false; player.chosenAlias = player.aliases[0]" ng-mouseenter="player._isDeleteVisible = true" ng-mouseleave="player._isDeleteVisible = false" class="md-2-line"><span layout="row" layout-align="center center" class="md-avatar">
+              <ng-md-icon size="36" icon="reorder" sv-handle="sv-handle"></ng-md-icon><span>{{ toCharacter($index+1) }}</span></span>
+            <div layout="column" class="md-list-item-text">
+              <h3>{{player.name}}</h3>
+              <p>Record: {{player.wins || 0}}/{{player.losses || 0}} ({{player.points || 0}} points)</p>
+            </div>
+            <md-input-container ng-if="player.aliases.length &gt; 0" class="auto-vert-margin">
+              <label>Alias</label>
+              <md-select ng-model="player.chosenAlias" ng-disabled="player.aliases.length === 1">
+                <md-option ng-repeat="alias in player.aliases" value="{{alias}}">{{alias}}</md-option>
+              </md-select>
+            </md-input-container>
+            <div style="width: 25px" class="auto-vert-margin">
+              <ng-md-icon size="24" icon="delete" ng-show="player._isDeleteVisible" ng-click="removeFromBucket(player)" class="pointer"></ng-md-icon>
+            </div>
+          </md-list-item>
+        </md-list>
+      </md-content>
+    </md-card>
+    <md-card flex="flex" layout-align="start start">
+      <md-list layout="column">
+        <md-subheader>Options</md-subheader>
+        <md-list-item>
+          <md-radio-group ng-model="tournamentOptions.type" layout="row">
+            <md-radio-button value="singles" class="md-primary">Single Elimination</md-radio-button>
+            <md-radio-button value="doubles" class="md-primary">Double Elimination</md-radio-button>
+          </md-radio-group>
+        </md-list-item>
+        <md-list-item ng-if="tournamentOptions.type === 'singles' || tournamentOptions.type === 'doubles'">
+          <label>&nbsp;</label>
+          <md-checkbox ng-model="tournamentOptions.short" aria-label="Short">Short tournament (no bronze or double grand final)</md-checkbox>
+        </md-list-item>
+        <md-list-item flex="flex"></md-list-item>
+        <md-list-item>
+          <md-button ng-click="start()" ng-disabled="isInvalid()" class="md-primary md-raised">Start</md-button>
+        </md-list-item>
+      </md-list>
+    </md-card>
+  </div>
+</script>
 <script type="text/ng-template" id="tournament-duel">
   <div layout="row">
     <div ng-repeat="match in maxMatches track by $index" scroll-observe="{{$index}}" class="match-column round-header md-subhead subhead">Round {{$index+1}}</div>
@@ -777,7 +780,7 @@
             </div>
           </div>
           <div layout="column" ng-if="!invalidMatch(match)" class="scores text-center">
-            <score ng-repeat="p in match.p track by $index" value="match.score[$index]" hover-name="{{getName(match.p[$index]-1)}}" class="score-container padding-5"></score>
+            <score ng-repeat="p in match.p track by $index" value="match.score[$index]" hover-name="{{getName(match.p[$index]-1)}}" can-click="{{hasAccess}}" class="score-container padding-5"></score>
           </div>
           <div layout="column" ng-if="invalidMatch(match)" class="scores text-center">
             <div ng-repeat="p in match.p track by $index" hover-name="{{getName(match.p[$index]-1)}}" class="score-container padding-5">
@@ -791,4 +794,7 @@
       </md-card>
     </div>
   </div>
+</script>
+<script type="text/ng-template" id="tournament-noaccess">
+  <div>You don't have access to view this tournament. Sorry!</div>
 </script>
