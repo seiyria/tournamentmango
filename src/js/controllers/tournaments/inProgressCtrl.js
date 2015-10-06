@@ -3,9 +3,12 @@ import site from '../../app';
 site.filter('inRound', () => (items, round) => _.filter(items, (i) => i.id.r === round));
 site.filter('inSection', () => (items, section) => _.filter(items, (i) => i.id.s === section));
 
-site.controller('inProgressController', ($scope, SidebarManagement, CurrentPlayerBucket, UserStatus, TournamentStatus, FirebaseURL, $firebaseObject, $state, $stateParams, $mdDialog) => {
+site.controller('inProgressController', ($scope, $timeout, SidebarManagement, CurrentPlayerBucket, UserStatus, TournamentStatus, FirebaseURL, $firebaseObject, $state, $stateParams, $mdDialog) => {
 
   SidebarManagement.hasSidebar = false;
+
+  const idMap = {};
+  let badIds = 0;
 
   $scope.url = window.location.href;
 
@@ -35,6 +38,74 @@ site.controller('inProgressController', ($scope, SidebarManagement, CurrentPlaye
     }
   };
 
+  $scope.strings = [];
+  $scope.getString = (matchId, idx = 0) => {
+    const obj = _.findWhere($scope.strings, { id: matchId });
+    if(!obj) return 'Walkover';
+    return obj.strings[idx];
+  };
+
+  $scope.loadTournamentWinnerStrings = () => {
+
+    const matchInfo = [
+      { prefix: 'Winner of', genFunction: $scope.trn.right },
+      { prefix: 'Loser of', genFunction: $scope.trn.down, checkPassthrough: true, altFunction: $scope.trn.right }
+    ];
+
+    const isBad = (match) => _.any(match.p, p => p === -1);
+    // const toId = (match) => `${match.id.s}-${$scope.toCharacter(idMap[JSON.stringify(match.id)])}`;
+
+    _.each(matchInfo, info => {
+      _.each($scope.trn.matches, match => {
+        if(isBad(match)) {
+          // console.log(info.prefix, 'bad match', toId(match));
+          return;
+        }
+
+        let nextMatchInfo = info.genFunction(match.id);
+        if(!nextMatchInfo) {
+          // console.log(info.prefix, 'no match info', toId(match));
+          return;
+        }
+
+        let nextMatch = _.findWhere($scope.trn.matches, { id: nextMatchInfo[0] });
+        if(!nextMatch) {
+          // console.log(info.prefix, 'no next match', match, nextMatchInfo, toId(match));
+          return;
+        }
+
+        if(_.isEqual(match, nextMatch)) {
+          // console.log(info.prefix, 'next match == match', toId(match));
+          return;
+        }
+
+        // console.log('ORIGINAL ROUTE', `${match.id.s}-${$scope.toCharacter(idMap[JSON.stringify(match.id)])}`, `${nextMatchInfo[0].s}-${$scope.toCharacter(idMap[JSON.stringify(nextMatchInfo[0])])}`);
+
+        if(info.checkPassthrough && isBad(nextMatch)) {
+          const newNextMatchInfo = info.altFunction(nextMatch.id);
+          // console.log('INITIAL PASSTHROUGH',newNextMatchInfo);
+          if(!newNextMatchInfo) return;
+          nextMatchInfo = newNextMatchInfo;
+          const obj = _.findWhere($scope.trn.matches, { id: nextMatchInfo[0] });
+          // console.log('PASSTHROUGH', obj);
+          if(!obj) return;
+          nextMatch = obj;
+        }
+
+        // console.log(match.id, 'next',info.prefix, nextMatchInfo[0], nextMatchInfo[1], `${match.id.s}-${$scope.toCharacter(idMap[JSON.stringify(match.id)])}`, `${nextMatchInfo[0].s}-${$scope.toCharacter(idMap[JSON.stringify(nextMatchInfo[0])])}`, match, nextMatch);
+
+        let stringObj = _.findWhere($scope.strings, { id: nextMatch.id });
+        if(!stringObj) {
+          stringObj = { id: nextMatch.id, strings: [] };
+          $scope.strings.push(stringObj);
+        }
+
+        stringObj.strings[nextMatchInfo[1]] = `${info.prefix} ${match.id.s}-${$scope.toCharacter($scope.getIdForMatch(match))}`;
+        // console.log('setting', stringObj.strings[nextMatchInfo[1]]);
+      });
+    });
+  };
+
   $scope.ref = $firebaseObject(new Firebase(`${FirebaseURL}/users/${atob($stateParams.userId)}/players/${$stateParams.setId}/tournaments/${$stateParams.tournamentId}`));
 
   $scope.reset = (ev) => {
@@ -46,7 +117,7 @@ site.controller('inProgressController', ($scope, SidebarManagement, CurrentPlaye
       .cancel('No');
     $mdDialog.show(confirm).then(() => {
       $scope.loadTournament($scope.ref, true);
-      $scope.ref.$save();
+      $scope.save();
     });
   };
 
@@ -75,17 +146,16 @@ site.controller('inProgressController', ($scope, SidebarManagement, CurrentPlaye
 
     $scope.matchesLeft = () => _.reduce($scope.trn.matches, ((prev, m) => prev + ($scope.noRender(m) ? 0 : ~~!m.m)), 0);
 
-    const idMap = {};
-
-    $scope.getIdForMatch = (id) => {
+    $scope.getIdForMatch = (match) => {
+      const id = match.id;
       const strId = JSON.stringify(id);
       if(idMap[strId]) return idMap[strId];
-      return idMap[strId] = ++$scope.numMatchesPerSection[id.s-1];
+      return idMap[strId] = $scope.noRender(match) ? ++badIds : ++$scope.numMatchesPerSection[id.s-1];
     };
 
     $scope.getName = (idx) => {
       const user = $scope.bucket[idx];
-      if(!user) return '-';
+      if(!user) return;
       if(user.alias) return user.alias;
       return user.name;
     };
@@ -104,6 +174,8 @@ site.controller('inProgressController', ($scope, SidebarManagement, CurrentPlaye
       if($scope.trn.isDone()) $scope.ref.status = TournamentStatus.COMPLETED;
       $scope.ref.$save();
     };
+
+    $timeout($scope.loadTournamentWinnerStrings, 0);
   });
 
 });

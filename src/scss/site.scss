@@ -10,7 +10,8 @@
   height: 85%;
 }
 
-$round-column-width: 300px;
+$round-column-width: 330px;
+$match-column-width: 130px;
 
 .subhead {
   font-size: 14px;
@@ -19,8 +20,8 @@ $round-column-width: 300px;
 
 .round-header {
   position: fixed;
-  width: 100px;
-  z-index: 150;
+  width: $match-column-width;
+  z-index: 11;
   text-align: center;
   background-color: #fff;
 }
@@ -40,6 +41,13 @@ $round-column-width: 300px;
 .pull-right { float: right; }
 .pull-left { float: left; }
 
+$duel-bg: #eee;
+$card-border: 1px solid #eee;
+
+.duel-area {
+  background-color: $duel-bg;
+}
+
 .match-area {
   margin-top: 24px;
 }
@@ -53,6 +61,11 @@ $round-column-width: 300px;
   margin-bottom: auto;
 }
 
+.bad-material-color-stuff {
+  background-color: rgb(63,81,181);
+  color: #fff;
+}
+
 .match-column {
   width: $round-column-width;
   min-width: $round-column-width;
@@ -60,7 +73,7 @@ $round-column-width: 300px;
 
 
   .match {
-    min-height: 60px;
+    min-height: 57px;
 
     &.unplayable {
       color: red;
@@ -68,6 +81,12 @@ $round-column-width: 300px;
 
     &.complete {
       color: gray;
+    }
+
+    &.walkover {
+      .confirm-score, .scores {
+        visibility: hidden;
+      }
     }
 
     .round-type {
@@ -78,15 +97,21 @@ $round-column-width: 300px;
     }
 
     .match-name {
-      width: 100px;
+      width: $match-column-width;
 
       .member {
-        width: 100px;
-        max-width: 100px;
+        width: $match-column-width;
+        max-width: $match-column-width;
         overflow: hidden;
         white-space: nowrap;
         text-align: center;
         text-overflow: ellipsis;
+
+        border-left: $card-border;
+
+        &:not(:last-child) {
+          border-bottom: $card-border;
+        }
       }
     }
 
@@ -97,18 +122,22 @@ $round-column-width: 300px;
       max-width: 24px;
     }
 
-    .score-container {
-      width: 25px;
-
-      .score-input {
+    .scores {
+      .score-container {
         width: 25px;
-        font-size: 12px;
-        margin: 0;
-        padding: 0;
-      }
+        border-right: $card-border;
+        border-left: $card-border;
 
-      .score-value {
-        text-align: right;
+        &:not(:last-child) {
+          border-bottom: $card-border;
+        }
+
+        .score-input {
+          width: 25px;
+          font-size: 12px;
+          margin: 0;
+          padding: 0;
+        }
       }
     }
   }
