@@ -8,6 +8,7 @@ const getId = (str) => {
 
 site.directive('drawTo', ($timeout) => {
   return (scope, element, attrs) => {
+    if(!attrs.drawTo) return;
     const drawTo = JSON.parse(attrs.drawTo);
     if(!drawTo || $(`#line-${getId(JSON.stringify(drawTo))}`).length > 0) return;
 
@@ -43,7 +44,13 @@ site.directive('drawTo', ($timeout) => {
       const x2 = targetBounds.left - $targetRound.width() - 20;
       const y2 = targetBounds.top - (targetBounds.height) - 20 - headerBarOffset;
 
-      const mid = x1+((x2-x1)/2);
+      const myRound = JSON.parse(attrs.matchId).r;
+      const targetRound = drawTo[0].r;
+
+      // if it's too far away, /2 is not a good midpoint
+      const modifier = targetRound - myRound === 1 ? 2 : 1.05;
+
+      const mid = x1+((x2-x1)/modifier);
 
       drawLine(x1, y1, mid, y1);
       drawLine(mid, y1, mid, y2);

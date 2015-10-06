@@ -48,51 +48,42 @@ site.controller('inProgressController', ($scope, $timeout, SidebarManagement, Cu
   $scope.loadTournamentWinnerStrings = () => {
 
     const matchInfo = [
-      { prefix: 'Winner of', genFunction: $scope.trn.right },
-      { prefix: 'Loser of', genFunction: $scope.trn.down, checkPassthrough: true, altFunction: $scope.trn.right }
+      { prefix: 'Winner of', genFunction: 'right' },
+      { prefix: 'Loser of', genFunction: 'down', checkPassthrough: true, altFunction: 'right' }
     ];
 
     const isBad = (match) => _.any(match.p, p => p === -1);
-    // const toId = (match) => `${match.id.s}-${$scope.toCharacter(idMap[JSON.stringify(match.id)])}`;
 
     _.each(matchInfo, info => {
       _.each($scope.trn.matches, match => {
+
+
         if(isBad(match)) {
-          // console.log(info.prefix, 'bad match', toId(match));
           return;
         }
 
-        let nextMatchInfo = info.genFunction(match.id);
+        let nextMatchInfo = $scope.trn[info.genFunction](match.id);
         if(!nextMatchInfo) {
-          // console.log(info.prefix, 'no match info', toId(match));
           return;
         }
 
-        let nextMatch = _.findWhere($scope.trn.matches, { id: nextMatchInfo[0] });
+        let nextMatch = $scope.trn.findMatch(nextMatchInfo[0]);
         if(!nextMatch) {
-          // console.log(info.prefix, 'no next match', match, nextMatchInfo, toId(match));
           return;
         }
 
         if(_.isEqual(match, nextMatch)) {
-          // console.log(info.prefix, 'next match == match', toId(match));
           return;
         }
 
-        // console.log('ORIGINAL ROUTE', `${match.id.s}-${$scope.toCharacter(idMap[JSON.stringify(match.id)])}`, `${nextMatchInfo[0].s}-${$scope.toCharacter(idMap[JSON.stringify(nextMatchInfo[0])])}`);
-
         if(info.checkPassthrough && isBad(nextMatch)) {
-          const newNextMatchInfo = info.altFunction(nextMatch.id);
-          // console.log('INITIAL PASSTHROUGH',newNextMatchInfo);
+          const newNextMatchInfo = $scope.trn[info.altFunction](nextMatch.id);
           if(!newNextMatchInfo) return;
           nextMatchInfo = newNextMatchInfo;
           const obj = _.findWhere($scope.trn.matches, { id: nextMatchInfo[0] });
-          // console.log('PASSTHROUGH', obj);
           if(!obj) return;
           nextMatch = obj;
         }
-
-        // console.log(match.id, 'next',info.prefix, nextMatchInfo[0], nextMatchInfo[1], `${match.id.s}-${$scope.toCharacter(idMap[JSON.stringify(match.id)])}`, `${nextMatchInfo[0].s}-${$scope.toCharacter(idMap[JSON.stringify(nextMatchInfo[0])])}`, match, nextMatch);
 
         let stringObj = _.findWhere($scope.strings, { id: nextMatch.id });
         if(!stringObj) {
@@ -101,7 +92,6 @@ site.controller('inProgressController', ($scope, $timeout, SidebarManagement, Cu
         }
 
         stringObj.strings[nextMatchInfo[1]] = `${info.prefix} ${match.id.s}-${$scope.toCharacter($scope.getIdForMatch(match))}`;
-        // console.log('setting', stringObj.strings[nextMatchInfo[1]]);
       });
     });
   };
@@ -142,7 +132,7 @@ site.controller('inProgressController', ($scope, $timeout, SidebarManagement, Cu
 
     $scope.maxMatches = new Array(horizMatches);
     $scope.numMatchesPerSection = _.map(new Array(totalSections), () => 0);
-    $scope.nextMatch = $scope.trn.right;
+    $scope.nextMatch = (match) => $scope.trn.right(match);
 
     $scope.matchesLeft = () => _.reduce($scope.trn.matches, ((prev, m) => prev + ($scope.noRender(m) ? 0 : ~~!m.m)), 0);
 
