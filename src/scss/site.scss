@@ -41,6 +41,13 @@ $match-column-width: 130px;
 .pull-right { float: right; }
 .pull-left { float: left; }
 
+$duel-bg: #eee;
+$card-border: 1px solid #eee;
+
+.duel-area {
+  background-color: $duel-bg;
+}
+
 .match-area {
   margin-top: 24px;
 }
@@ -61,7 +68,7 @@ $match-column-width: 130px;
 
 
   .match {
-    min-height: 60px;
+    min-height: 57px;
 
     &.unplayable {
       color: red;
@@ -95,10 +102,10 @@ $match-column-width: 130px;
         text-align: center;
         text-overflow: ellipsis;
 
-        border-left: 1px solid #ccc;
+        border-left: $card-border;
 
         &:not(:last-child) {
-          border-bottom: 1px solid #ccc;
+          border-bottom: $card-border;
         }
       }
     }
@@ -113,11 +120,11 @@ $match-column-width: 130px;
     .scores {
       .score-container {
         width: 25px;
-        border-right: 1px solid #ccc;
-        border-left: 1px solid #ccc;
+        border-right: $card-border;
+        border-left: $card-border;
 
         &:not(:last-child) {
-          border-bottom: 1px solid #ccc;
+          border-bottom: $card-border;
         }
 
         .score-input {
