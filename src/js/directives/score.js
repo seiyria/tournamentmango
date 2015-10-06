@@ -7,11 +7,12 @@ site.directive('score', ($timeout) => {
     scope: {
       value: '='
     },
-    link: (scope, element) => {
+    link: (scope, element, attrs) => {
       scope.editing = false;
       scope.editStuff = { value: scope.value }; // don't bind to primitives, they said
 
       scope.edit = () => {
+        if(!attrs.canClick) return;
         scope.editing = true;
         $timeout(() => {
           $(element).find('.score-input').focus();
