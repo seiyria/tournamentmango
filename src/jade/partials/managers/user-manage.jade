@@ -78,7 +78,7 @@ script(type="text/ng-template", id="/user-manage")
 
           tr(md-auto-select, ng-repeat="user in visibleUsers")
             td {{user.name}}
-            td {{user.location}}
+            td(ng-class="{empty: !user.location}") {{user.location}}
             td {{user.wins || 0}}
             td {{user.losses || 0}}
             td {{user.points || 0}}
