@@ -26,14 +26,14 @@ script(type="text/ng-template", id="tournament-duel")
           .round-type.subhead {{match.id.s}}-{{toCharacter(getIdForMatch(match))}}
 
           .match-name(layout="column")
-            .member.padding-5(ng-repeat="p in match.p track by $index", class="member-{{$index}}") {{getName(match.p[$index]-1) || getString(match.id, $index) || '???'}}
+            .member.padding-5(ng-repeat="p in match.p track by $index", class="member-{{$index}}", hover-highlight, hover-name="{{getName(match.p[$index]-1)}}") {{getName(match.p[$index]-1) || getString(match.id, $index) || '???'}}
               md-tooltip(ng-if="bucket[match.p[$index]-1]") {{bucket[match.p[$index]-1].alias || 'no alias'}}: {{bucket[match.p[$index]-1].name}}
 
           .scores.text-center(layout="column", ng-if="!invalidMatch(match)")
-            score.score-container.padding-5(ng-repeat="p in match.p track by $index", value="match.score[$index]")
+            score.score-container.padding-5(ng-repeat="p in match.p track by $index", value="match.score[$index]", hover-name="{{getName(match.p[$index]-1)}}")
 
           .scores.text-center(layout="column", ng-if="invalidMatch(match)")
-            .score-container.padding-5(ng-repeat="p in match.p track by $index")
+            .score-container.padding-5(ng-repeat="p in match.p track by $index", hover-name="{{getName(match.p[$index]-1)}}")
               .score-value -
 
           div.margin-right-10.margin-left-10.confirm-score
