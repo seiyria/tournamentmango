@@ -1,6 +1,6 @@
 import site from '../app';
 
-site.service('Auth', (FirebaseURL, UserStatus, $q, $state, $firebaseAuth, $firebaseObject) => {
+site.service('Auth', (FirebaseURL, UserStatus, $window, $q, $state, $firebaseAuth, $firebaseObject) => {
 
   const loaded = $q.defer();
 
@@ -61,6 +61,7 @@ site.service('Auth', (FirebaseURL, UserStatus, $q, $state, $firebaseAuth, $fireb
     authBase.$unauth();
     UserStatus.loggedIn = false;
     $state.go('home');
+    $window.location.reload();
   };
 
   return {
