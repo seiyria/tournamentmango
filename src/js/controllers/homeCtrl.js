@@ -30,9 +30,10 @@ site.controller('homeController', ($scope, SidebarManagement) => {
       icon: 'group'
     },
     {
-      name: 'Distribution',
-      info: 'OpenChallenge can export to PDF for easy paper distribution.',
-      icon: 'file_download'
+      name: 'Open Source',
+      link: 'https://github.com/seiyria/openchallenge',
+      info: 'No secrets here. Check out the source on GitHub by clicking the icon above. Feel free to open an issue if you have problems, or submit a pull request if you\'re inclined.',
+      icon: 'github-circle'
     }
   ];
 });
