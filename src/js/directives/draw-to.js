@@ -11,7 +11,7 @@ site.directive('drawTo', ($timeout) => {
     const drawTo = JSON.parse(attrs.drawTo);
     if(!drawTo || $(`#line-${getId(JSON.stringify(drawTo))}`).length > 0) return;
 
-    const drawLine = (x1, y1, x2, y2, thickness = 1, color = '#000') => {
+    const drawLine = (x1, y1, x2, y2, thickness = 1, color = '#888') => {
       const length = Math.sqrt(((x2-x1) * (x2-x1)) + ((y2-y1) * (y2-y1)));
       const cx = ((x1 + x2) / 2) - (length / 2);
       const cy = ((y1 + y2) / 2) - (thickness / 2);
