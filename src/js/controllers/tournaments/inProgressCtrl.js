@@ -7,6 +7,9 @@ site.controller('inProgressController', ($scope, $timeout, SidebarManagement, Cu
 
   SidebarManagement.hasSidebar = false;
 
+  const idMap = {};
+  let badIds = 0;
+
   $scope.url = window.location.href;
 
   $scope.toCharacter = (round) => {
@@ -36,9 +39,9 @@ site.controller('inProgressController', ($scope, $timeout, SidebarManagement, Cu
   };
 
   $scope.strings = [];
-  $scope.getString = (matchId, idx) => {
+  $scope.getString = (matchId, idx = 0) => {
     const obj = _.findWhere($scope.strings, { id: matchId });
-    if(!obj) return '-';
+    if(!obj) return 'Walkover';
     return obj.strings[idx];
   };
 
@@ -46,16 +49,50 @@ site.controller('inProgressController', ($scope, $timeout, SidebarManagement, Cu
 
     const matchInfo = [
       { prefix: 'Winner of', genFunction: $scope.trn.right },
-      { prefix: 'Loser of', genFunction: $scope.trn.down }
+      { prefix: 'Loser of', genFunction: $scope.trn.down, checkPassthrough: true, altFunction: $scope.trn.right }
     ];
+
+    const isBad = (match) => _.any(match.p, p => p === -1);
+    // const toId = (match) => `${match.id.s}-${$scope.toCharacter(idMap[JSON.stringify(match.id)])}`;
 
     _.each(matchInfo, info => {
       _.each($scope.trn.matches, match => {
-        const nextMatchInfo = info.genFunction(match.id);
-        if(!nextMatchInfo || $scope.noRender(match)) return;
+        if(isBad(match)) {
+          // console.log(info.prefix, 'bad match', toId(match));
+          return;
+        }
 
-        const nextMatch = _.findWhere($scope.trn.matches, { id: nextMatchInfo[0] });
-        if(!nextMatch || $scope.noRender(nextMatch)) return;
+        let nextMatchInfo = info.genFunction(match.id);
+        if(!nextMatchInfo) {
+          // console.log(info.prefix, 'no match info', toId(match));
+          return;
+        }
+
+        let nextMatch = _.findWhere($scope.trn.matches, { id: nextMatchInfo[0] });
+        if(!nextMatch) {
+          // console.log(info.prefix, 'no next match', match, nextMatchInfo, toId(match));
+          return;
+        }
+
+        if(_.isEqual(match, nextMatch)) {
+          // console.log(info.prefix, 'next match == match', toId(match));
+          return;
+        }
+
+        // console.log('ORIGINAL ROUTE', `${match.id.s}-${$scope.toCharacter(idMap[JSON.stringify(match.id)])}`, `${nextMatchInfo[0].s}-${$scope.toCharacter(idMap[JSON.stringify(nextMatchInfo[0])])}`);
+
+        if(info.checkPassthrough && isBad(nextMatch)) {
+          const newNextMatchInfo = info.altFunction(nextMatch.id);
+          // console.log('INITIAL PASSTHROUGH',newNextMatchInfo);
+          if(!newNextMatchInfo) return;
+          nextMatchInfo = newNextMatchInfo;
+          const obj = _.findWhere($scope.trn.matches, { id: nextMatchInfo[0] });
+          // console.log('PASSTHROUGH', obj);
+          if(!obj) return;
+          nextMatch = obj;
+        }
+
+        // console.log(match.id, 'next',info.prefix, nextMatchInfo[0], nextMatchInfo[1], `${match.id.s}-${$scope.toCharacter(idMap[JSON.stringify(match.id)])}`, `${nextMatchInfo[0].s}-${$scope.toCharacter(idMap[JSON.stringify(nextMatchInfo[0])])}`, match, nextMatch);
 
         let stringObj = _.findWhere($scope.strings, { id: nextMatch.id });
         if(!stringObj) {
@@ -63,7 +100,8 @@ site.controller('inProgressController', ($scope, $timeout, SidebarManagement, Cu
           $scope.strings.push(stringObj);
         }
 
-        stringObj.strings[nextMatchInfo[1]] = `${info.prefix} ${match.id.s}-${$scope.toCharacter($scope.getIdForMatch(match.id))}`;
+        stringObj.strings[nextMatchInfo[1]] = `${info.prefix} ${match.id.s}-${$scope.toCharacter($scope.getIdForMatch(match))}`;
+        // console.log('setting', stringObj.strings[nextMatchInfo[1]]);
       });
     });
   };
@@ -108,12 +146,11 @@ site.controller('inProgressController', ($scope, $timeout, SidebarManagement, Cu
 
     $scope.matchesLeft = () => _.reduce($scope.trn.matches, ((prev, m) => prev + ($scope.noRender(m) ? 0 : ~~!m.m)), 0);
 
-    const idMap = {};
-
-    $scope.getIdForMatch = (id) => {
+    $scope.getIdForMatch = (match) => {
+      const id = match.id;
       const strId = JSON.stringify(id);
       if(idMap[strId]) return idMap[strId];
-      return idMap[strId] = ++$scope.numMatchesPerSection[id.s-1];
+      return idMap[strId] = $scope.noRender(match) ? ++badIds : ++$scope.numMatchesPerSection[id.s-1];
     };
 
     $scope.getName = (idx) => {
@@ -134,7 +171,6 @@ site.controller('inProgressController', ($scope, $timeout, SidebarManagement, Cu
     $scope.save = () => {
       $scope.ref.trn = $scope.trn.state;
       $scope.ref.matches = $scope.trn.matches;
-      console.log($scope.ref.trn, $scope.ref.matches);
       if($scope.trn.isDone()) $scope.ref.status = TournamentStatus.COMPLETED;
       $scope.ref.$save();
     };
