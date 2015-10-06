@@ -61,6 +61,11 @@ $card-border: 1px solid #eee;
   margin-bottom: auto;
 }
 
+.bad-material-color-stuff {
+  background-color: rgb(63,81,181);
+  color: #fff;
+}
+
 .match-column {
   width: $round-column-width;
   min-width: $round-column-width;
