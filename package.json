@@ -3,7 +3,7 @@
   "description": "A tournament management tool.",
   "readme": "README.md",
   "repository": "https://github.com/seiyria/openchallenge",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "license": "MIT",
   "authors": [
     "Kyle Kemp <kyle@seiyria.com>"
