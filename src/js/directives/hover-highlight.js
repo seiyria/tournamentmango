@@ -8,9 +8,10 @@ site.directive('hoverHighlight', () => {
       $(element).hover(
         () => {
           if(!attrs.hoverName) return;
-          $(`[hover-name='${attrs.hoverName}']`).addClass('bad-material-color-stuff');
+          const ref = $('body > md-toolbar');
+          $(`[hover-name='${attrs.hoverName}']`).css('background-color', ref.css('background-color')).css('color', ref.css('color'));
         }, () => {
-          $(`[hover-name='${attrs.hoverName}']`).removeClass('bad-material-color-stuff');
+          $(`[hover-name='${attrs.hoverName}']`).css('background-color', '').css('color', '');
         }
       );
     }
