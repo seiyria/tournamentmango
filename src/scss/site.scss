@@ -71,7 +71,7 @@ $card-border: 1px solid #eee;
     min-height: 57px;
 
     &.unplayable {
-      color: red;
+      color: #c76e06;
     }
 
     &.complete {
@@ -103,6 +103,11 @@ $card-border: 1px solid #eee;
         text-overflow: ellipsis;
 
         border-left: $card-border;
+
+        &[hover-name=""] {
+          font-style: italic;
+          font-size: small;
+        }
 
         &:not(:last-child) {
           border-bottom: $card-border;
