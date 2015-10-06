@@ -37,11 +37,11 @@ site.directive('drawTo', ($timeout) => {
 
       // element + an offset
       const x1 = meBounds.left + meBounds.width + 10;
-      const y1 = meBounds.top - (meBounds.height / 2) - 30 - headerBarOffset;
+      const y1 = meBounds.top - (meBounds.height / 2) - headerBarOffset;
 
       // element - an offset
       const x2 = targetBounds.left - $targetRound.width() - 20;
-      const y2 = targetBounds.top - (targetBounds.height) - 35 - headerBarOffset;
+      const y2 = targetBounds.top - (targetBounds.height) - 20 - headerBarOffset;
 
       const mid = x1+((x2-x1)/2);
 
