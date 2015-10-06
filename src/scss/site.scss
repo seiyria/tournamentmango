@@ -94,6 +94,12 @@ $match-column-width: 130px;
         white-space: nowrap;
         text-align: center;
         text-overflow: ellipsis;
+
+        border-left: 1px solid #ccc;
+
+        &:not(:last-child) {
+          border-bottom: 1px solid #ccc;
+        }
       }
     }
 
@@ -104,18 +110,22 @@ $match-column-width: 130px;
       max-width: 24px;
     }
 
-    .score-container {
-      width: 25px;
-
-      .score-input {
+    .scores {
+      .score-container {
         width: 25px;
-        font-size: 12px;
-        margin: 0;
-        padding: 0;
-      }
+        border-right: 1px solid #ccc;
+        border-left: 1px solid #ccc;
 
-      .score-value {
-        text-align: right;
+        &:not(:last-child) {
+          border-bottom: 1px solid #ccc;
+        }
+
+        .score-input {
+          width: 25px;
+          font-size: 12px;
+          margin: 0;
+          padding: 0;
+        }
       }
     }
   }
