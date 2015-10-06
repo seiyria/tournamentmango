@@ -1,13 +1,20 @@
 import site from '../../app';
 
-site.service('CurrentUsers', ($q, $firebaseObject, FirebaseURL, UserStatus) => {
+site.service('CurrentUsers', ($q, $firebaseObject, FirebaseURL, Auth, UserStatus) => {
 
-  let users = $firebaseObject(new Firebase(`${FirebaseURL}/users/${UserStatus.firebase.playerSetUid}/players/${UserStatus.firebase.playerSet}`));
+  let users = UserStatus.firebase ? $firebaseObject(new Firebase(`${FirebaseURL}/users/${UserStatus.firebase.playerSetUid}/players/${UserStatus.firebase.playerSet}`)) : {};
   const defer = $q.defer();
 
-  UserStatus.firebase.$watch(() => {
+  const newUsers = () => {
     users = $firebaseObject(new Firebase(`${FirebaseURL}/users/${UserStatus.firebase.playerSetUid}/players/${UserStatus.firebase.playerSet}`));
-    defer.notify(users);
+    users.$loaded(() => {
+      defer.notify(users);
+    });
+  };
+
+  Auth.ready.then(() => {
+    newUsers();
+    UserStatus.firebase.$watch(newUsers);
   });
 
   return {

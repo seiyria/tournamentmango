@@ -3,9 +3,21 @@ import site from '../../app';
 site.filter('inRound', () => (items, round) => _.filter(items, (i) => i.id.r === round));
 site.filter('inSection', () => (items, section) => _.filter(items, (i) => i.id.s === section));
 
-site.controller('inProgressController', ($scope, $timeout, SidebarManagement, CurrentPlayerBucket, UserStatus, TournamentStatus, FirebaseURL, $firebaseObject, $state, $stateParams, $mdDialog) => {
+site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, SidebarManagement, CurrentUsers, CurrentPlayerBucket, UserStatus, TournamentStatus, FirebaseURL, $firebaseObject, $state, $stateParams, $mdDialog) => {
 
   SidebarManagement.hasSidebar = false;
+  const authData = EnsureLoggedIn.check(false);
+
+  const defaultHasAccess = () => authData && authData.uid === UserStatus.firebase.playerSetUid;
+
+  $scope.hasAccess = defaultHasAccess();
+
+  if(authData) {
+    CurrentUsers.watch.then(null, null, data => {
+      if(!data.shareIDs) return;
+      $scope.hasAccess = defaultHasAccess() || data && data.shareIDs[authData.uid];
+    });
+  }
 
   const idMap = {};
   let badIds = 0;
@@ -23,6 +35,10 @@ site.controller('inProgressController', ($scope, $timeout, SidebarManagement, Cu
   };
 
   $scope.loadTournament = (ref, makeNew = false) => {
+    $scope.tournamentName = $scope.ref.name;
+
+    console.log(ref);
+
     $scope.bucket = ref.players;
 
     const oldScores = _.cloneDeep(ref.trn);
@@ -123,8 +139,6 @@ site.controller('inProgressController', ($scope, $timeout, SidebarManagement, Cu
   $scope.ref.$watch(() => $scope.loadTournament($scope.ref));
 
   $scope.ref.$loaded().then(() => {
-    $scope.tournamentName = $scope.ref.name;
-
     $scope.loadTournament($scope.ref);
 
     const horizMatches = _.max($scope.trn.matches, 'id.r').id.r; // these start at 1 I guess.
