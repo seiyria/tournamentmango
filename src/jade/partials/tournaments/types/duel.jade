@@ -30,7 +30,7 @@ script(type="text/ng-template", id="tournament-duel")
               md-tooltip(ng-if="bucket[match.p[$index]-1]") {{bucket[match.p[$index]-1].alias || 'no alias'}}: {{bucket[match.p[$index]-1].name}}
 
           .scores.text-center(layout="column", ng-if="!invalidMatch(match)")
-            score.score-container.padding-5(ng-repeat="p in match.p track by $index", value="match.score[$index]", hover-name="{{getName(match.p[$index]-1)}}")
+            score.score-container.padding-5(ng-repeat="p in match.p track by $index", value="match.score[$index]", hover-name="{{getName(match.p[$index]-1)}}", can-click="{{hasAccess}}")
 
           .scores.text-center(layout="column", ng-if="invalidMatch(match)")
             .score-container.padding-5(ng-repeat="p in match.p track by $index", hover-name="{{getName(match.p[$index]-1)}}")

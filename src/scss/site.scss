@@ -61,6 +61,10 @@ $card-border: 1px solid #eee;
   margin-bottom: auto;
 }
 
+.hide-underline a {
+  text-decoration: none;
+}
+
 .match-column {
   width: $round-column-width;
   min-width: $round-column-width;
