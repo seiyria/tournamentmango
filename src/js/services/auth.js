@@ -1,6 +1,8 @@
 import site from '../app';
 
-site.service('Auth', (FirebaseURL, UserStatus, $state, $firebaseAuth, $firebaseObject) => {
+site.service('Auth', (FirebaseURL, UserStatus, $q, $state, $firebaseAuth, $firebaseObject) => {
+
+  const loaded = $q.defer();
 
   const loginTypes = [
     {
@@ -37,6 +39,7 @@ site.service('Auth', (FirebaseURL, UserStatus, $state, $firebaseAuth, $firebaseO
         UserStatus.firebase.name = authData[authData.auth.provider].displayName;
         UserStatus.firebase.$save();
       }
+      loaded.resolve();
     });
   };
 
@@ -63,6 +66,7 @@ site.service('Auth', (FirebaseURL, UserStatus, $state, $firebaseAuth, $firebaseO
   return {
     loginTypes,
     doLogin,
-    doLogout
+    doLogout,
+    ready: loaded.promise
   };
 });
