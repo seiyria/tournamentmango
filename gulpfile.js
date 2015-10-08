@@ -200,31 +200,43 @@ gulp.task('watch', function() {
   return gulp.watch([paths.sass, paths.jade, paths.js, 'package.json'], ['reload']);
 });
 
-gulp.task('bump:patch', function() {
-  gulp.src(['./bower.json', './package.json'])
-    .pipe(bump({ type: 'patch' }))
+var versionSources = ['./bower.json', './package.json'];
+
+var versionStream = function(type) {
+  return gulp.src(versionSources)
+    .pipe(bump({ type: type }))
     .pipe(gulp.dest('./'))
     .pipe(filter('package.json'))
-    .pipe(tagVersion({ prefix: '' }))
-    .pipe(git.commit('patch version bump', { args: '-a' }));
+    .pipe(tagVersion({ prefix: '' }));
+};
+
+var commitStream = function(type) {
+  return gulp.src(versionSources)
+    .pipe(git.commit(type + ' version bump'));
+};
+
+gulp.task('bump:patch:tag', function() {
+  return versionStream('patch');
 });
 
-gulp.task('bump:minor', function() {
-  gulp.src(['./bower.json', './package.json'])
-    .pipe(bump({ type: 'minor' }))
-    .pipe(gulp.dest('./'))
-    .pipe(filter('package.json'))
-    .pipe(tagVersion({ prefix: '' }))
-    .pipe(git.commit('minor version bump'));
+gulp.task('bump:minor:tag', function() {
+  return versionStream('minor');
 });
 
-gulp.task('bump:major', function() {
-  gulp.src(['./bower.json', './package.json'])
-    .pipe(bump({ type: 'major' }))
-    .pipe(gulp.dest('./'))
-    .pipe(filter('package.json'))
-    .pipe(tagVersion({ prefix: '' }))
-    .pipe(git.commit('major version bump'));
+gulp.task('bump:major:tag', function() {
+  return versionStream('major');
+});
+
+gulp.task('bump:patch:commit', ['bump:patch:tag'], function() {
+  return commitStream('patch');
+});
+
+gulp.task('bump:minor:commit', ['bump:minor:tag'],function() {
+  return commitStream('minor');
+});
+
+gulp.task('bump:major:commit', ['bump:major:tag'],function() {
+  return commitStream('major');
 });
 
 gulp.task('test', function() {
@@ -233,6 +245,10 @@ gulp.task('test', function() {
   gulp.src(paths.testjs)
     .pipe(mocha());
 });
+
+gulp.task('bump:patch', ['bump:patch:tag', 'bump:patch:commit']);
+gulp.task('bump:minor', ['bump:minor:tag', 'bump:minor:commit']);
+gulp.task('bump:major', ['bump:major:tag', 'bump:major:commit']);
 
 gulp.task('default', ['build', 'connect', 'open', 'watch']);
 gulp.task('build', ['clean', 'copy:favicon', 'build:libjs', 'build:libcss', 'compile']);
