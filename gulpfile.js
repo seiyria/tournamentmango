@@ -11,6 +11,7 @@ var errorify = require('errorify');
 var watchify = require('watchify');
 var fs = require('fs');
 
+var git = require('gulp-git');
 var util = require('gulp-util');
 var open = require('gulp-open');
 var concat = require('gulp-concat');
@@ -204,7 +205,8 @@ gulp.task('bump:patch', function() {
     .pipe(bump({ type: 'patch' }))
     .pipe(gulp.dest('./'))
     .pipe(filter('package.json'))
-    .pipe(tagVersion({ prefix: '' }));
+    .pipe(tagVersion({ prefix: '' }))
+    .pipe(git.commit('patch version bump'));
 });
 
 gulp.task('bump:minor', function() {
@@ -212,7 +214,8 @@ gulp.task('bump:minor', function() {
     .pipe(bump({ type: 'minor' }))
     .pipe(gulp.dest('./'))
     .pipe(filter('package.json'))
-    .pipe(tagVersion({ prefix: '' }));
+    .pipe(tagVersion({ prefix: '' }))
+    .pipe(git.commit('minor version bump'));
 });
 
 gulp.task('bump:major', function() {
@@ -220,7 +223,8 @@ gulp.task('bump:major', function() {
     .pipe(bump({ type: 'major' }))
     .pipe(gulp.dest('./'))
     .pipe(filter('package.json'))
-    .pipe(tagVersion({ prefix: '' }));
+    .pipe(tagVersion({ prefix: '' }))
+    .pipe(git.commit('major version bump'));
 });
 
 gulp.task('test', function() {
