@@ -51,6 +51,12 @@ $match-column-width: 130px;
   }
 }
 
+.match-column-container {
+  height: 24px;
+  background-color: #fff;
+  width: 100%;
+}
+
 .pull-right { float: right; }
 .pull-left { float: left; }
 
@@ -59,10 +65,6 @@ $card-border: 1px solid #eee;
 
 .duel-area {
   background-color: $duel-bg;
-}
-
-.match-area {
-  margin-top: 24px;
 }
 
 .pointer {
@@ -158,6 +160,15 @@ $card-border: 1px solid #eee;
       }
     }
   }
+}
+
+input.hide-spinner[type="number"]::-webkit-outer-spin-button,
+input.hide-spinner[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input.hide-spinner[type="number"] {
+  -moz-appearance: textfield;
 }
 
 .player-bucket-list {

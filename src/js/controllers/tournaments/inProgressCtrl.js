@@ -23,6 +23,17 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
   let badIds = 0;
 
   $scope.url = window.location.href;
+  $scope.includedTemplate = 'duel';
+
+  const determineTemplate = (options) => {
+    const hash = { singles: 'duel', doubles: 'duel', groupstage: 'groupstage' };
+    return options.last ? 'duel' : hash[options.type]; // backwards compatibility. damn alpha testers
+  };
+
+  const determineTournament = (options) => {
+    const hash = { singles: Duel, doubles: Duel, groupstage: GroupStage };
+    return options.last ? Duel : hash[options.type]; // backwards compatibility. damn alpha testers
+  };
 
   $scope.toCharacter = (round) => {
     let str = '';
@@ -36,14 +47,14 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
 
   $scope.loadTournament = (ref, makeNew = false) => {
     $scope.tournamentName = $scope.ref.name;
-
-    console.log(ref);
+    $scope.includedTemplate = determineTemplate(ref.options);
 
     $scope.bucket = ref.players;
 
     const oldScores = _.cloneDeep(ref.trn);
+    const tournamentProto = determineTournament(ref.options);
 
-    $scope.trn = ref.trn && !makeNew ? Duel.restore($scope.bucket.length, ref.options, ref.trn) : new Duel($scope.bucket.length, ref.options);
+    $scope.trn = ref.trn && !makeNew ? tournamentProto.restore($scope.bucket.length, ref.options, ref.trn) : new tournamentProto($scope.bucket.length, ref.options);
 
     if(ref.trn && !makeNew) {
       _.each(oldScores, match => {
@@ -179,7 +190,9 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
       $scope.ref.$save();
     };
 
-    $timeout($scope.loadTournamentWinnerStrings, 0);
+    if($scope.includedTemplate !== 'groupstage') {
+      $timeout($scope.loadTournamentWinnerStrings, 0);
+    }
   });
 
 });

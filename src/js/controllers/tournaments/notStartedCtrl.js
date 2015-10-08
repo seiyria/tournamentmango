@@ -19,8 +19,7 @@ site.controller('notStartedController', ($scope, EnsureLoggedIn, UserStatus, Sha
   };
 
   $scope.tournamentOptions = {
-    type: 'singles',
-    short: false
+    type: 'singles'
   };
 
   if($scope.bucket.length === 0) return $state.go('userManage'); // don't refresh the page here, I guess
@@ -28,17 +27,20 @@ site.controller('notStartedController', ($scope, EnsureLoggedIn, UserStatus, Sha
 
   $scope.getOptions = () => {
     const type = $scope.tournamentOptions.type;
-    if(type === 'singles' || type === 'doubles') return { last: type === 'singles' ? Duel.WB : Duel.LB, short: $scope.tournamentOptions.short };
-    return {};
+    if(type === 'singles' || type === 'doubles') return { type, last: type === 'singles' ? Duel.WB : Duel.LB, short: $scope.tournamentOptions.short };
+    return $scope.tournamentOptions;
   };
 
   $scope.isInvalid = () => {
     const type = $scope.tournamentOptions.type;
     if(type === 'singles' || type === 'doubles') return Duel.invalid($scope.bucket.length, $scope.getOptions());
-    return false;
+    if(type === 'groupstage') return GroupStage.invalid($scope.bucket.length, $scope.getOptions());
+    return true;
   };
 
   $scope.removeFromBucket = CurrentPlayerBucket.remove;
+
+  $scope.baseGroupSize = () => ~~Math.sqrt($scope.bucket.length);
 
   $scope.start = () => {
     const ref = $firebaseObject(new Firebase(`${FirebaseURL}/users/${UserStatus.firebase.playerSetUid}/players/${UserStatus.firebase.playerSet}/tournaments/${$stateParams.tournamentId}`));

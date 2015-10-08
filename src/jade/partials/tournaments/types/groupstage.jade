@@ -1,5 +1,5 @@
 
-script(type="text/ng-template", id="tournament-duel")
+script(type="text/ng-template", id="tournament-groupstage")
 
   .match-column-container.margin-bottom-10(layout="row")
     .match-column.round-header.md-subhead.subhead(ng-repeat="match in maxMatches track by $index", scroll-observe="{{$index}}") Round {{$index+1}}
@@ -14,8 +14,6 @@ script(type="text/ng-template", id="tournament-duel")
       layout-align="space-around center")
 
       md-card.match(
-        data-match-id="{{match.id}}",
-        draw-to="{{nextMatch(match.id)}}"
         ng-repeat="match in trn.matches | inRound:thisIndex",
         ng-init="match.score = match.score || []",
         ng-class="{ unplayable: invalidMatch(match), complete: match.m }")

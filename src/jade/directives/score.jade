@@ -1,4 +1,4 @@
 script(type="text/ng-template", id="score")
   .score-value.text-center(ng-click="edit()", ng-if="!editing") {{editStuff.value || '-'}}
   div(ng-if="editing")
-    input.score-input(ng-model="editStuff.value", ng-blur="unedit()", ng-keydown="watchKeyPresses($event)")
+    input.score-input.hide-spinner(type="number", ng-model="editStuff.value", ng-blur="unedit()", ng-keydown="watchKeyPresses($event)", max="999")

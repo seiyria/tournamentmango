@@ -16,6 +16,7 @@
     "Clipboard": true,
     "saveAs": true,
     "Duel": true,
+    "GroupStage": true,
     "$": true,
     "jsPDF": true
   },
