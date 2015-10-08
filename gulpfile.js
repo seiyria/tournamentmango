@@ -218,6 +218,11 @@ var commitStream = function(type) {
     }));
 };
 
+var pushStream = function() {
+  git.push();
+  git.push('origin', 'master', { args: '--tags' });
+};
+
 gulp.task('bump:patch:tag', function() {
   return versionStream('patch');
 });
@@ -231,15 +236,15 @@ gulp.task('bump:major:tag', function() {
 });
 
 gulp.task('bump:patch:commit', ['bump:patch:tag'], function() {
-  return commitStream('patch');
+  return commitStream('patch') && pushStream();
 });
 
 gulp.task('bump:minor:commit', ['bump:minor:tag'],function() {
-  return commitStream('minor');
+  return commitStream('minor') && pushStream();
 });
 
 gulp.task('bump:major:commit', ['bump:major:tag'],function() {
-  return commitStream('major');
+  return commitStream('major') && pushStream();
 });
 
 gulp.task('test', function() {
