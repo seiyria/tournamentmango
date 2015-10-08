@@ -206,7 +206,7 @@ gulp.task('bump:patch', function() {
     .pipe(gulp.dest('./'))
     .pipe(filter('package.json'))
     .pipe(tagVersion({ prefix: '' }))
-    .pipe(git.commit('patch version bump'));
+    .pipe(git.commit('patch version bump', { args: '-a' }));
 });
 
 gulp.task('bump:minor', function() {
