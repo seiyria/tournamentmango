@@ -44,15 +44,43 @@ script(type="text/ng-template", id="/tournaments/not-started")
         md-subheader Options
 
         md-list-item
-          md-radio-group(ng-model="tournamentOptions.type", layout="row")
+          md-radio-group.margin-left-20(ng-model="tournamentOptions.type", layout="row")
             md-radio-button.md-primary(value="singles") Single Elimination
             md-radio-button.md-primary(value="doubles") Double Elimination
+            md-radio-button.md-primary(value="groupstage") GroupStage
 
         md-list-item(ng-if="tournamentOptions.type === 'singles' || tournamentOptions.type === 'doubles'")
-          label &nbsp;
-          md-checkbox(ng-model="tournamentOptions.short", aria-label="Short") Short tournament (no bronze or double grand final)
+          ng-md-icon(icon="help", size="24")
+            md-tooltip No 3rd/4th place matches or double grand final
+          md-checkbox(ng-model="tournamentOptions.short", aria-label="Short") Short tournament
+
+        md-list-item(ng-if="tournamentOptions.type === 'groupstage'")
+          ng-md-icon.margin-right-10(icon="help", size="24")
+            md-tooltip The number of players in each group
+          md-input-container(ng-init="tournamentOptions.groupSize = baseGroupSize()")
+            label Group Size
+            input(type="number", ng-model="tournamentOptions.groupSize", min="2", max="{{bucket.length}}")
+
+        md-list-item(ng-if="tournamentOptions.type === 'groupstage'")
+          ng-md-icon.margin-right-10(icon="help", size="24")
+            md-tooltip The number of points awarded for a win
+          md-input-container(ng-init="tournamentOptions.winPoints = 3")
+            label Win Points
+            input(type="number", ng-model="tournamentOptions.winPoints")
+
+        md-list-item(ng-if="tournamentOptions.type === 'groupstage'")
+          ng-md-icon.margin-right-10(icon="help", size="24")
+            md-tooltip The quantity of points awarded in a tie
+          md-input-container(ng-init="tournamentOptions.tiePoints = 1")
+            label Tie Points
+            input(type="number", ng-model="tournamentOptions.tiePoints")
+
+        md-list-item(ng-if="tournamentOptions.type === 'groupstage'")
+          ng-md-icon.margin-right-5(icon="help", size="24")
+            md-tooltip Look at the sum of scores in case of ties
+          md-checkbox(ng-model="tournamentOptions.breakScores") Break ties on score sum
 
         md-list-item(flex)
 
         md-list-item
-          md-button.md-primary.md-raised(ng-click="start()", ng-disabled="isInvalid()") Start
+          md-button.md-primary.md-raised.margin-left-50(ng-click="start()", ng-disabled="isInvalid()") Start
