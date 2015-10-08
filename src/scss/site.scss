@@ -31,7 +31,9 @@ $match-column-width: 130px;
 }
 
 .header-bar {
-  height: 70px;
+  min-height: 54px;
+  height: 54px;
+  max-height: 54px;
 
   .md-title {
     margin-top: 10px;
