@@ -39,9 +39,16 @@ script(type="text/ng-template", id="/tournaments/not-started")
             .auto-vert-margin(style="width: 25px")
               ng-md-icon.pointer(size="24", icon="delete", ng-show="player._isDeleteVisible", ng-click="removeFromBucket(player)")
 
+
     md-card(flex, layout-align="start start")
       md-list(layout="column")
-        md-subheader Options
+        md-subheader Seed Functions
+        md-list-item(layout="row")
+          md-button.md-accent.md-raised(flex, ng-click="sort.descending()") Descending Score
+          md-button.md-accent.md-raised(flex, ng-click="sort.shuffle()") Shuffle
+          md-button.md-accent.md-raised(flex, ng-click="sort.stagger()") Stagger
+
+        md-subheader Tournament Options
 
         md-list-item
           md-radio-group.margin-left-20(ng-model="tournamentOptions.type", layout="row")

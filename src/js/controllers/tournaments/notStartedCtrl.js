@@ -38,6 +38,22 @@ site.controller('notStartedController', ($scope, EnsureLoggedIn, UserStatus, Sha
     return true;
   };
 
+  $scope.sort = {
+    descending: () => $scope.bucket = _.sortByOrder($scope.bucket, ['points', 'wins'], ['desc', 'desc']),
+    shuffle: () => $scope.bucket = _.shuffle($scope.bucket),
+    stagger: () => {
+      $scope.sort.descending();
+
+      const newOrder = [];
+      for(let i = $scope.bucket.length-1; i >= 0; i--) {
+        const item = $scope.bucket[i];
+        const func = i % 2 === 0 ? 'unshift' : 'push';
+        newOrder[func](item);
+      }
+      $scope.bucket = newOrder;
+    }
+  };
+
   $scope.removeFromBucket = CurrentPlayerBucket.remove;
 
   $scope.baseGroupSize = () => ~~Math.sqrt($scope.bucket.length);
