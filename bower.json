@@ -15,10 +15,10 @@
     "lodash": "~3.10.1",
     "sizzle": "~2.2.0",
     "svg-morpheus": "~0.1.8",
-    "tournament": "master"
+    "tournament": "~3.0.2"
   },
   "resolutions": {
-    "tournament": "master",
+    "tournament": "~3.0.2",
     "jquery": "~2.1.4",
     "angular-material": "0.11.2"
   }
