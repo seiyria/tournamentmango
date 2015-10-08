@@ -52,7 +52,9 @@ $match-column-width: 130px;
 }
 
 .match-column-container {
+  min-height: 24px;
   height: 24px;
+  max-height: 24px;
   background-color: #fff;
   width: 100%;
 }
