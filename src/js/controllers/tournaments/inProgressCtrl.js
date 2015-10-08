@@ -45,6 +45,23 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
     return str;
   };
 
+  $scope.showResults = (event) => {
+    const mdDialogOptions = {
+      clickOutsideToClose: true,
+      controller: 'resultsDialogController',
+      focusOnOpen: false,
+      templateUrl: '/dialog/results',
+      event,
+      locals: {
+        tournamentName: $scope.tournamentName,
+        results: $scope.trn.results(),
+        names: _.pluck($scope.bucket, 'name')
+      }
+    };
+
+    $mdDialog.show(mdDialogOptions);
+  };
+
   $scope.loadTournament = (ref, makeNew = false) => {
     $scope.tournamentName = $scope.ref.name;
     $scope.includedTemplate = determineTemplate(ref.options);
