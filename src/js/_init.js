@@ -52,5 +52,6 @@ import './controllers/dialogs/tournamentDialogCtrl';
 import './controllers/dialogs/inputPromptCtrl';
 import './controllers/dialogs/sharePromptCtrl';
 import './controllers/dialogs/selectPromptCtrl';
+import './controllers/dialogs/resultsDialogCtrl';
 
 import './routes';

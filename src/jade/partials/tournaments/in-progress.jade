@@ -4,6 +4,8 @@ script(type="text/ng-template", id="/tournaments/in-progress")
     div(flex, layout="row", layout-align="center center")
       div(flex)
         md-button.md-warn.md-raised(ng-show="hasAccess", ng-click="reset($event)", aria-label="reset") Reset
+      div(flex, ng-if="trn.isDone()")
+        md-button.md-primary.md-raised(ng-click="showResults($event)", aria-label="show results") Results
       div(flex, ng-if="false")
         md-button.md-accent.md-raised(flex, ng-click="toPDF()", aria-label="pdf") PDF
       md-switch(flex, ng-show="hasAccess", ng-model="ref.public", ng-change="savePublicity()", aria-label="public") Public
