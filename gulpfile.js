@@ -212,7 +212,9 @@ var versionStream = function(type) {
 
 var commitStream = function(type) {
   return gulp.src(versionSources)
-    .pipe(git.commit(type + ' version bump'));
+    .pipe(git.commit(type + ' version bump'))
+    .pipe(git.push('origin', 'master'))
+    .pipe(git.push('origin', 'master', { args: '--tags' }));
 };
 
 gulp.task('bump:patch:tag', function() {
