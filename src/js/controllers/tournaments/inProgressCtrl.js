@@ -26,12 +26,12 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
   $scope.includedTemplate = 'duel';
 
   const determineTemplate = (options) => {
-    const hash = { singles: 'duel', doubles: 'duel', groupstage: 'groupstage' };
+    const hash = { singles: 'duel', doubles: 'duel', groupstage: 'groupstage', ffa: 'ffa' };
     return options.last ? 'duel' : hash[options.type]; // backwards compatibility. damn alpha testers
   };
 
   const determineTournament = (options) => {
-    const hash = { singles: Duel, doubles: Duel, groupstage: GroupStage };
+    const hash = { singles: Duel, doubles: Duel, groupstage: GroupStage, ffa: FFA };
     return options.last ? Duel : hash[options.type]; // backwards compatibility. damn alpha testers
   };
 
@@ -55,7 +55,7 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
       locals: {
         tournamentName: $scope.tournamentName,
         results: $scope.trn.results(),
-        names: _.pluck($scope.bucket, 'name')
+        players: $scope.bucket
       }
     };
 
@@ -85,7 +85,7 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
   $scope.strings = [];
   $scope.getString = (matchId, idx = 0) => {
     const obj = _.findWhere($scope.strings, { id: matchId });
-    if(!obj) return 'Walkover';
+    if(!obj) return 'TBD';
     return obj.strings[idx];
   };
 
@@ -194,7 +194,8 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
 
     $scope.invalidMatch = (match) => !$scope.trn.isPlayable(match);
     $scope.noRender = (match) => _.any(match.p, p => p === -1);
-    $scope.scoresEqual = (match) => match.score && match.score.length > 1 ? match.score.length !== _.compact(_.uniq(match.score)).length : true;
+    $scope.scoresEqual = (match) => match.score && match.score.length === match.p.length ? match.score.length !== _.compact(_.uniq(match.score)).length : true;
+
     $scope.confirmScore = (match) => {
       $scope.trn.score(match.id, _.map(match.score, i => +i));
       $scope.save();
@@ -207,7 +208,7 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
       $scope.ref.$save();
     };
 
-    if($scope.includedTemplate !== 'groupstage') {
+    if(!_.contains(['groupstage', 'ffa'], $scope.includedTemplate)) {
       $timeout($scope.loadTournamentWinnerStrings, 0);
     }
   });

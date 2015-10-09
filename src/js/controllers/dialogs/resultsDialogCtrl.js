@@ -1,12 +1,18 @@
 import site from '../../app';
 
-site.controller('resultsDialogController', ($scope, $mdDialog, tournamentName, results, names) => {
+site.controller('resultsDialogController', ($scope, $mdDialog, tournamentName, results, players) => {
 
   $scope.cancel = $mdDialog.cancel;
 
   $scope.tournamentName = tournamentName;
   $scope.results = results;
-  $scope.names = names;
+  $scope.players = players;
+  
+  $scope.nameString = (idx) => {
+    const player = $scope.players[idx-1];
+    if(player.alias) return `${player.alias} (${player.name})`;
+    return player.name;
+  };
 
   $scope.toOrdinal = (num) => {
     const s = ['th', 'st', 'nd', 'rd'];

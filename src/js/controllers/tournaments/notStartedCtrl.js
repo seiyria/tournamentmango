@@ -18,12 +18,15 @@ site.controller('notStartedController', ($scope, EnsureLoggedIn, UserStatus, Sha
     return str;
   };
 
+  const stringToArray = (string) => _.compact(_.map(string.split(','), s => parseInt(s.trim()))) || [];
+
   $scope.tournamentOptions = {
     type: 'singles'
   };
 
-  if($scope.bucket.length === 0) return $state.go('userManage'); // don't refresh the page here, I guess
+  $scope.setStringArrValue = (key, value) => $scope.tournamentOptions[key] = stringToArray($scope.tournamentOptions[value]);
 
+  if($scope.bucket.length === 0) return $state.go('userManage'); // don't refresh the page here, I guess
 
   $scope.getOptions = () => {
     const type = $scope.tournamentOptions.type;
@@ -35,6 +38,7 @@ site.controller('notStartedController', ($scope, EnsureLoggedIn, UserStatus, Sha
     const type = $scope.tournamentOptions.type;
     if(type === 'singles' || type === 'doubles') return Duel.invalid($scope.bucket.length, $scope.getOptions());
     if(type === 'groupstage') return GroupStage.invalid($scope.bucket.length, $scope.getOptions());
+    if(type === 'ffa') return FFA.invalid($scope.bucket.length, $scope.getOptions());
     return true;
   };
 
