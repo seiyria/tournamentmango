@@ -19,7 +19,7 @@ site.controller('tournamentDialogController', ($scope, $mdDialog, tournament, Cu
 
     if($scope.item.form.$valid) {
       const newItem = _.omit($scope.item, 'form');
-      newItem.status = TournamentStatus.NOT_STARTED;
+      newItem.status = newItem.status || TournamentStatus.NOT_STARTED;
       success(newItem);
     }
   };

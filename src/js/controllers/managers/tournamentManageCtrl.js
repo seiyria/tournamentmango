@@ -61,11 +61,11 @@ site.controller('tournamentManageController', ($scope, $state, ShareToken, Sideb
     });
   };
 
-  $scope.tournamentName = TournamentManagement.getTournamentNameFromId;
+  $scope.tournamentName = TournamentManagement.getTournamentEventNameFromId;
 
   $scope.editItem = (event) => {
     TournamentManagement.editItem(event, $scope.selected[0], oldTournament => {
-      const item = $scope.events.$getRecord(oldTournament.$id);
+      const item = $scope.tournaments.$getRecord(oldTournament.$id);
       _.extend(item, oldTournament);
       $scope.tournaments.$save(item);
     });
