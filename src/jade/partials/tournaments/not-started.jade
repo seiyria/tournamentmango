@@ -60,6 +60,8 @@ script(type="text/ng-template", id="/tournaments/not-started")
               md-tooltip A round-robin style tournament
             md-radio-button.md-primary(flex="25", value="ffa") Free For All
               md-tooltip A free-for-all tournament
+            md-radio-button.md-primary(flex="25", value="masters") Masters
+              md-tooltip A subset of free-for-all where only knockouts per round are calculated
 
         md-list-item(ng-if="tournamentOptions.type === 'singles' || tournamentOptions.type === 'doubles'")
           ng-md-icon(icon="help", size="24")
@@ -109,6 +111,13 @@ script(type="text/ng-template", id="/tournaments/not-started")
         md-list-item(ng-if="tournamentOptions.type === 'ffa' && tournamentOptions.advancers.length >= tournamentOptions.sizes.length")
           ng-md-icon.margin-right-5(icon="error", size="24")
           p.error You can't have more advancer entries than round entries.
+
+        md-list-item(ng-if="tournamentOptions.type === 'masters'")
+          ng-md-icon.margin-right-5(icon="help", size="24")
+            md-tooltip The number of people knocked out each round
+          md-input-container(ng-init="tournamentOptions.knockoutsString = '1'")
+            label Knockouts
+            input(ng-model="tournamentOptions.advancersString", ng-change="setStringArrValue('knockouts', 'knockoutsString')")
 
         md-list-item(flex)
 

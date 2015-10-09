@@ -18,6 +18,7 @@
     "Duel": true,
     "GroupStage": true,
     "FFA": true,
+    "Masters": true,
     "$": true,
     "jsPDF": true
   },

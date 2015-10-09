@@ -7,7 +7,7 @@ site.controller('resultsDialogController', ($scope, $mdDialog, tournamentName, r
   $scope.tournamentName = tournamentName;
   $scope.results = results;
   $scope.players = players;
-  
+
   $scope.nameString = (idx) => {
     const player = $scope.players[idx-1];
     if(player.alias) return `${player.alias} (${player.name})`;

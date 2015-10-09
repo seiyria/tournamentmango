@@ -26,12 +26,12 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
   $scope.includedTemplate = 'duel';
 
   const determineTemplate = (options) => {
-    const hash = { singles: 'duel', doubles: 'duel', groupstage: 'groupstage', ffa: 'ffa' };
+    const hash = { singles: 'duel', doubles: 'duel', groupstage: 'groupstage', ffa: 'ffa', masters: 'masters' };
     return options.last ? 'duel' : hash[options.type]; // backwards compatibility. damn alpha testers
   };
 
   const determineTournament = (options) => {
-    const hash = { singles: Duel, doubles: Duel, groupstage: GroupStage, ffa: FFA };
+    const hash = { singles: Duel, doubles: Duel, groupstage: GroupStage, ffa: FFA , masters: Masters };
     return options.last ? Duel : hash[options.type]; // backwards compatibility. damn alpha testers
   };
 
@@ -194,7 +194,11 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
 
     $scope.invalidMatch = (match) => !$scope.trn.isPlayable(match);
     $scope.noRender = (match) => _.any(match.p, p => p === -1);
-    $scope.scoresEqual = (match) => match.score && match.score.length === match.p.length ? match.score.length !== _.compact(_.uniq(match.score)).length : true;
+    $scope.scoresEqual = (match) => {
+      if(match.score && match.score.length === 1 || _.compact(match.score).length !== match.p.length) return true;
+      const sorted = _.sortBy(match.score).reverse();
+      return sorted[0] === sorted[1];
+    };
 
     $scope.confirmScore = (match) => {
       $scope.trn.score(match.id, _.map(match.score, i => +i));
@@ -208,7 +212,7 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
       $scope.ref.$save();
     };
 
-    if(!_.contains(['groupstage', 'ffa'], $scope.includedTemplate)) {
+    if(!_.contains(['groupstage', 'ffa', 'masters'], $scope.includedTemplate)) {
       $timeout($scope.loadTournamentWinnerStrings, 0);
     }
   });
