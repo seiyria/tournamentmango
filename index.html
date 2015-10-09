@@ -542,7 +542,7 @@
           <tr md-auto-select="md-auto-select" ng-repeat="tournament in visibleTournaments">
             <td>{{tournament.name}}</td>
             <td>{{tournament.game}}</td>
-            <td ng-class="{empty: !tournament.event}">{{tournamentName(tournament.event)}}</td>
+            <td ng-class="{empty: !tournamentName(tournament.event)}">{{tournamentName(tournament.event)}}</td>
             <td>{{tournament.status}}</td>
             <td ng-if="tournament.status === tStatus.NOT_STARTED">
               <md-button aria-label="start tournament" ng-disabled="playersAvailable &lt; 2" ng-click="startTournament(tournament.$id)" class="md-raised md-primary">Start
@@ -589,6 +589,7 @@
       <label>Score Function</label>
       <md-select ng-model="userData.firebase.scoreFunc" ng-change="saveFirebase()">
         <md-option value="simple">Simple (Win-Loss)</md-option>
+        <md-option value="ell">ELL</md-option>
       </md-select>
     </md-input-container>
     <md-button ng-click="recalculateScore()" ng-disabled="calculating" class="md-warn">Force Recalculate</md-button>
@@ -664,7 +665,7 @@
             <td ng-class="{empty: !user.location}">{{user.location}}</td>
             <td>{{user.wins || 0}}</td>
             <td>{{user.losses || 0}}</td>
-            <td>{{user.points || 0}}</td>
+            <td>{{(user.points || 0) | number:0}}</td>
             <td>
               <md-button ng-click="viewItem($event, user)" class="md-raised md-accent">View Info</md-button>
             </td>
