@@ -4,7 +4,7 @@ OpenChallenge is an open source tournament bracket and user management system. Y
 
 You can also create and manage events and tournaments. An event is essentially a group of tournaments, but an event isn't necessary to create a tournament.
 
-Currently, the bracket generator only supports single and double elimination, but free for all (and a variant) and round robin are coming soon.
+Currently, the bracket generator supports single elimination, double elimination, free for all, group stage (round robin), and masters (a FFA subtype).
 
 # Installation
 
