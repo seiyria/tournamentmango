@@ -43,10 +43,11 @@ site.service('TournamentManagement', (FirebaseURL, $mdDialog, Toaster, $filter, 
     callback();
   };
 
-  const getTournamentNameFromId = (id) => {
-    const tournament = _.findWhere(CurrentEvents.get(), { $id: id });
-    if(!tournament) return null;
-    return tournament.name;
+  const getTournamentEventNameFromId = (id) => {
+    if(!id) return '';
+    const event = _.findWhere(CurrentEvents.get(), { $id: id });
+    if(!event) return '';
+    return event.name;
   };
 
   const filterTournaments = (events, datatable, archived = false) => {
@@ -55,7 +56,7 @@ site.service('TournamentManagement', (FirebaseURL, $mdDialog, Toaster, $filter, 
       [tournament.name.toLowerCase()],
       [tournament.game.toLowerCase()],
       [tournament.status.toLowerCase()],
-      [getTournamentNameFromId(tournament.event).toLowerCase()]
+      [getTournamentEventNameFromId(tournament.event).toLowerCase()]
     ]), 'archived');
   };
 
@@ -65,6 +66,6 @@ site.service('TournamentManagement', (FirebaseURL, $mdDialog, Toaster, $filter, 
     removeItem,
     archiveItem,
     filterTournaments,
-    getTournamentNameFromId
+    getTournamentEventNameFromId
   };
 });

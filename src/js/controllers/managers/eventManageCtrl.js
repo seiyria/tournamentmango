@@ -1,6 +1,6 @@
 import site from '../../app';
 
-site.controller('eventManageController', ($scope, SidebarManagement, EnsureLoggedIn, EventManagement, CurrentEvents) => {
+site.controller('eventManageController', ($scope, SidebarManagement, EnsureLoggedIn, EventManagement, CurrentEvents, CurrentTournaments) => {
   SidebarManagement.hasSidebar = true;
   EnsureLoggedIn.check();
 
@@ -67,6 +67,15 @@ site.controller('eventManageController', ($scope, SidebarManagement, EnsureLogge
 
   $scope.removeItem = (event) => {
     EventManagement.removeItem(event, $scope.selected, () => {
+      const tournaments = CurrentTournaments.get();
+      _.each(tournaments, tournament => {
+        if(tournament.event === event.$id) {
+          const fbTournament = tournaments.$getRecord(tournament.$id);
+          fbTournament.event = null;
+          tournaments.$save(fbTournament);
+        }
+      });
+
       _.each($scope.selected, event => {
         const item = $scope.events.$getRecord(event.$id);
         $scope.events.$remove(item);
