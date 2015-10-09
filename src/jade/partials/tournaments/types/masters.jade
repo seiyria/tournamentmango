@@ -1,0 +1,38 @@
+
+script(type="text/ng-template", id="tournament-masters")
+
+  .match-column-container.margin-bottom-10(layout="row")
+    .match-column.round-header.md-subhead.subhead(ng-repeat="match in maxMatches track by $index", scroll-observe="{{$index}}") Round {{$index+1}}
+
+  .match-area(layout="row")
+
+    .match-column(
+      ng-repeat="match in maxMatches track by $index",
+      ng-init="thisIndex=$index+1",
+      flex,
+      layout="column",
+      layout-align="space-around center")
+
+      md-card.match(
+        ng-repeat="match in trn.matches | inRound:thisIndex",
+        ng-init="match.score = match.score || []",
+        ng-class="{ unplayable: invalidMatch(match), complete: match.m }")
+
+        div(ng-if="noRender(match)", flex)
+          div(ng-show="false") {{getIdForMatch(match)}}
+        .match-data(ng-if="!noRender(match)", layout="row", layout-align="center center")
+          .round-type.subhead {{match.id.s}}-{{toCharacter(getIdForMatch(match))}}
+
+          .match-name(layout="column")
+            .member.padding-5(ng-repeat="p in match.p track by $index", class="member-{{$index}}", hover-highlight, hover-name="{{getName(match.p[$index]-1)}}") {{getName(match.p[$index]-1) || getString(match.id, $index) || '???'}}
+              md-tooltip(ng-if="bucket[match.p[$index]-1]") {{bucket[match.p[$index]-1].alias || 'no alias'}}: {{bucket[match.p[$index]-1].name}}
+
+          .scores.text-center(layout="column", ng-if="!invalidMatch(match)")
+            score.score-container.padding-5(ng-repeat="p in match.p track by $index", value="match.score[$index]", hover-name="{{getName(match.p[$index]-1)}}", can-click="{{hasAccess}}")
+
+          .scores.text-center(layout="column", ng-if="invalidMatch(match)")
+            .score-container.padding-5(ng-repeat="p in match.p track by $index", hover-name="{{getName(match.p[$index]-1)}}")
+              .score-value -
+
+          div.margin-right-10.margin-left-10.confirm-score
+            ng-md-icon(size="24", icon="check_circle", ng-click="confirmScore(match)", ng-if="!invalidMatch(match) && !scoresEqual(match)", style="fill: {{match.m ? '#ccc' : '#000'}}")

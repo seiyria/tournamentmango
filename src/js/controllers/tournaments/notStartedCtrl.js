@@ -39,6 +39,7 @@ site.controller('notStartedController', ($scope, EnsureLoggedIn, UserStatus, Sha
     if(type === 'singles' || type === 'doubles') return Duel.invalid($scope.bucket.length, $scope.getOptions());
     if(type === 'groupstage') return GroupStage.invalid($scope.bucket.length, $scope.getOptions());
     if(type === 'ffa') return FFA.invalid($scope.bucket.length, $scope.getOptions());
+    if(type === 'masters') return Masters.invalid($scope.bucket.length, $scope.getOptions());
     return true;
   };
 
