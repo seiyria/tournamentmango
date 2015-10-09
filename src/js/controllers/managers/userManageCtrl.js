@@ -1,6 +1,6 @@
 import site from '../../app';
 
-site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject, FirebaseURL, CurrentUsers, InputPrompt, UserStatus, CurrentPlayerBucket, CurrentTournaments, ShareManagement, SetManagement, SidebarManagement, EnsureLoggedIn, UserManagement, TournamentStatus, Toaster) => {
+site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject, FirebaseURL, ScoringFunctions, CurrentUsers, InputPrompt, UserStatus, CurrentPlayerBucket, CurrentTournaments, ShareManagement, SetManagement, SidebarManagement, EnsureLoggedIn, UserManagement, TournamentStatus, Toaster) => {
 
   SidebarManagement.hasSidebar = true;
   const authData = EnsureLoggedIn.check();
@@ -214,10 +214,6 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
   $scope.anyCompletedTournaments = () => _.any($scope.tournaments, t => t.status === TournamentStatus.COMPLETED);
   $scope.allTournamentGames = () => _.uniq($scope.tournaments, t => t.game);
 
-  $scope.scoreFunctions = {
-    simple: (player) => player.wins - player.losses
-  };
-
   $scope.recalculateScore = () => {
     $scope.calculating = true;
 
@@ -241,10 +237,10 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
       });
     });
 
-    _.each($scope.users, (user) => {
-      user.points = $scope.scoreFunctions[UserStatus.firebase.scoreFunc](user);
+    ScoringFunctions[UserStatus.firebase.scoreFunc]($scope.users);
 
-      $scope.users.$save(user);
+    _.each($scope.users, p => {
+      $scope.users.$save(p);
     });
 
     $scope.calculating = false;

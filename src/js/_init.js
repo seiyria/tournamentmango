@@ -9,6 +9,7 @@ import './directives/draw-to';
 import './directives/hover-highlight';
 import './directives/scroll-observe';
 
+import './services/scoring';
 import './services/userStatus';
 import './services/ensureLoggedIn';
 import './services/managers/sidebarManagement';

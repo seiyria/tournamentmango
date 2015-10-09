@@ -18,6 +18,7 @@ script(type="text/ng-template", id="/user-manage")
       label Score Function
       md-select(ng-model="userData.firebase.scoreFunc", ng-change="saveFirebase()")
         md-option(value="simple") Simple (Win-Loss)
+        md-option(value="ell") ELL
 
     md-button.md-warn(ng-click="recalculateScore()", ng-disabled="calculating") Force Recalculate
 
@@ -81,7 +82,7 @@ script(type="text/ng-template", id="/user-manage")
             td(ng-class="{empty: !user.location}") {{user.location}}
             td {{user.wins || 0}}
             td {{user.losses || 0}}
-            td {{user.points || 0}}
+            td {{(user.points || 0) | number:0}}
             td
               md-button.md-raised.md-accent(ng-click="viewItem($event, user)") View Info
 
