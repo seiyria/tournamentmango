@@ -17,6 +17,7 @@
     "saveAs": true,
     "Duel": true,
     "GroupStage": true,
+    "FFA": true,
     "$": true,
     "jsPDF": true
   },

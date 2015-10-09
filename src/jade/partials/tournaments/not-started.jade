@@ -51,10 +51,15 @@ script(type="text/ng-template", id="/tournaments/not-started")
         md-subheader Tournament Options
 
         md-list-item
-          md-radio-group.margin-left-20(ng-model="tournamentOptions.type", layout="row")
-            md-radio-button.md-primary(value="singles") Single Elimination
-            md-radio-button.md-primary(value="doubles") Double Elimination
-            md-radio-button.md-primary(value="groupstage") GroupStage
+          md-radio-group.margin-left-20(ng-model="tournamentOptions.type", layout="row", layout-wrap)
+            md-radio-button.md-primary(flex="25", value="singles") Single Elimination
+              md-tooltip A standard single elimination tournament
+            md-radio-button.md-primary(flex="25", value="doubles") Double Elimination
+              md-tooltip A standard double elimination tournament
+            md-radio-button.md-primary(flex="25", value="groupstage") GroupStage
+              md-tooltip A round-robin style tournament
+            md-radio-button.md-primary(flex="25", value="ffa") Free For All
+              md-tooltip A free-for-all tournament
 
         md-list-item(ng-if="tournamentOptions.type === 'singles' || tournamentOptions.type === 'doubles'")
           ng-md-icon(icon="help", size="24")
@@ -86,6 +91,24 @@ script(type="text/ng-template", id="/tournaments/not-started")
           ng-md-icon.margin-right-5(icon="help", size="24")
             md-tooltip Look at the sum of scores in case of ties
           md-checkbox(ng-model="tournamentOptions.breakScores") Break ties on score sum
+
+        md-list-item(ng-if="tournamentOptions.type === 'ffa'")
+          ng-md-icon.margin-right-5(icon="help", size="24")
+            md-tooltip The number of players in each round, ex: 4, 4, 4 - 3 rounds with 4 players each
+          md-input-container(ng-init="tournamentOptions.roundSizesString = bucket.length+''; setStringArrValue('sizes', 'roundSizesString')")
+            label Round Sizes
+            input(ng-model="tournamentOptions.roundSizesString", ng-change="setStringArrValue('sizes', 'roundSizesString')")
+
+        md-list-item(ng-if="tournamentOptions.type === 'ffa'")
+          ng-md-icon.margin-right-5(icon="help", size="24")
+            md-tooltip The number of advancers in each round, ex: 2, 2 - the top two from each round advance
+          md-input-container(ng-init="tournamentOptions.advancersString = ''")
+            label Advancers
+            input(ng-model="tournamentOptions.advancersString", ng-change="setStringArrValue('advancers', 'advancersString')")
+
+        md-list-item(ng-if="tournamentOptions.type === 'ffa' && tournamentOptions.advancers.length >= tournamentOptions.sizes.length")
+          ng-md-icon.margin-right-5(icon="error", size="24")
+          p.error You can't have more advancer entries than round entries.
 
         md-list-item(flex)
 

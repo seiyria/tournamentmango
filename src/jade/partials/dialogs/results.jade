@@ -9,7 +9,7 @@ script(type="text/ng-template", id="/dialog/results")
         md-list-item.md-2-line(ng-repeat="result in results")
           .md-avatar.subhead {{toOrdinal(result.pos)}}
           .md-list-item-text
-            h3 {{names[result.seed]}}
+            h3 {{nameString(result.seed)}}
             p Wins: {{result.wins}}, Total Points Scored: {{result.for}}
 
     .md-actions
