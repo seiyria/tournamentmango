@@ -12,6 +12,7 @@ var babelify = require('babelify');
 var errorify = require('errorify');
 var watchify = require('watchify');
 var fs = require('fs');
+var execSync = require('child_process').execSync;
 
 var git = require('gulp-git');
 var util = require('gulp-util');
@@ -214,8 +215,9 @@ var versionStream = function(type) {
 };
 
 var commitStream = function(type) {
+  var tag = execSync('git describe --abbrev=0').toString().trim();
   return gulp.src(versionSources)
-    .pipe(git.commit(type + ' version bump', function() {
+    .pipe(git.commit('chore(version): release '+tag, function() {
       git.push();
       git.push('origin', 'master', { args: '--tags' });
     }));
