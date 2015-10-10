@@ -1,6 +1,8 @@
 
 require('babel/register');
 
+var _ = require('lodash');
+
 var gulp = require('gulp');
 var del = require('del');
 var source = require('vinyl-source-stream');
@@ -35,6 +37,7 @@ var autoprefixer = require('gulp-autoprefixer');
 var cached = require('gulp-cached');
 var remember = require('gulp-remember');
 var mocha = require('gulp-mocha');
+var changelog = require('conventional-changelog');
 
 var watching = false;
 
@@ -239,12 +242,24 @@ gulp.task('bump:patch:commit', ['bump:patch:tag'], function() {
   return commitStream('patch') && pushStream();
 });
 
-gulp.task('bump:minor:commit', ['bump:minor:tag'],function() {
+gulp.task('bump:minor:commit', ['bump:minor:tag'], function() {
   return commitStream('minor') && pushStream();
 });
 
-gulp.task('bump:major:commit', ['bump:major:tag'],function() {
+gulp.task('bump:major:commit', ['bump:major:tag'], function() {
   return commitStream('major') && pushStream();
+});
+
+gulp.task('generate:changelog', function() {
+  return changelog({
+    releaseCount: 0 /*,
+    transform: function(commit, cb) {
+      console.log(commit);
+      if(_.contains(commit.header, ['bump'])) return cb(null);
+      return cb(null, commit);
+    }*/
+  })
+    .pipe(fs.createWriteStream('CHANGELOG.md'));
 });
 
 gulp.task('test', function() {
