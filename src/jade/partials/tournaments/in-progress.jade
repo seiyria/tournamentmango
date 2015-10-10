@@ -15,6 +15,8 @@ script(type="text/ng-template", id="/tournaments/in-progress")
       span(ng-show="ref.public || hasAccess") {{tournamentName}}{{trn.isDone() ? ' (Complete)' : ' (' + matchesLeft() + ' matches left)'}}
     .text-right.auto-vert-margin(flex, layout="row", layout-align="end center")
       .hide-underline(ng-show="ref.public && hasAccess")
+        a#copy-url(data-clipboard-text="{{url}}")
+          ng-md-icon.pointer.margin-left-10(size="20", icon="link")
         a(target="_blank", ng-href="https://twitter.com/home?status={{url}}")
           ng-md-icon.pointer.margin-left-10(size="20", icon="twitter")
         a(target="_blank", ng-href="https://www.facebook.com/sharer/sharer.php?u={{url}}")
