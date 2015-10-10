@@ -238,15 +238,15 @@ gulp.task('bump:major:tag', function() {
   return versionStream('major');
 });
 
-gulp.task('bump:patch:commit', ['bump:patch:tag'], function() {
+gulp.task('bump:patch:commit', ['bump:patch:tag', 'generate:changelog'], function() {
   return commitStream('patch') && pushStream();
 });
 
-gulp.task('bump:minor:commit', ['bump:minor:tag'], function() {
+gulp.task('bump:minor:commit', ['bump:minor:tag', 'generate:changelog'], function() {
   return commitStream('minor') && pushStream();
 });
 
-gulp.task('bump:major:commit', ['bump:major:tag'], function() {
+gulp.task('bump:major:commit', ['bump:major:tag', 'generate:changelog'], function() {
   return commitStream('major') && pushStream();
 });
 
