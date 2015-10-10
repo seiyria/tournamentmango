@@ -252,7 +252,8 @@ gulp.task('bump:major:commit', ['bump:major:tag', 'generate:changelog'], functio
 
 gulp.task('generate:changelog', function() {
   return changelog({
-    releaseCount: 0 /*,
+    releaseCount: 0,
+    preset: 'angular' /*,
     transform: function(commit, cb) {
       console.log(commit);
       if(_.contains(commit.header, ['bump'])) return cb(null);
