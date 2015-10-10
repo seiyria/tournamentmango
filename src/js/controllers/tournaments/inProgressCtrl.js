@@ -3,10 +3,15 @@ import site from '../../app';
 site.filter('inRound', () => (items, round) => _.filter(items, (i) => i.id.r === round));
 site.filter('inSection', () => (items, section) => _.filter(items, (i) => i.id.s === section));
 
-site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, SidebarManagement, CurrentUsers, CurrentPlayerBucket, UserStatus, TournamentStatus, FirebaseURL, $firebaseObject, $state, $stateParams, $mdDialog) => {
+site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, SidebarManagement, Toaster, CurrentUsers, CurrentPlayerBucket, UserStatus, TournamentStatus, FirebaseURL, $firebaseObject, $state, $stateParams, $mdDialog) => {
 
   SidebarManagement.hasSidebar = false;
   const authData = EnsureLoggedIn.check(false);
+
+  const clipboard = new Clipboard('#copy-url');
+  clipboard.on('success', () => {
+    Toaster.show(`Copied URL to clipboard!`);
+  });
 
   const defaultHasAccess = () => authData && authData.uid === UserStatus.firebase.playerSetUid;
 
