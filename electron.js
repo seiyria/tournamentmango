@@ -1,17 +1,12 @@
+var path = require('path');
 var app = require('app');  // Module to control application life.
 var BrowserWindow = require('browser-window');  // Module to create native browser window.
 
-var http = require('http');
-var fs = require('fs');
+var express = require('express');
+var expressApp = express();
 
-fs.readFile(__dirname + '/index.html', function(e, html) {
-  if(e) throw e;
-  http.createServer(function(req, res) {
-    res.writeHeader(200, { 'Content-Type': 'text/html' });
-    res.write(html);
-    res.end();
-  }).listen(30517);
-});
+expressApp.use(express.static(path.join(__dirname, '/dist')));
+expressApp.listen(30517);
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -30,7 +25,7 @@ app.on('ready', function() {
 
   // and load the index.html of the app.
   //mainWindow.loadUrl('file://' + __dirname + '/index.html');
-  mainWindow.loadUrl('localhost:30517');
+  mainWindow.loadUrl('http://localhost:30517');
 
   mainWindow.openDevTools();
 

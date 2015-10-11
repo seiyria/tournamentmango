@@ -18,6 +18,7 @@
     "chai": "^3.2.0",
     "conventional-changelog": "^0.5.0",
     "del": "~1.2.1",
+    "electron-packager": "^5.1.0",
     "errorify": "^0.3.1",
     "eslint-config-kellyirc": "^2.0.0",
     "gulp": "~3.9.0",
@@ -113,6 +114,7 @@
     "angular-ui-router": "^0.2.15",
     "angularfire": "^1.1.2",
     "duel": "^3.0.1",
+    "express": "^4.13.3",
     "ngstorage": "^0.3.9",
     "vinyl-paths": "^1.0.0"
   }
