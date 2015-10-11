@@ -39,6 +39,9 @@ var cached = require('gulp-cached');
 var remember = require('gulp-remember');
 var mocha = require('gulp-mocha');
 var changelog = require('conventional-changelog');
+var electron = require('gulp-electron');
+//var nwbuilder = require('gulp-nw-builder');
+var packageJSON = require('./package.json');
 
 var watching = false;
 
@@ -65,6 +68,13 @@ gulp.task('copy:favicon', ['clean'], function() {
   var paths = getPaths();
 
   return gulp.src(paths.favicon)
+    .pipe(gulp.dest(paths.dist))
+    .on('error', util.log);
+});
+gulp.task('copy:electron', function() {
+  var paths = getPaths();
+
+  return gulp.src('./electron.js')
     .pipe(gulp.dest(paths.dist))
     .on('error', util.log);
 });
@@ -255,14 +265,39 @@ gulp.task('bump:major:commit', ['bump:major:tag', 'generate:changelog'], functio
 gulp.task('generate:changelog', function() {
   return changelog({
     releaseCount: 0,
-    preset: 'angular' /*,
-    transform: function(commit, cb) {
-      console.log(commit);
-      if(_.contains(commit.header, ['bump'])) return cb(null);
-      return cb(null, commit);
-    }*/
+    preset: 'angular'
   })
     .pipe(fs.createWriteStream('CHANGELOG.md'));
+});
+
+gulp.task('generate:binaries', ['copy:electron'], function() {
+
+  return gulp.src('')
+    .pipe(electron({
+      src: './dist',
+      // asar: true,
+      packageJson: packageJSON,
+      release: './bin-build',
+      cache: './bin-cache',
+      version: 'v0.33.7',
+      platforms: ['darwin-x64', 'win32-x64', 'linux-x64'],
+      platformResources: {
+        darwin: {
+          CFBundleDisplayName: packageJSON.name,
+          CFBundleIdentifier: packageJSON.name,
+          CFBundleName: packageJSON.name,
+          CFBundleVersion: packageJSON.version,
+          icon: 'favicon.icns'
+        },
+        win: {
+          'version-string': packageJSON.version,
+          'file-version': packageJSON.version,
+          'product-version': packageJSON.version,
+          icon: 'favicon.ico'
+        }
+      }
+    }))
+    .pipe(gulp.dest(''));
 });
 
 gulp.task('test', function() {
@@ -277,6 +312,7 @@ gulp.task('bump:minor', ['bump:minor:tag', 'bump:minor:commit']);
 gulp.task('bump:major', ['bump:major:tag', 'bump:major:commit']);
 
 gulp.task('default', ['build', 'connect', 'open', 'watch']);
-gulp.task('build', ['clean', 'copy:favicon', 'build:libjs', 'build:libcss', 'compile']);
+gulp.task('copy', ['copy:favicon']);
+gulp.task('build', ['clean', 'copy', 'build:libjs', 'build:libcss', 'compile']);
 gulp.task('compile', ['compile:js', 'compile:sass', 'compile:jade']);
 gulp.task('check', ['test', 'build']);

@@ -1,10 +1,11 @@
 {
-  "name": "openchallenge",
+  "name": "OpenChallenge",
   "description": "A tournament management tool.",
   "readme": "README.md",
   "repository": "https://github.com/seiyria/openchallenge",
   "version": "0.4.2",
   "license": "MIT",
+  "main": "electron.js",
   "authors": [
     "Kyle Kemp <kyle@seiyria.com>"
   ],
@@ -87,7 +88,8 @@
       "./node_modules/angular-material-data-table/dist/md-data-table.min.css"
     ],
     "favicon": [
-      "favicon.ico"
+      "favicon.ico",
+      "favicon.icns"
     ],
     "jade": [
       "src/jade/**/*.jade"

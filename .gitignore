@@ -31,3 +31,6 @@ bower_components
 .publish
 
 dist
+
+bin-build
+bin-cache
