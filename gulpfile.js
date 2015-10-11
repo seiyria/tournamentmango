@@ -13,6 +13,7 @@ var errorify = require('errorify');
 var watchify = require('watchify');
 var fs = require('fs');
 var execSync = require('child_process').execSync;
+var electronPackager = require('electron-packager');
 
 var git = require('gulp-git');
 var util = require('gulp-util');
@@ -39,8 +40,6 @@ var cached = require('gulp-cached');
 var remember = require('gulp-remember');
 var mocha = require('gulp-mocha');
 var changelog = require('conventional-changelog');
-var electron = require('gulp-electron');
-//var nwbuilder = require('gulp-nw-builder');
 var packageJSON = require('./package.json');
 
 var watching = false;
@@ -68,13 +67,6 @@ gulp.task('copy:favicon', ['clean'], function() {
   var paths = getPaths();
 
   return gulp.src(paths.favicon)
-    .pipe(gulp.dest(paths.dist))
-    .on('error', util.log);
-});
-gulp.task('copy:electron', function() {
-  var paths = getPaths();
-
-  return gulp.src('./electron.js')
     .pipe(gulp.dest(paths.dist))
     .on('error', util.log);
 });
@@ -270,34 +262,25 @@ gulp.task('generate:changelog', function() {
     .pipe(fs.createWriteStream('CHANGELOG.md'));
 });
 
-gulp.task('generate:binaries', ['copy:electron'], function() {
-
-  return gulp.src('')
-    .pipe(electron({
-      src: './dist',
-      // asar: true,
-      packageJson: packageJSON,
-      release: './bin-build',
-      cache: './bin-cache',
-      version: 'v0.33.7',
-      platforms: ['darwin-x64', 'win32-x64', 'linux-x64'],
-      platformResources: {
-        darwin: {
-          CFBundleDisplayName: packageJSON.name,
-          CFBundleIdentifier: packageJSON.name,
-          CFBundleName: packageJSON.name,
-          CFBundleVersion: packageJSON.version,
-          icon: 'favicon.icns'
-        },
-        win: {
-          'version-string': packageJSON.version,
-          'file-version': packageJSON.version,
-          'product-version': packageJSON.version,
-          icon: 'favicon.ico'
-        }
-      }
-    }))
-    .pipe(gulp.dest(''));
+gulp.task('generate:binaries', ['build'], function(done) {
+  electronPackager({
+    dir: '.',
+    name: 'Open Challenge',
+    platform: 'darwin',
+    arch: 'x64',
+    version: '0.33.7',
+    out: './bin-build',
+    icon: 'favicon',
+    'app-bundle-id': packageJSON.name,
+    'app-bundle-version': packageJSON.version,
+    cache: './bin-cache',
+    prune: true,
+    ignore: new RegExp('/src($|/)|/bin-cache($|/)|/bin-build($|/)')
+  }, function(err, path) {
+    if (err) return done(err);
+    console.log('Binaries generated at ', path);
+    done();
+  });
 });
 
 gulp.task('test', function() {
