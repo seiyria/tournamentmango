@@ -58,7 +58,10 @@ var currentTag = function() {
 gulp.task('deploy', function() {
   var paths = getPaths();
 
-  return gulp.src(paths.dist + '/(css|js|favicon.ico|index.html)')
+  return gulp.src(paths.dist+'/**/*', { base: paths.dist })
+    .pipe(filter(function(file) {
+      return !_.contains(file.path, 'node_modules');
+    }))
     .pipe(ghPages());
 });
 
