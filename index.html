@@ -425,18 +425,18 @@
     <md-data-table-toolbar ng-show="selected.length">
       <div>{{selected.length}} {{selected.length > 1 ? 'events' : 'event'}} selected</div>
       <div flex="flex"></div>
-      <md-button ng-if="selected.length == 1" aria-label="edit event" class="md-icon-button">
-        <ng-md-icon icon="edit" ng-click="editItem($event)">
+      <md-button ng-if="selected.length == 1" ng-click="editItem($event)" aria-label="edit event" class="md-icon-button">
+        <ng-md-icon icon="edit">
           <md-tooltip>Edit tournament</md-tooltip>
         </ng-md-icon>
       </md-button>
-      <md-button ng-click="ng-click" aria-label="archive events" class="md-icon-button">
-        <ng-md-icon icon="archive" ng-click="archiveItem($event)">
+      <md-button ng-click="archiveItem($event)" aria-label="archive events" class="md-icon-button">
+        <ng-md-icon icon="archive">
           <md-tooltip>Archive event</md-tooltip>
         </ng-md-icon>
       </md-button>
-      <md-button ng-click="ng-click" aria-label="remove events" class="md-icon-button">
-        <ng-md-icon icon="delete" ng-click="removeItem($event)">
+      <md-button ng-click="removeItem($event)" aria-label="remove events" class="md-icon-button">
+        <ng-md-icon icon="delete">
           <md-tooltip>Remove event</md-tooltip>
         </ng-md-icon>
       </md-button>
@@ -511,18 +511,18 @@
     <md-data-table-toolbar ng-show="selected.length">
       <div>{{selected.length}} {{selected.length > 1 ? 'tournaments' : 'tournament'}} selected</div>
       <div flex="flex"></div>
-      <md-button ng-if="selected.length == 1" aria-label="edit tournament" class="md-icon-button">
-        <ng-md-icon icon="edit" ng-click="editItem($event)">
+      <md-button ng-if="selected.length == 1" ng-click="editItem($event)" aria-label="edit tournament" class="md-icon-button">
+        <ng-md-icon icon="edit">
           <md-tooltip>Edit tournament</md-tooltip>
         </ng-md-icon>
       </md-button>
-      <md-button ng-click="ng-click" aria-label="archive tournaments" class="md-icon-button">
-        <ng-md-icon icon="archive" ng-click="archiveItem($event)">
+      <md-button ng-click="archiveItem($event)" aria-label="archive tournaments" class="md-icon-button">
+        <ng-md-icon icon="archive">
           <md-tooltip>Archive tournament</md-tooltip>
         </ng-md-icon>
       </md-button>
-      <md-button ng-click="ng-click" aria-label="remove tournaments" class="md-icon-button">
-        <ng-md-icon icon="delete" ng-click="removeItem($event)">
+      <md-button ng-click="removeItem($event)" aria-label="remove tournaments" class="md-icon-button">
+        <ng-md-icon icon="delete">
           <md-tooltip>Remove tournament</md-tooltip>
         </ng-md-icon>
       </md-button>
@@ -631,18 +631,18 @@
     <md-data-table-toolbar ng-show="selected.length">
       <div>{{selected.length}} {{selected.length > 1 ? 'people' : 'person'}} selected</div>
       <div flex="flex"></div>
-      <md-button aria-label="add to player bucket" class="md-icon-button">
-        <ng-md-icon icon="group_add" ng-click="addToPlayerBucket()">
+      <md-button ng-click="addToPlayerBucket()" aria-label="add to player bucket" class="md-icon-button">
+        <ng-md-icon icon="group_add">
           <md-tooltip>Add to player bucket</md-tooltip>
         </ng-md-icon>
       </md-button>
-      <md-button ng-if="selected.length == 1" aria-label="edit user" class="md-icon-button">
-        <ng-md-icon icon="edit" ng-click="editItem($event)">
+      <md-button ng-if="selected.length == 1" ng-click="editItem($event)" aria-label="edit user" class="md-icon-button">
+        <ng-md-icon icon="edit">
           <md-tooltip>Edit player</md-tooltip>
         </ng-md-icon>
       </md-button>
-      <md-button ng-click="ng-click" aria-label="remove users" class="md-icon-button">
-        <ng-md-icon icon="delete" ng-click="removeItem($event)">
+      <md-button ng-click="removeItem($event)" aria-label="remove users" class="md-icon-button">
+        <ng-md-icon icon="delete">
           <md-tooltip>Remove player</md-tooltip>
         </ng-md-icon>
       </md-button>
@@ -724,7 +724,8 @@
     </div>
     <div flex="flex" class="text-center md-title"><span ng-show="!ref.public &amp;&amp; !hasAccess">Unavailable</span><span ng-show="ref.public || hasAccess">{{tournamentName}}{{trn.isDone() ? ' (Complete)' : ' (' + matchesLeft() + ' matches left)'}}</span></div>
     <div flex="flex" layout="row" layout-align="end center" class="text-right auto-vert-margin">
-      <div ng-show="ref.public &amp;&amp; hasAccess" class="hide-underline"><a target="_blank" ng-href="https://twitter.com/home?status={{url}}">
+      <div ng-show="ref.public &amp;&amp; hasAccess" class="hide-underline"><a id="copy-url" data-clipboard-text="{{url}}">
+          <ng-md-icon size="20" icon="link" class="pointer margin-left-10"></ng-md-icon></a><a target="_blank" ng-href="https://twitter.com/home?status={{url}}">
           <ng-md-icon size="20" icon="twitter" class="pointer margin-left-10"></ng-md-icon></a><a target="_blank" ng-href="https://www.facebook.com/sharer/sharer.php?u={{url}}">
           <ng-md-icon size="20" icon="facebook" class="pointer margin-left-10"></ng-md-icon></a><a target="_blank" ng-href="https://plus.google.com/share?url={{url}}">
           <ng-md-icon size="20" icon="google-plus" class="pointer margin-left-10 margin-right-10"></ng-md-icon></a></div>
