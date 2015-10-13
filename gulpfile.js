@@ -39,6 +39,11 @@ var cached = require('gulp-cached');
 var remember = require('gulp-remember');
 var mocha = require('gulp-mocha');
 var changelog = require('conventional-changelog');
+var nwBuilder = require('gulp-nw-builder');
+var zip = require('gulp-zip');
+var folders = require('gulp-folders');
+var release = require('gulp-github-release');
+var packageJson = require('./package.json');
 
 var watching = false;
 
@@ -49,7 +54,7 @@ var getPaths = function() {
 gulp.task('deploy', function() {
   var paths = getPaths();
 
-  return gulp.src(paths.dist + '**/*')
+  return gulp.src(paths.dist + '/(css|js|favicon.ico|index.html)')
     .pipe(ghPages());
 });
 
@@ -93,7 +98,7 @@ gulp.task('build:libjs', ['clean'], function() {
   return gulp.src(paths.libjs)
     //.pipe(cached('libjs'))
     //.pipe(remember('libjs'))
-    .pipe(gulpif(!watching, uglify({ outSourceMaps: false })))
+    //.pipe(gulpif(!watching, uglify({ outSourceMaps: false })))
     .pipe(concat('lib.min.js'))
     .pipe(gulp.dest(paths.dist + 'js'))
     .on('error', util.log);
@@ -117,7 +122,7 @@ gulp.task('compile:js', ['eslint', 'clean'], function() {
     return bundler
       .bundle()
       .pipe(source('js/main.min.js'))
-      .pipe(gulpif(!watching, streamify(uglify({ outSourceMaps: false }))))
+      //.pipe(gulpif(!watching, uglify({ outSourceMaps: false })))
       .pipe(ngAnnotate())
       .pipe(gulp.dest(paths.dist))
       .on('error', util.log);
@@ -211,7 +216,7 @@ var versionStream = function(type) {
     .pipe(bump({ type: type }))
     .pipe(gulp.dest('./'))
     .pipe(filter('package.json'))
-    .pipe(tagVersion({ prefix: '' }));
+    .pipe(tagVersion({ prefix: 'v' }));
 };
 
 var commitStream = function(type) {
@@ -265,6 +270,53 @@ gulp.task('generate:changelog', function() {
     .pipe(fs.createWriteStream('CHANGELOG.md'));
 });
 
+gulp.task('copy:nw', function() {
+  var paths = getPaths();
+
+  return gulp.src(['./package.json', 'nw-setup/**/*'])
+    .pipe(gulp.dest(paths.dist))
+    .on('error', util.log);
+});
+
+gulp.task('generate:binaries', ['clean:binaries', 'copy:nw'], function() {
+  execSync('npm install --prefix ./dist/ express');
+  var paths = getPaths();
+
+  return gulp.src(paths.dist+'/**/*')
+    .pipe(nwBuilder({
+      version: 'v0.12.2',
+      platforms: ['osx64', 'win64', 'linux64'],
+      appName: packageJson.name,
+      appVersion: packageJson.version,
+      buildDir: './bin-build',
+      cacheDir: './bin-cache',
+      macIcns: './favicon.icns',
+      winIco: './favicon.ico'
+    }));
+});
+
+gulp.task('clean:binaries', function() {
+  return gulp.src(['./bin-build', './bin-release'])
+    .pipe(vinylPaths(del))
+    .on('error', util.log);
+});
+
+var binaryPath = './bin-build/OpenChallenge';
+gulp.task('package:binaries', ['generate:binaries'], folders(binaryPath, function(folder) {
+  return gulp.src(binaryPath + '/' + folder + '/**/*')
+    .pipe(zip(folder + '.zip'))
+    .pipe(gulp.dest('./bin-release'));
+}));
+
+gulp.task('upload:binaries', ['package:binaries'], function() {
+  return gulp.src('./bin-release/*.zip')
+    .pipe(release({
+      repo: 'openchallenge',
+      owner: 'seiyria',
+      manifest: packageJson
+    }));
+});
+
 gulp.task('test', function() {
   var paths = getPaths();
 
@@ -275,6 +327,8 @@ gulp.task('test', function() {
 gulp.task('bump:patch', ['bump:patch:tag', 'bump:patch:commit']);
 gulp.task('bump:minor', ['bump:minor:tag', 'bump:minor:commit']);
 gulp.task('bump:major', ['bump:major:tag', 'bump:major:commit']);
+
+gulp.task('release:patch', ['bump:patch', 'upload:binaries']);
 
 gulp.task('default', ['build', 'connect', 'open', 'watch']);
 gulp.task('build', ['clean', 'copy:favicon', 'build:libjs', 'build:libcss', 'compile']);
