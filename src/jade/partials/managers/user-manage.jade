@@ -54,14 +54,14 @@ script(type="text/ng-template", id="/user-manage")
     md-data-table-toolbar(ng-show="selected.length")
       div {{selected.length}} {{selected.length > 1 ? 'people' : 'person'}} selected
       div(flex)
-      md-button.md-icon-button(aria-label="add to player bucket")
-        ng-md-icon(icon="group_add", ng-click="addToPlayerBucket()")
+      md-button.md-icon-button(ng-click="addToPlayerBucket()", aria-label="add to player bucket")
+        ng-md-icon(icon="group_add")
           md-tooltip Add to player bucket
-      md-button.md-icon-button(ng-if="selected.length == 1", aria-label="edit user")
-        ng-md-icon(icon="edit", ng-click="editItem($event)")
+      md-button.md-icon-button(ng-if="selected.length == 1", ng-click="editItem($event)", aria-label="edit user")
+        ng-md-icon(icon="edit")
           md-tooltip Edit player
-      md-button.md-icon-button(ng-click, aria-label="remove users")
-        ng-md-icon(icon="delete", ng-click="removeItem($event)")
+      md-button.md-icon-button(ng-click="removeItem($event)", aria-label="remove users")
+        ng-md-icon(icon="delete")
           md-tooltip Remove player
 
     md-data-table-container

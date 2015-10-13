@@ -25,14 +25,14 @@ script(type="text/ng-template", id="/event-manage")
     md-data-table-toolbar(ng-show="selected.length")
       div {{selected.length}} {{selected.length > 1 ? 'events' : 'event'}} selected
       div(flex)
-      md-button.md-icon-button(ng-if="selected.length == 1", aria-label="edit event")
-        ng-md-icon(icon="edit", ng-click="editItem($event)")
+      md-button.md-icon-button(ng-if="selected.length == 1", ng-click="editItem($event)", aria-label="edit event")
+        ng-md-icon(icon="edit")
           md-tooltip Edit tournament
-      md-button.md-icon-button(ng-click, aria-label="archive events")
-        ng-md-icon(icon="archive", ng-click="archiveItem($event)")
+      md-button.md-icon-button(ng-click="archiveItem($event)", aria-label="archive events")
+        ng-md-icon(icon="archive")
           md-tooltip Archive event
-      md-button.md-icon-button(ng-click, aria-label="remove events")
-        ng-md-icon(icon="delete", ng-click="removeItem($event)")
+      md-button.md-icon-button(ng-click="removeItem($event)", aria-label="remove events")
+        ng-md-icon(icon="delete")
           md-tooltip Remove event
 
     md-data-table-container
