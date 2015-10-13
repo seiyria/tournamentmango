@@ -39,6 +39,8 @@ var cached = require('gulp-cached');
 var remember = require('gulp-remember');
 var mocha = require('gulp-mocha');
 var changelog = require('conventional-changelog');
+var nwBuilder = require('gulp-nw-builder');
+var packageJson = require('./package.json');
 
 var watching = false;
 
@@ -49,7 +51,7 @@ var getPaths = function() {
 gulp.task('deploy', function() {
   var paths = getPaths();
 
-  return gulp.src(paths.dist + '**/*')
+  return gulp.src(paths.dist + '/(css|js|favicon.ico|index.html)')
     .pipe(ghPages());
 });
 
@@ -93,7 +95,7 @@ gulp.task('build:libjs', ['clean'], function() {
   return gulp.src(paths.libjs)
     //.pipe(cached('libjs'))
     //.pipe(remember('libjs'))
-    .pipe(gulpif(!watching, uglify({ outSourceMaps: false })))
+    //.pipe(gulpif(!watching, uglify({ outSourceMaps: false })))
     .pipe(concat('lib.min.js'))
     .pipe(gulp.dest(paths.dist + 'js'))
     .on('error', util.log);
@@ -117,7 +119,7 @@ gulp.task('compile:js', ['eslint', 'clean'], function() {
     return bundler
       .bundle()
       .pipe(source('js/main.min.js'))
-      .pipe(gulpif(!watching, streamify(uglify({ outSourceMaps: false }))))
+      //.pipe(gulpif(!watching, uglify({ outSourceMaps: false })))
       .pipe(ngAnnotate())
       .pipe(gulp.dest(paths.dist))
       .on('error', util.log);
@@ -264,6 +266,37 @@ gulp.task('generate:changelog', function() {
   })
     .pipe(fs.createWriteStream('CHANGELOG.md'));
 });
+
+gulp.task('copy:nw', function() {
+  var paths = getPaths();
+
+  return gulp.src(['./package.json', 'nw-setup/**/*'])
+    .pipe(gulp.dest(paths.dist))
+    .on('error', util.log);
+});
+
+gulp.task('generate:binaries', ['clean:binaries', 'copy:nw'], function() {
+  execSync('npm install --prefix ./dist/ express');
+  var paths = getPaths();
+
+  return gulp.src(paths.dist+'/**/*')
+    .pipe(nwBuilder({
+      version: 'v0.12.2',
+      platforms: ['osx64', 'win64', 'linux64'],
+      appName: packageJson.name,
+      appVersion: packageJson.version,
+      buildDir: './bin-build',
+      cacheDir: './bin-cache',
+      macIcns: './favicon.icns',
+      winIco: './favicon.ico'
+    }));
+});
+
+gulp.task('clean:binaries', function() {
+  return gulp.src('./bin-build')
+    .pipe(vinylPaths(del))
+    .on('error', util.log);
+  });
 
 gulp.task('test', function() {
   var paths = getPaths();
