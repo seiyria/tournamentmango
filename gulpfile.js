@@ -329,6 +329,8 @@ gulp.task('bump:minor', ['bump:minor:tag', 'bump:minor:commit']);
 gulp.task('bump:major', ['bump:major:tag', 'bump:major:commit']);
 
 gulp.task('release:patch', ['bump:patch', 'upload:binaries']);
+gulp.task('release:minor', ['bump:minor', 'upload:binaries']);
+gulp.task('release:major', ['bump:major', 'upload:binaries']);
 
 gulp.task('default', ['build', 'connect', 'open', 'watch']);
 gulp.task('build', ['clean', 'copy:favicon', 'build:libjs', 'build:libcss', 'compile']);
