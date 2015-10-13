@@ -11,6 +11,8 @@ site.directive('score', ($timeout) => {
       scope.editing = false;
       scope.editStuff = { value: scope.value }; // don't bind to primitives, they said
 
+      scope.getValue = () => _.isNumber(scope.value) ? scope.value : '-';
+
       scope.edit = () => {
         if(!attrs.canClick) return;
         scope.editing = true;

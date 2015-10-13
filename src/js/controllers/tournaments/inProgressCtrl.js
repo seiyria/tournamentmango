@@ -200,7 +200,7 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
     $scope.invalidMatch = (match) => !$scope.trn.isPlayable(match);
     $scope.noRender = (match) => _.any(match.p, p => p === -1);
     $scope.scoresEqual = (match) => {
-      if(match.score && match.score.length === 1 || _.compact(match.score).length !== match.p.length) return true;
+      if(match.score && match.score.length === 1 || _.filter(match.score, _.isNumber).length !== match.p.length) return true;
       const sorted = _.sortBy(match.score).reverse();
       return sorted[0] === sorted[1];
     };

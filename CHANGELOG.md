@@ -1,5 +1,19 @@
-<a name="0.4.1"></a>
-## [0.4.1](https://github.com/seiyria/openchallenge/compare/0.4.1...v0.4.1) (2015-10-10)
+<a name="0.4.2"></a>
+## [0.4.2](https://github.com/seiyria/openchallenge/compare/0.4.2...v0.4.2) (2015-10-13)
+
+
+### Bug Fixes
+
+* **allManagers:** fixing top-row buttons click zones (firefox bug) ([7a77ba2](https://github.com/seiyria/openchallenge/commit/7a77ba2)), closes [#55](https://github.com/seiyria/openchallenge/issues/55)
+
+### Features
+
+* **desktop:** added a way to make a desktop build for all platforms ([977267f](https://github.com/seiyria/openchallenge/commit/977267f)), closes [#19](https://github.com/seiyria/openchallenge/issues/19)
+
+
+
+<a name="0.4.2"></a>
+## [0.4.2](https://github.com/seiyria/openchallenge/compare/0.4.1...0.4.2) (2015-10-10)
 
 
 ### Bug Fixes
