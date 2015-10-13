@@ -40,6 +40,9 @@ var remember = require('gulp-remember');
 var mocha = require('gulp-mocha');
 var changelog = require('conventional-changelog');
 var nwBuilder = require('gulp-nw-builder');
+var zip = require('gulp-zip');
+var folders = require('gulp-folders');
+var release = require('gulp-github-release');
 var packageJson = require('./package.json');
 
 var watching = false;
@@ -213,7 +216,7 @@ var versionStream = function(type) {
     .pipe(bump({ type: type }))
     .pipe(gulp.dest('./'))
     .pipe(filter('package.json'))
-    .pipe(tagVersion({ prefix: '' }));
+    .pipe(tagVersion({ prefix: 'v' }));
 };
 
 var commitStream = function(type) {
@@ -293,10 +296,26 @@ gulp.task('generate:binaries', ['clean:binaries', 'copy:nw'], function() {
 });
 
 gulp.task('clean:binaries', function() {
-  return gulp.src('./bin-build')
+  return gulp.src(['./bin-build', './bin-release'])
     .pipe(vinylPaths(del))
     .on('error', util.log);
-  });
+});
+
+var binaryPath = './bin-build/OpenChallenge';
+gulp.task('package:binaries', ['generate:binaries'], folders(binaryPath, function(folder) {
+  return gulp.src(binaryPath + '/' + folder + '/**/*')
+    .pipe(zip(folder + '.zip'))
+    .pipe(gulp.dest('./bin-release'));
+}));
+
+gulp.task('upload:binaries', ['package:binaries'], function() {
+  return gulp.src('./bin-release/*.zip')
+    .pipe(release({
+      repo: 'openchallenge',
+      owner: 'seiyria',
+      manifest: packageJson
+    }));
+});
 
 gulp.task('test', function() {
   var paths = getPaths();
@@ -308,6 +327,8 @@ gulp.task('test', function() {
 gulp.task('bump:patch', ['bump:patch:tag', 'bump:patch:commit']);
 gulp.task('bump:minor', ['bump:minor:tag', 'bump:minor:commit']);
 gulp.task('bump:major', ['bump:major:tag', 'bump:major:commit']);
+
+gulp.task('release:patch', ['bump:patch', 'upload:binaries']);
 
 gulp.task('default', ['build', 'connect', 'open', 'watch']);
 gulp.task('build', ['clean', 'copy:favicon', 'build:libjs', 'build:libcss', 'compile']);
