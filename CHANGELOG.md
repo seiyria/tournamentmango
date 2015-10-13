@@ -5,6 +5,7 @@
 ### Bug Fixes
 
 * **allManagers:** fixing top-row buttons click zones (firefox bug) ([7a77ba2](https://github.com/seiyria/openchallenge/commit/7a77ba2)), closes [#55](https://github.com/seiyria/openchallenge/issues/55)
+* **tournament:** scoring now works if one score is 0 ([ab92b57](https://github.com/seiyria/openchallenge/commit/ab92b57))
 
 ### Features
 
