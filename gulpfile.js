@@ -220,7 +220,7 @@ var versionStream = function(type) {
     .pipe(bump({ type: type }))
     .pipe(gulp.dest('./'))
     .pipe(filter('package.json'))
-    .pipe(tagVersion({ prefix: 'v' }));
+    .pipe(tagVersion({ prefix: '' }));
 };
 
 var commitStream = function(type) {
