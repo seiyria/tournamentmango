@@ -51,6 +51,10 @@ var getPaths = function() {
   return JSON.parse(fs.readFileSync('./package.json')).gulp;
 };
 
+var currentTag = function() {
+  return execSync('git describe --abbrev=0').toString().trim();
+};
+
 gulp.task('deploy', function() {
   var paths = getPaths();
 
@@ -220,7 +224,7 @@ var versionStream = function(type) {
 };
 
 var commitStream = function(type) {
-  var tag = execSync('git describe --abbrev=0').toString().trim();
+  var tag = currentTag();
   return gulp.src(versionSources.concat('CHANGELOG.md'))
     .pipe(git.commit('chore(version): release '+type+ ' version ' +tag, function() {
       git.push();
@@ -260,12 +264,7 @@ gulp.task('bump:major:commit', ['bump:major:tag', 'generate:changelog'], functio
 gulp.task('generate:changelog', function() {
   return changelog({
     releaseCount: 0,
-    preset: 'angular' /*,
-    transform: function(commit, cb) {
-      console.log(commit);
-      if(_.contains(commit.header, ['bump'])) return cb(null);
-      return cb(null, commit);
-    }*/
+    preset: 'angular'
   })
     .pipe(fs.createWriteStream('CHANGELOG.md'));
 });
@@ -313,6 +312,7 @@ gulp.task('upload:binaries', ['package:binaries'], function() {
     .pipe(release({
       repo: 'openchallenge',
       owner: 'seiyria',
+      tag: currentTag(),
       manifest: packageJson
     }));
 });
