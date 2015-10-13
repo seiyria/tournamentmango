@@ -6,7 +6,7 @@ site.controller('homeController', ($scope, SidebarManagement) => {
   $scope.blocks = [
     {
       name: 'Tournament Management',
-      info: 'Generate single or double elimination brackets with ease.',
+      info: 'Generate single elimination, double elimination, free-for-all, round robin, or masters brackets with ease.',
       icon: 'assignment'
     },
     {
