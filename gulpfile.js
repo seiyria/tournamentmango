@@ -221,8 +221,8 @@ var versionStream = function(type) {
 
 var commitStream = function(type) {
   var tag = execSync('git describe --abbrev=0').toString().trim();
-  return gulp.src(versionSources)
-    .pipe(git.commit('chore(version): release '+type+ ' version ' +tag, { args: '-a' }, function() {
+  return gulp.src(versionSources.concat('CHANGELOG.md'))
+    .pipe(git.commit('chore(version): release '+type+ ' version ' +tag, function() {
       git.push();
       git.push('origin', 'master', { args: '--tags' });
     }));
