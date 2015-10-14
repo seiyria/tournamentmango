@@ -10,7 +10,7 @@ script(type="text/ng-template", id="/dialog/addevent")
         span &nbsp;All fields are required.
 
       form(name="item.form", ng-submit="addItem()")
-        .input-row(layout="row")
+        .input-row(layout-gt-sm="row", layout-sm="column", )
           md-input-container(flex)
             label Name
             input(name="name", ng-model="item.name", md-maxlength="30", required)

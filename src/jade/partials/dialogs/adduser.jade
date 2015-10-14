@@ -11,7 +11,7 @@ script(type="text/ng-template", id="/dialog/adduser")
         span &nbsp;All fields are required.
 
       form(name="item.form", ng-submit="addItem()")
-        .input-row(layout="row", ng-if="!viewOnly")
+        .input-row(layout-gt-sm="row", layout-sm="column", ng-if="!viewOnly")
           md-input-container(flex)
             label Name
             input(name="name", ng-model="item.name", md-maxlength="30", required)
