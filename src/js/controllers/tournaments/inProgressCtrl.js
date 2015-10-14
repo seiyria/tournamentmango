@@ -27,7 +27,7 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
   const idMap = {};
   let badIds = 0;
 
-  $scope.url = window.location.href;
+  $timeout(() => $scope.url = window.location.href, 0);
   $scope.includedTemplate = 'duel';
 
   const determineTemplate = (options) => {
