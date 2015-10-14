@@ -1,6 +1,6 @@
 script(type="text/ng-template", id="/tournaments/in-progress")
 
-  .header-bar(layout="row")
+  .header-bar(layout="row", hide-sm)
     div(flex, layout="row", layout-align="center center")
       div(flex)
         md-button.md-warn.md-raised(ng-show="hasAccess", ng-click="reset($event)", aria-label="reset") Reset
@@ -15,7 +15,7 @@ script(type="text/ng-template", id="/tournaments/in-progress")
       span(ng-show="ref.public || hasAccess") {{tournamentName}}{{trn.isDone() ? ' (Complete)' : ' (' + matchesLeft() + ' matches left)'}}
     .text-right.auto-vert-margin(flex, layout="row", layout-align="end center")
       .hide-underline(ng-show="ref.public && hasAccess")
-        a#copy-url(data-clipboard-text="{{url}}")
+        a.copy-url(data-clipboard-text="{{url}}")
           ng-md-icon.pointer.margin-left-10(size="20", icon="link")
         a(target="_blank", ng-href="https://twitter.com/home?status={{url}}")
           ng-md-icon.pointer.margin-left-10(size="20", icon="twitter")
@@ -23,6 +23,53 @@ script(type="text/ng-template", id="/tournaments/in-progress")
           ng-md-icon.pointer.margin-left-10(size="20", icon="facebook")
         a(target="_blank", ng-href="https://plus.google.com/share?url={{url}}")
           ng-md-icon.pointer.margin-left-10.margin-right-10(size="20", icon="google-plus")
+
+  .header-bar(layout="row", hide-gt-sm)
+    .text-center.md-title(flex)
+      span(ng-show="!ref.public && !hasAccess") Unavailable
+      span(ng-show="ref.public || hasAccess") {{tournamentName}}{{trn.isDone() ? ' (Complete)' : ' (' + matchesLeft() + ' matches left)'}}
+
+  // these are for mobile browsers (ie, touch-enabled) only - they do not work (well) on small desktop browsers
+  .abs-position-bottom-right(ng-click="isOpen = true", hide-gt-sm)
+
+    md-fab-speed-dial.md-scale(md-direction="left", md-open="isOpen")
+      md-fab-trigger.align-with-text
+        md-button.md-fab.md-primary.hidden(aria-label="hidden")
+
+      md-fab-actions(ng-if="isOpen")
+        md-button.md-fab.md-mini.md-raised.md-accent.md-hue-1.copy-url(data-clipboard-text="{{url}}", aria-label="share by link")
+          ng-md-icon(size="24", icon="link", style="fill: white")
+          md-tooltip(md-direction="top") Copy link to clipboard
+
+        md-button.md-fab.md-mini.md-raised.md-accent.md-hue-1(aria-label="share on facebook")
+          ng-md-icon(size="24", icon="facebook", style="fill: white")
+          md-tooltip(md-direction="top") Share on facebook
+
+        md-button.md-fab.md-mini.md-raised.md-accent.md-hue-1(aria-label="share on twitter")
+          ng-md-icon(size="24", icon="twitter", style="fill: white")
+          md-tooltip(md-direction="top") Share on twitter
+
+        md-button.md-fab.md-mini.md-raised.md-accent.md-hue-1(aria-label="share on google plus")
+          ng-md-icon(size="24", icon="google-plus", style="fill: white")
+          md-tooltip(md-direction="top") Share on google plus
+
+  .abs-position-bottom-right(ng-click="isOpen = true", hide-gt-sm)
+
+    md-fab-speed-dial.md-scale(md-direction="up", md-open="isOpen")
+      md-fab-trigger.align-with-text
+
+        md-button.md-fab.md-primary(aria-label="menu or results", ng-click="doOrOpen($event)", ng-mouseenter="isOpen = true")
+          ng-md-icon(size="24", icon="{{isOpen && trn.isDone() ? 'assessment' : 'menu'}}", style="fill: white")
+          md-tooltip(md-direction="left", ng-if="isOpen && trn.isDone()") View results
+
+      md-fab-actions(ng-if="isOpen")
+        md-button.md-fab.md-raised.md-accent(aria-label="toggle public", ng-click="ref.public = !ref.public; savePublicity()", ng-if="hasAccess")
+          ng-md-icon(size="24", icon="{{ref.public ? 'lock' : 'lock_open'}}", style="fill: white")
+          md-tooltip(md-direction="left") Make {{ref.public ? 'private' : 'public'}}
+
+        md-button.md-fab.md-raised.md-warn(aria-label="reset", ng-click="reset($event)", ng-if="hasAccess")
+          ng-md-icon(size="24", icon="history", style="fill: white")
+          md-tooltip(md-direction="left") Reset tournament
 
   md-content.scroller.duel-area(md-scroll, flex, layout="column", ng-include="'tournament-'+includedTemplate", ng-if="hasAccess || ref.public", ng-class="{ 'big-scores': ref.options.bigScore }")
   md-content(flex, layout="row", layout-align="center center", ng-include="'tournament-noaccess'", ng-if="!hasAccess && !ref.public")

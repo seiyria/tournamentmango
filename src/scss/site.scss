@@ -4,6 +4,10 @@
   width: $width;
 }
 
+.hidden {
+  visibility: hidden;
+}
+
 .text-center {
   text-align: center;
 }
@@ -245,6 +249,7 @@ md-data-table-toolbar > form > input:focus {
   position: fixed;
   right: 10px;
   bottom: 10px;
+  z-index: 12;
 }
 
 $paddings: top bottom left right;

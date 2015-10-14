@@ -8,7 +8,7 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
   SidebarManagement.hasSidebar = false;
   const authData = EnsureLoggedIn.check(false);
 
-  const clipboard = new Clipboard('#copy-url');
+  const clipboard = new Clipboard('.copy-url');
   clipboard.on('success', () => {
     Toaster.show(`Copied URL to clipboard!`);
   });
@@ -29,6 +29,8 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
 
   $timeout(() => $scope.url = window.location.href, 0);
   $scope.includedTemplate = 'duel';
+
+  $scope.doOrOpen = (event) => $scope.isOpen && $scope.trn.isDone() ? $scope.showResults(event) : $scope.isOpen = true;
 
   const determineTemplate = (options) => {
     const hash = { singles: 'duel', doubles: 'duel', groupstage: 'groupstage', ffa: 'ffa', masters: 'masters' };
