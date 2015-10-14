@@ -32,6 +32,16 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
 
   $scope.doOrOpen = (event) => $scope.isOpen && $scope.trn.isDone() ? $scope.showResults(event) : $scope.isOpen = true;
 
+  $scope.share = (service) => {
+    const services = {
+      facebook: 'https://www.facebook.com/sharer/sharer.php?u=',
+      twitter: 'https://twitter.com/home?status=',
+      google: 'https://plus.google.com/share?url='
+    };
+
+    window.open(services[service]+$scope.url, '_blank');
+  };
+
   const determineTemplate = (options) => {
     const hash = { singles: 'duel', doubles: 'duel', groupstage: 'groupstage', ffa: 'ffa', masters: 'masters' };
     return options.last ? 'duel' : hash[options.type]; // backwards compatibility. damn alpha testers

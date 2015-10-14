@@ -17,11 +17,11 @@ script(type="text/ng-template", id="/tournaments/in-progress")
       .hide-underline(ng-show="ref.public && hasAccess")
         a.copy-url(data-clipboard-text="{{url}}")
           ng-md-icon.pointer.margin-left-10(size="20", icon="link")
-        a(target="_blank", ng-href="https://twitter.com/home?status={{url}}")
-          ng-md-icon.pointer.margin-left-10(size="20", icon="twitter")
-        a(target="_blank", ng-href="https://www.facebook.com/sharer/sharer.php?u={{url}}")
+        a(ng-click="share('facebook')")
           ng-md-icon.pointer.margin-left-10(size="20", icon="facebook")
-        a(target="_blank", ng-href="https://plus.google.com/share?url={{url}}")
+        a(ng-click="share('twitter')")
+          ng-md-icon.pointer.margin-left-10(size="20", icon="twitter")
+        a(ng-click="share('google')")
           ng-md-icon.pointer.margin-left-10.margin-right-10(size="20", icon="google-plus")
 
   .header-bar(layout="row", hide-gt-sm)
@@ -36,20 +36,20 @@ script(type="text/ng-template", id="/tournaments/in-progress")
       md-fab-trigger.align-with-text
         md-button.md-fab.md-primary.hidden(aria-label="hidden")
 
-      md-fab-actions(ng-if="isOpen")
+      md-fab-actions(ng-if="isOpen && ref.public")
         md-button.md-fab.md-mini.md-raised.md-accent.md-hue-1.copy-url(data-clipboard-text="{{url}}", aria-label="share by link")
           ng-md-icon(size="24", icon="link", style="fill: white")
           md-tooltip(md-direction="top") Copy link to clipboard
 
-        md-button.md-fab.md-mini.md-raised.md-accent.md-hue-1(aria-label="share on facebook")
+        md-button.md-fab.md-mini.md-raised.md-accent.md-hue-1(aria-label="share on facebook", ng-click="share('facebook')")
           ng-md-icon(size="24", icon="facebook", style="fill: white")
           md-tooltip(md-direction="top") Share on facebook
 
-        md-button.md-fab.md-mini.md-raised.md-accent.md-hue-1(aria-label="share on twitter")
+        md-button.md-fab.md-mini.md-raised.md-accent.md-hue-1(aria-label="share on twitter", ng-click="share('twitter')")
           ng-md-icon(size="24", icon="twitter", style="fill: white")
           md-tooltip(md-direction="top") Share on twitter
 
-        md-button.md-fab.md-mini.md-raised.md-accent.md-hue-1(aria-label="share on google plus")
+        md-button.md-fab.md-mini.md-raised.md-accent.md-hue-1(aria-label="share on google plus", ng-click="share('google')")
           ng-md-icon(size="24", icon="google-plus", style="fill: white")
           md-tooltip(md-direction="top") Share on google plus
 
