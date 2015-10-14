@@ -1,6 +1,6 @@
 import site from '../app';
 
-site.directive('score', ($timeout) => {
+site.directive('score', ($timeout, $filter) => {
   return {
     restrict: 'E',
     templateUrl: 'score',
@@ -10,8 +10,14 @@ site.directive('score', ($timeout) => {
     link: (scope, element, attrs) => {
       scope.editing = false;
       scope.editStuff = { value: scope.value }; // don't bind to primitives, they said
+      scope.maxScore = 999;
 
-      scope.getValue = () => _.isNumber(scope.value) ? scope.value : '-';
+      $timeout(() => {
+        const bigScores = $('.duel-area').hasClass('big-scores');
+        scope.maxScore = bigScores ? 999999999999 : 999;
+      }, 0);
+
+      scope.getValue = () => _.isNumber(scope.value) ? $filter('number')(scope.value, 0) : '-';
 
       scope.edit = () => {
         if(!attrs.canClick) return;

@@ -24,5 +24,5 @@ script(type="text/ng-template", id="/tournaments/in-progress")
         a(target="_blank", ng-href="https://plus.google.com/share?url={{url}}")
           ng-md-icon.pointer.margin-left-10.margin-right-10(size="20", icon="google-plus")
 
-  md-content.scroller.duel-area(md-scroll, flex, layout="column", ng-include="'tournament-'+includedTemplate", ng-if="hasAccess || ref.public")
+  md-content.scroller.duel-area(md-scroll, flex, layout="column", ng-include="'tournament-'+includedTemplate", ng-if="hasAccess || ref.public", ng-class="{ 'big-scores': ref.options.bigScore }")
   md-content(flex, layout="row", layout-align="center center", ng-include="'tournament-noaccess'", ng-if="!hasAccess && !ref.public")

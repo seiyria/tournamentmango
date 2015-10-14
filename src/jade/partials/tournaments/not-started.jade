@@ -63,6 +63,11 @@ script(type="text/ng-template", id="/tournaments/not-started")
             md-radio-button.md-primary(flex="25", value="masters") Masters
               md-tooltip A subset of free-for-all where only knockouts per round are calculated
 
+        md-list-item
+          ng-md-icon(icon="help", size="24")
+            md-tooltip Increase the max score from 999 to 999,999,999,999
+          md-checkbox(ng-model="tournamentOptions.bigScore", aria-label="larger scores") Big Scores
+
         md-list-item(ng-if="tournamentOptions.type === 'singles' || tournamentOptions.type === 'doubles'")
           ng-md-icon(icon="help", size="24")
             md-tooltip No 3rd/4th place matches or double grand final

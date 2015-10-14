@@ -1,3 +1,9 @@
+@mixin all-widths($width) {
+  min-width: $width;
+  max-width: $width;
+  width: $width;
+}
+
 .text-center {
   text-align: center;
 }
@@ -16,14 +22,6 @@ $match-column-width: 130px;
 .subhead {
   font-size: 14px;
   font-weight: 500;
-}
-
-.round-header {
-  position: fixed;
-  width: $match-column-width;
-  z-index: 11;
-  text-align: center;
-  background-color: #fff;
 }
 
 .max-height {
@@ -68,7 +66,6 @@ $duel-bg: #eee;
 $card-border: 1px solid #eee;
 
 .duel-area {
-  background-color: $duel-bg;
 }
 
 .pointer {
@@ -84,81 +81,117 @@ $card-border: 1px solid #eee;
   text-decoration: none;
 }
 
-.match-column {
-  width: $round-column-width;
-  min-width: $round-column-width;
-  max-width: $round-column-width;
+.duel-area {
+  background-color: $duel-bg;
 
+  .round-header {
+    position: fixed;
+    @include all-widths($round-column-width);
+    z-index: 11;
+    text-align: center;
+    background-color: #fff;
+  }
 
-  .match {
-    min-height: 57px;
+  .match-column {
+    @include all-widths($round-column-width);
 
-    &.unplayable {
-      color: #c76e06;
-    }
+    .match {
+      min-height: 57px;
 
-    &.complete {
-      color: gray;
-    }
-
-    &.walkover {
-      .confirm-score, .scores {
-        visibility: hidden;
+      &.unplayable {
+        color: #c76e06;
       }
-    }
 
-    .round-type {
-      width: 60px;
-      min-width: 60px;
-      max-width: 60px;
-      text-align: center;
-    }
+      &.complete {
+        color: gray;
+      }
 
-    .match-name {
-      width: $match-column-width;
+      &.walkover {
+        .confirm-score, .scores {
+          visibility: hidden;
+        }
+      }
 
-      .member {
-        width: $match-column-width;
-        max-width: $match-column-width;
-        overflow: hidden;
-        white-space: nowrap;
+      .round-type {
+        width: 60px;
+        min-width: 60px;
+        max-width: 60px;
         text-align: center;
-        text-overflow: ellipsis;
+      }
 
-        border-left: $card-border;
+      .match-name {
+        @include all-widths($match-column-width);
 
-        &[hover-name=""] {
-          font-style: italic;
+        .member {
+          @include all-widths($match-column-width);
+          overflow: hidden;
+          white-space: nowrap;
+          text-align: center;
+          text-overflow: ellipsis;
+
+          border-left: $card-border;
+
+          &[hover-name=""] {
+            font-style: italic;
+          }
+
+          &:not(:last-child) {
+            border-bottom: $card-border;
+          }
         }
+      }
 
-        &:not(:last-child) {
-          border-bottom: $card-border;
+      .confirm-score {
+        cursor: pointer;
+        @include all-widths(24px);
+      }
+
+      .scores {
+        .score-container {
+          width: 25px;
+          border-right: $card-border;
+          border-left: $card-border;
+
+          &:not(:last-child) {
+            border-bottom: $card-border;
+          }
+
+          .score-input {
+            width: 25px;
+            font-size: 12px;
+            margin: 0;
+            padding: 0;
+          }
         }
       }
     }
+  }
+}
 
-    .confirm-score {
-      cursor: pointer;
-      width: 24px;
-      min-width: 24px;
-      max-width: 24px;
-    }
+.duel-area.big-scores {
 
-    .scores {
-      .score-container {
-        width: 25px;
-        border-right: $card-border;
-        border-left: $card-border;
+  .round-header {
+    @include all-widths($round-column-width * 1.5);
+  }
 
-        &:not(:last-child) {
-          border-bottom: $card-border;
+  .match-column {
+    @include all-widths($round-column-width * 1.5);
+
+    .match {
+      .match-name {
+        @include all-widths($match-column-width);
+
+        .member {
+          @include all-widths($match-column-width);
         }
+      }
 
-        .score-input {
-          width: 25px;
-          font-size: 12px;
-          margin: 0;
-          padding: 0;
+      .scores {
+        .score-container {
+          @include all-widths($match-column-width);
+          .score-input {
+            @include all-widths($match-column-width);
+          }
         }
       }
     }
