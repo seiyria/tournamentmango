@@ -1,6 +1,26 @@
 <a name="0.4.3"></a>
-## [0.4.3](https://github.com/seiyria/openchallenge/compare/0.4.3...v0.4.3) (2015-10-14)
+## [0.4.3](https://github.com/seiyria/openchallenge/compare/0.4.4...v0.4.3) (2015-10-14)
 
+
+
+
+<a name="0.5.0"></a>
+# [0.5.0](https://github.com/seiyria/openchallenge/compare/0.4.4...0.5.0) (2015-10-14)
+
+
+### Bug Fixes
+
+* **dialogs:** all dialogs should work better on mobile resolutions ([d4782ec](https://github.com/seiyria/openchallenge/commit/d4782ec))
+* **quickActions:** quick actions button should now stay in the bottom right ([00de65d](https://github.com/seiyria/openchallenge/commit/00de65d))
+* **scoring:** score header is actually usable on mobile ([46a6f60](https://github.com/seiyria/openchallenge/commit/46a6f60))
+* **settings:** settings page no longer squishes on mobile ([0fbf901](https://github.com/seiyria/openchallenge/commit/0fbf901))
+* **social:** url copy-to-clipboard gives correct url now ([5ef07b6](https://github.com/seiyria/openchallenge/commit/5ef07b6))
+* **tournaments:** tournament header tools moved to fab menu on mobile ([18ef0d0](https://github.com/seiyria/openchallenge/commit/18ef0d0)), closes [#54](https://github.com/seiyria/openchallenge/issues/54)
+
+### Features
+
+* **app:** app will now ask if you want to leave and are offline ([a991b07](https://github.com/seiyria/openchallenge/commit/a991b07)), closes [#57](https://github.com/seiyria/openchallenge/issues/57)
+* **tournaments:** option to allow scores up to 999,999,999,999 ([88adb36](https://github.com/seiyria/openchallenge/commit/88adb36)), closes [#51](https://github.com/seiyria/openchallenge/issues/51)
 
 
 
