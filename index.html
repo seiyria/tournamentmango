@@ -726,9 +726,9 @@
     <div flex="flex" class="text-center md-title"><span ng-show="!ref.public &amp;&amp; !hasAccess">Unavailable</span><span ng-show="ref.public || hasAccess">{{tournamentName}}{{trn.isDone() ? ' (Complete)' : ' (' + matchesLeft() + ' matches left)'}}</span></div>
     <div flex="flex" layout="row" layout-align="end center" class="text-right auto-vert-margin">
       <div ng-show="ref.public &amp;&amp; hasAccess" class="hide-underline"><a data-clipboard-text="{{url}}" class="copy-url">
-          <ng-md-icon size="20" icon="link" class="pointer margin-left-10"></ng-md-icon></a><a target="_blank" ng-href="https://twitter.com/home?status={{url}}">
-          <ng-md-icon size="20" icon="twitter" class="pointer margin-left-10"></ng-md-icon></a><a target="_blank" ng-href="https://www.facebook.com/sharer/sharer.php?u={{url}}">
-          <ng-md-icon size="20" icon="facebook" class="pointer margin-left-10"></ng-md-icon></a><a target="_blank" ng-href="https://plus.google.com/share?url={{url}}">
+          <ng-md-icon size="20" icon="link" class="pointer margin-left-10"></ng-md-icon></a><a ng-click="share('facebook')">
+          <ng-md-icon size="20" icon="facebook" class="pointer margin-left-10"></ng-md-icon></a><a ng-click="share('twitter')">
+          <ng-md-icon size="20" icon="twitter" class="pointer margin-left-10"></ng-md-icon></a><a ng-click="share('google')">
           <ng-md-icon size="20" icon="google-plus" class="pointer margin-left-10 margin-right-10"></ng-md-icon></a></div>
     </div>
   </div>
@@ -741,20 +741,20 @@
       <md-fab-trigger class="align-with-text">
         <md-button aria-label="hidden" class="md-fab md-primary hidden"></md-button>
       </md-fab-trigger>
-      <md-fab-actions ng-if="isOpen">
+      <md-fab-actions ng-if="isOpen &amp;&amp; ref.public">
         <md-button data-clipboard-text="{{url}}" aria-label="share by link" class="md-fab md-mini md-raised md-accent md-hue-1 copy-url">
           <ng-md-icon size="24" icon="link" style="fill: white"></ng-md-icon>
           <md-tooltip md-direction="top">Copy link to clipboard</md-tooltip>
         </md-button>
-        <md-button aria-label="share on facebook" class="md-fab md-mini md-raised md-accent md-hue-1">
+        <md-button aria-label="share on facebook" ng-click="share('facebook')" class="md-fab md-mini md-raised md-accent md-hue-1">
           <ng-md-icon size="24" icon="facebook" style="fill: white"></ng-md-icon>
           <md-tooltip md-direction="top">Share on facebook</md-tooltip>
         </md-button>
-        <md-button aria-label="share on twitter" class="md-fab md-mini md-raised md-accent md-hue-1">
+        <md-button aria-label="share on twitter" ng-click="share('twitter')" class="md-fab md-mini md-raised md-accent md-hue-1">
           <ng-md-icon size="24" icon="twitter" style="fill: white"></ng-md-icon>
           <md-tooltip md-direction="top">Share on twitter</md-tooltip>
         </md-button>
-        <md-button aria-label="share on google plus" class="md-fab md-mini md-raised md-accent md-hue-1">
+        <md-button aria-label="share on google plus" ng-click="share('google')" class="md-fab md-mini md-raised md-accent md-hue-1">
           <ng-md-icon size="24" icon="google-plus" style="fill: white"></ng-md-icon>
           <md-tooltip md-direction="top">Share on google plus</md-tooltip>
         </md-button>
