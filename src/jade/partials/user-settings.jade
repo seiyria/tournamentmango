@@ -1,9 +1,9 @@
 
 script(type="text/ng-template", id="/user-settings")
-  md-card
+  md-card(flex)
     md-list
       md-subheader User Information
-      md-list-item.md-3-line
+      md-list-item.md-3-line(flex)
         md-button.md-avatar#copy-id(data-clipboard-text="{{shareId}}", aria-label="copy share id")
           ng-md-icon(icon="local_offer", size="36")
         .md-list-item-text(layout="column")
@@ -12,7 +12,7 @@ script(type="text/ng-template", id="/user-settings")
           p Give this ID to others for them to share with you.
 
       md-subheader Data Management
-      md-list-item.md-3-line
+      md-list-item.md-3-line(flex)
         md-button.md-avatar(ng-click="save()", aria-label="download all data")
           ng-md-icon(icon="file_download", size="36")
         .md-list-item-text(layout="column")
@@ -20,7 +20,9 @@ script(type="text/ng-template", id="/user-settings")
           p Download a copy of your data in OpenChallenges format.
           p WARNING: This will not preserve collaborators on documents. They will have to be manually re-added.
 
-      md-list-item.md-3-line
+      md-list-item.md-3-line(flex, hide-gt-sm)
+
+      md-list-item.md-3-line(flex)
         md-button.md-avatar(disabled, aria-label="upload old data")
           ng-md-icon(icon="file_upload", size="36")
         .md-list-item-text(layout="column")
