@@ -1,18 +1,18 @@
 
 script(type="text/ng-template", id="/user-manage")
 
-  md-card(ng-if="anyCompletedTournaments()", layout="row")
+  md-card(ng-if="anyCompletedTournaments()", layout-gt-sm="row", layout-sm="column")
 
     h2.md-title.margin-left-25 Scoring
 
-    div(flex="5")
+    div(flex="5", hide-sm)
 
     md-input-container
       label Game
       md-select(ng-model="userData.firebase.scoreGame", ng-change="saveFirebase()")
         md-option(ng-repeat="tournament in allTournamentGames()", value="{{tournament.game}}") {{tournament.game}}
 
-    div(flex="5")
+    div(flex="5", hide-sm)
 
     md-input-container
       label Score Function
@@ -22,7 +22,7 @@ script(type="text/ng-template", id="/user-manage")
 
     md-button.md-warn(ng-click="recalculateScore()", ng-disabled="calculating") Force Recalculate
 
-    div(flex)
+    div(flex, hide-sm)
 
     ng-md-icon.auto-vert-margin.margin-right-25.spin(icon="refresh", ng-if="calculating")
       md-tooltip Recalculating scores...
