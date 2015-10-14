@@ -29,7 +29,7 @@ script(type="text/ng-template", id="/tournaments/not-started")
 
             .md-list-item-text(layout="column")
               h3 {{player.name}}
-              p Record: {{player.wins || 0}}/{{player.losses || 0}} ({{player.points || 0}} points)
+              p Record: {{player.wins || 0}}/{{player.losses || 0}} ({{(player.points || 0) | number:0}} points)
 
             md-input-container.auto-vert-margin(ng-if="player.aliases.length > 0")
               label Alias
