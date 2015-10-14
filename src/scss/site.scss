@@ -242,7 +242,7 @@ md-data-table-toolbar > form > input:focus {
 }
 
 .abs-position-bottom-right {
-  position: absolute;
+  position: fixed;
   right: 10px;
   bottom: 10px;
 }
