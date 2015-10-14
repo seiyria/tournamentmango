@@ -1,5 +1,11 @@
 <a name="0.4.3"></a>
-## [0.4.3](https://github.com/seiyria/openchallenge/compare/0.4.3...v0.4.3) (2015-10-13)
+## [0.4.3](https://github.com/seiyria/openchallenge/compare/0.4.3...v0.4.3) (2015-10-14)
+
+
+
+
+<a name="0.4.4"></a>
+## [0.4.4](https://github.com/seiyria/openchallenge/compare/0.4.3...0.4.4) (2015-10-13)
 
 
 
