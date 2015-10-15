@@ -25,9 +25,7 @@ site.controller('notStartedController', ($scope, EnsureLoggedIn, UserStatus, Sha
   };
 
   $scope.setStringArrValue = (key, value) => $scope.tournamentOptions[key] = stringToArray($scope.tournamentOptions[value]);
-
-  if($scope.bucket.length === 0) return $state.go('userManage'); // don't refresh the page here, I guess
-
+  
   $scope.getOptions = () => {
     const type = $scope.tournamentOptions.type;
     if(type === 'singles' || type === 'doubles') return _.extend({ last: type === 'singles' ? Duel.WB : Duel.LB }, $scope.tournamentOptions);
