@@ -183,7 +183,6 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
   };
 
   $scope.changeOptions = () => {
-    console.log($scope.ref.$id);
     $state.go('setupTournament', { tournamentId: $scope.ref.$id });
   };
 

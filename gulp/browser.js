@@ -11,7 +11,8 @@ const ghPages = require('gulp-gh-pages');
 const getPaths = require('./_common').getPaths;
 
 gulp.task('deploy', () => {
-  return gulp.src(`${getPaths().dist}/**/*`, { base: paths.dist })
+  const paths = getPaths();
+  return gulp.src(`${paths.dist}/**/*`, { base: paths.dist })
     .pipe(filter((file) => {
       return !_.contains(file.path, 'node_modules') && !_.contains(file.path, 'nw') && !_.contains(file.path, 'package');
     }))
