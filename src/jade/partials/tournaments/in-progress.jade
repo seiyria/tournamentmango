@@ -6,6 +6,7 @@ script(type="text/ng-template", id="/tournaments/in-progress")
     .text-center.md-title(flex)
       span(ng-show="!ref.public && !hasAccess") Unavailable
       span(ng-show="ref.public || hasAccess") {{tournamentName}}{{trn.isDone() ? ' (Complete)' : ' (' + matchesLeft() + ' matches left)'}}
+
     .text-right.auto-vert-margin(flex, layout="row", layout-align="end center")
       .hide-underline(ng-show="ref.public && hasAccess")
         a.copy-url(data-clipboard-text="{{url}}")
@@ -53,12 +54,16 @@ script(type="text/ng-template", id="/tournaments/in-progress")
 
         md-button.md-fab.md-primary(aria-label="menu or results", ng-click="doOrOpen($event)", ng-mouseenter="isOpen = true")
           ng-md-icon(size="24", icon="{{isOpen && trn.isDone() ? 'assessment' : 'menu'}}", style="fill: white")
-          md-tooltip(md-direction="left", ng-if="isOpen && trn.isDone()") View results
+          md-tooltip(md-direction="left", ng-show="isOpen && trn.isDone()") View results
 
       md-fab-actions(ng-if="isOpen")
         md-button.md-fab.md-raised.md-accent(aria-label="toggle public", ng-click="ref.public = !ref.public; savePublicity()", ng-if="hasAccess")
           ng-md-icon(size="24", icon="{{ref.public ? 'lock' : 'lock_open'}}", style="fill: white")
           md-tooltip(md-direction="left") Make {{ref.public ? 'private' : 'public'}}
+
+        md-button.md-fab.md-raised.md-warn(aria-label="change options", ng-click="changeOptions()", ng-if="trn.state.length === 0")
+          ng-md-icon(size="24", icon="edit", style="fill: white")
+          md-tooltip(md-direction="left") Change tournament options
 
         md-button.md-fab.md-raised.md-warn(aria-label="reset", ng-click="reset($event)", ng-if="hasAccess")
           ng-md-icon(size="24", icon="history", style="fill: white")
