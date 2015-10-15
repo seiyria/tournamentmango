@@ -18,7 +18,8 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
   $scope.hasAccess = defaultHasAccess();
 
   if(authData) {
-    CurrentUsers.watch.then(null, null, data => {
+    CurrentUsers.watch.then(null, null, currentUsersInfo => {
+      const data = currentUsersInfo.users;
       if(!data.shareIDs) return;
       $scope.hasAccess = defaultHasAccess() || data && data.shareIDs[authData.uid];
     });

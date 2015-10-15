@@ -48,7 +48,7 @@ site.service('UserManagement', (FirebaseURL, $mdDialog, Toaster, FilterUtils) =>
   const filterUsers = (users, datatable) => {
     return FilterUtils.filterTable(users, datatable, user => [
       [user.name.toLowerCase()],
-      [user.location.toLowerCase()],
+      [user.location ? user.location.toLowerCase() : ''],
       FilterUtils.getFilterArr(user, 'aliases'),
       FilterUtils.getFilterArr(user, 'games'),
       FilterUtils.getFilterArr(user, 'characters')

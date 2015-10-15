@@ -110,8 +110,9 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
     });
   };
 
-  CurrentUsers.watch.then(null, null, (list) => {
-    $scope.setCurrentPlayerSet(list);
+  CurrentUsers.watch.then(null, null, (data) => {
+    if(!data.isNewSet) return;
+    $scope.setCurrentPlayerSet(data.users);
   });
 
   $scope.hasMultipleSets = () => $scope.listKeys.length > 1;
