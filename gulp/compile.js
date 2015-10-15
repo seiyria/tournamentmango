@@ -20,7 +20,7 @@ const watchify = require('watchify');
 
 const getPaths = require('./_common').getPaths;
 
-gulp.task('compile:libcss', ['clean:libcss'], function() {
+gulp.task('compile:libcss', ['clean:libcss'], () => {
   return gulp.src(getPaths().libcss)
     // .pipe(cached('libcss'))
     // .pipe(remember('libcss'))
@@ -33,7 +33,7 @@ gulp.task('compile:libcss', ['clean:libcss'], function() {
     .on('error', util.log);
 });
 
-gulp.task('compile:libjs', ['clean:libjs'], function() {
+gulp.task('compile:libjs', ['clean:libjs'], () => {
   return gulp.src(getPaths().libjs)
     // .pipe(cached('libjs'))
     // .pipe(remember('libjs'))
@@ -42,18 +42,9 @@ gulp.task('compile:libjs', ['clean:libjs'], function() {
     .on('error', util.log);
 });
 
-gulp.task('compile:js', ['eslint', 'clean:js'], function() {
+let bundler = null;
 
-  let bundler = browserify({
-    cache: {}, packageCache: {}, fullPaths: true,
-    entries: [getPaths().entry],
-    debug: global.watching
-  })
-    .transform(babelify);
-
-  if(global.watching) {
-    bundler.plugin(errorify);
-  }
+gulp.task('compile:js', ['eslint', 'clean:js'], () => {
 
   const bundlee = function() {
     return bundler
@@ -64,6 +55,19 @@ gulp.task('compile:js', ['eslint', 'clean:js'], function() {
       .on('error', util.log);
   };
 
+  if(global.watching && bundler) return bundlee();
+
+  bundler = browserify({
+    cache: {}, packageCache: {}, fullPaths: true,
+    entries: [getPaths().entry],
+    debug: global.watching
+  })
+    .transform(babelify);
+
+  if(global.watching) {
+    bundler.plugin(errorify);
+  }
+
   if (global.watching) {
     bundler = watchify(bundler);
     bundler.on('update', bundlee);
@@ -72,7 +76,7 @@ gulp.task('compile:js', ['eslint', 'clean:js'], function() {
   return bundlee();
 });
 
-gulp.task('compile:sass', ['clean:css'], function() {
+gulp.task('compile:sass', ['clean:css'], () => {
   return gulp.src(getPaths().sass)
     .pipe(sourcemaps.init())
     .pipe(sass().on('error', sass.logError))
@@ -91,7 +95,7 @@ gulp.task('compile:sass', ['clean:css'], function() {
     .on('error', util.log);
 });
 
-gulp.task('compile:jade', function() {
+gulp.task('compile:jade', () => {
   return gulp.src(getPaths().jade)
     .pipe(concat('index.html'))
     .pipe(jade({

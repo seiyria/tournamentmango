@@ -10,7 +10,7 @@ const currentTag = require('./_common').currentTag;
 
 const versionSources = ['./bower.json', './package.json'];
 
-const versionStream = function(type) {
+const versionStream = (type) => {
   return gulp.src(versionSources)
     .pipe(bump({ type: type }))
     .pipe(gulp.dest('./'))
@@ -18,40 +18,24 @@ const versionStream = function(type) {
     .pipe(tagVersion({ prefix: '' }));
 };
 
-const commitStream = function(type) {
+const commitStream = (type) => {
   var tag = currentTag();
   return gulp.src(versionSources.concat('CHANGELOG.md'))
-    .pipe(git.commit('chore(version): release '+type+ ' version ' +tag, function() {
+    .pipe(git.commit(`chore(version): release ${type} version ${tag}`, function() {
       git.push();
       git.push('origin', 'master', { args: '--tags' });
     }));
 };
 
-const pushStream = function() {
+const pushStream = () => {
   git.push();
   git.push('origin', 'master', { args: '--tags' });
 };
 
-gulp.task('bump:patch:tag', function() {
-  return versionStream('patch');
-});
+gulp.task('bump:patch:tag', () => versionStream('patch'));
+gulp.task('bump:minor:tag', () => versionStream('minor'));
+gulp.task('bump:major:tag', () => versionStream('major'));
 
-gulp.task('bump:minor:tag', function() {
-  return versionStream('minor');
-});
-
-gulp.task('bump:major:tag', function() {
-  return versionStream('major');
-});
-
-gulp.task('bump:patch:commit', ['bump:patch:tag', 'generate:changelog'], function() {
-  return commitStream('patch') && pushStream();
-});
-
-gulp.task('bump:minor:commit', ['bump:minor:tag', 'generate:changelog'], function() {
-  return commitStream('minor') && pushStream();
-});
-
-gulp.task('bump:major:commit', ['bump:major:tag', 'generate:changelog'], function() {
-  return commitStream('major') && pushStream();
-});
+gulp.task('bump:patch:commit', ['bump:patch:tag', 'generate:changelog'], () => commitStream('patch') && pushStream());
+gulp.task('bump:minor:commit', ['bump:minor:tag', 'generate:changelog'], () => commitStream('minor') && pushStream());
+gulp.task('bump:major:commit', ['bump:major:tag', 'generate:changelog'], () => commitStream('major') && pushStream());

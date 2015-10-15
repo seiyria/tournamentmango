@@ -17,7 +17,7 @@ const currentTag = require('./_common').currentTag;
 
 const binaryPath = () => getPaths().bin.build + '/OpenChallenge';
 
-gulp.task('clean:binaries', function() {
+gulp.task('clean:binaries', () => {
   const paths = getPaths();
 
   return gulp.src([paths.bin.build, paths.bin.release])
@@ -25,14 +25,14 @@ gulp.task('clean:binaries', function() {
     .on('error', util.log);
 });
 
-gulp.task('package:binaries', ['generate:binaries'], folders(binaryPath(), function(folder) {
-  return gulp.src(binaryPath() + '/' + folder + '/**/*')
-    .pipe(zip(folder + '.zip'))
+gulp.task('package:binaries', ['generate:binaries'], folders(binaryPath(), (folder) => {
+  return gulp.src(`${binaryPath()}/${folder}/**/*`)
+    .pipe(zip(`${folder}.zip`))
     .pipe(gulp.dest(getPaths().bin.release));
 }));
 
-gulp.task('upload:binaries', ['package:binaries'], function() {
-  return gulp.src(getPaths().bin.release + '/*.zip')
+gulp.task('upload:binaries', ['package:binaries'], () => {
+  return gulp.src(`${getPaths().bin.release}/*.zip`)
     .pipe(release({
       repo: 'openchallenge',
       owner: 'seiyria',
@@ -41,12 +41,12 @@ gulp.task('upload:binaries', ['package:binaries'], function() {
     }));
 });
 
-gulp.task('generate:binaries', ['clean:binaries', 'copy:nw'], function() {
+gulp.task('generate:binaries', ['clean:binaries', 'copy:nw'], () => {
   execSync('npm install --prefix ./dist/ express');
 
   const paths = getPaths();
 
-  return gulp.src(paths.dist+'/**/*')
+  return gulp.src(`${paths.dist}/**/*`)
     .pipe(nwBuilder({
       version: 'v0.12.2',
       platforms: ['osx64', 'win64', 'linux64'],
@@ -59,7 +59,7 @@ gulp.task('generate:binaries', ['clean:binaries', 'copy:nw'], function() {
     }));
 });
 
-gulp.task('generate:changelog', function() {
+gulp.task('generate:changelog', () => {
   return changelog({
     releaseCount: 0,
     preset: 'angular'
