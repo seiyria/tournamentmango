@@ -69,9 +69,6 @@ $match-column-width: 130px;
 $duel-bg: #eee;
 $card-border: 1px solid #eee;
 
-.duel-area {
-}
-
 .pointer {
   cursor: pointer;
 }
@@ -211,11 +208,33 @@ input.hide-spinner[type="number"] {
   -moz-appearance: textfield;
 }
 
-.player-bucket-list {
-  .highlight:not(.sv-helper) {
-  //md-list-item:not(.sv-helper):not(.sv-candidate):nth-child(4n),
-  //md-list-item:not(.sv-helper):not(.sv-candidate):nth-child(4n+1) {
-    background-color: #ccc;
+.player-bucket-list-container {
+
+  .md-subheader-wrapper {
+    .md-subheader-inner {
+      padding: 0;
+    }
+  }
+
+  .player-bucket-list {
+    padding-top: 0;
+
+    .highlight:not(.sv-helper) {
+      //md-list-item:not(.sv-helper):not(.sv-candidate):nth-child(4n),
+      //md-list-item:not(.sv-helper):not(.sv-candidate):nth-child(4n+1) {
+      background-color: #ccc;
+    }
+
+    .md-subheader.no-padding {
+      margin-right: 0;
+
+      .md-subheader-inner {
+        padding: 0;
+      }
+    }
+  }
+
+  md-list.no-padding {
   }
 }
 

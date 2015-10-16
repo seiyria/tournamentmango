@@ -1,11 +1,36 @@
 import site from '../../app';
 
-site.controller('notStartedController', ($scope, Auth, EnsureLoggedIn, UserStatus, ShareToken, TournamentStatus, FirebaseURL, $firebaseObject, CurrentPlayerBucket, CurrentTournament, $state, $stateParams) => {
+site.controller('notStartedController', ($scope, Auth, EnsureLoggedIn, UserStatus, ShareToken, Toaster, TournamentStatus, FirebaseURL, $timeout, $firebaseObject, CurrentPlayerBucket, CurrentTournament, $state, $stateParams) => {
 
   const authData = EnsureLoggedIn.check();
 
   $scope.bucket = [];
   $scope.tournamentOptions = {};
+
+  $scope.currentPlayerBucket = () => CurrentPlayerBucket.get();
+  $scope.showBucketButton = () => $scope.currentPlayerBucket().length !== 0 && $scope.ref && $scope.ref.status === TournamentStatus.IN_PROGRESS;
+
+  // lol, add the bucket to the bucket
+  $scope.addBucketToBucket = () => {
+    $scope.bucket.push(...$scope.transformPlayers($scope.currentPlayerBucket()));
+    CurrentPlayerBucket.clear();
+    $scope.bucket = _.uniq($scope.bucket, 'id');
+    Toaster.show('Successfully added player bucket to tournament!');
+  };
+
+  $scope.transformPlayers = (players) => {
+    return _.map(players, (player) => {
+      return {
+        id: player.$id || player.id,
+        name: player.name,
+        alias: player.alias || player.chosenAlias || '',
+        wins: player.wins || 0,
+        losses: player.losses || 0,
+        points: player.points || 0,
+        aliases: player.aliases || []
+      };
+    });
+  };
 
   Auth.ready.then(() => {
     $scope.ref = $firebaseObject(new Firebase(`${FirebaseURL}/users/${UserStatus.firebase.playerSetUid}/players/${UserStatus.firebase.playerSet}/tournaments/${$stateParams.tournamentId}`));
@@ -13,7 +38,6 @@ site.controller('notStartedController', ($scope, Auth, EnsureLoggedIn, UserStatu
     $scope.ref.$loaded().then(() => {
       $scope.tournamentOptions = $scope.ref.options || { type: 'singles' };
       $scope.bucket = $scope.ref.players || CurrentPlayerBucket.get();
-      CurrentPlayerBucket.watch.then(null, null, bucket => $scope.bucket = bucket);
     });
   });
 
@@ -63,23 +87,16 @@ site.controller('notStartedController', ($scope, Auth, EnsureLoggedIn, UserStatu
     }
   };
 
-  $scope.removeFromBucket = CurrentPlayerBucket.remove;
+  $scope.removeFromBucket = (player) => {
+    CurrentPlayerBucket.remove(player);
+    $scope.bucket = _.without($scope.bucket, player);
+  };
 
   $scope.baseGroupSize = () => ~~Math.sqrt($scope.bucket.length);
 
   $scope.start = () => {
     $scope.ref.options = $scope.getOptions();
-    $scope.ref.players = _.map($scope.bucket, (player) => {
-      return {
-        id: player.$id || player.id,
-        name: player.name,
-        alias: player.alias || player.chosenAlias || '',
-        wins: player.wins || 0,
-        losses: player.losses || 0,
-        points: player.points || 0,
-        aliases: player.aliases || []
-      };
-    });
+    $scope.ref.players = $scope.transformPlayers($scope.bucket);
     $scope.ref.status = TournamentStatus.IN_PROGRESS;
     $scope.ref.$save().then(() => {
       CurrentPlayerBucket.clear();

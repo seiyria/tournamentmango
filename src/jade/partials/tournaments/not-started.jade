@@ -1,9 +1,17 @@
 script(type="text/ng-template", id="/tournaments/not-started")
   div(layout="row", flex)
     md-card.almost-max-height(layout="column", flex="40")
-      md-content(flex, md-scroll-y)
+      md-content(ng-class="{ 'player-bucket-list-container': showBucketButton() }", flex, md-scroll-y)
         md-list.player-bucket-list(flex, sv-root, sv-part="bucket")
-          md-subheader Players ({{bucket.length}})
+          md-subheader.no-padding
+            div(flex, layout="row", layout-align="center center")
+              span(flex, offset="5") Players ({{bucket.length}})
+              span(flex)
+              span.text-right(flex)
+                md-button.md-fab.md-mini.md-primary(ng-show="showBucketButton()", ng-click="addBucketToBucket()")
+                  ng-md-icon(size="24", icon="group_add", style="fill:white")
+                  md-tooltip Add player bucket ({{currentPlayerBucket().length}} players)
+
           md-list-item.md-2-line(
             ng-if="bucket.length === 0"
           )
