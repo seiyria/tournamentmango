@@ -118,7 +118,6 @@
     "angular-ui-router": "^0.2.15",
     "angularfire": "^1.1.2",
     "duel": "^3.0.1",
-    "ngstorage": "^0.3.9",
-    "vinyl-paths": "^1.0.0"
+    "ngstorage": "^0.3.9"
   }
 }
