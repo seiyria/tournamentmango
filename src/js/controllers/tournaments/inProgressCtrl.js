@@ -45,11 +45,13 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
 
   const determineTemplate = (options) => {
     const hash = { singles: 'duel', doubles: 'duel', groupstage: 'groupstage', ffa: 'ffa', masters: 'masters' };
+    if(!options.type && options.last) return 'duel';
     return hash[options.type];
   };
 
   const determineTournament = (options) => {
     const hash = { singles: Duel, doubles: Duel, groupstage: GroupStage, ffa: FFA , masters: Masters };
+    if(!options.type && options.last) return Duel;
     return hash[options.type];
   };
 
