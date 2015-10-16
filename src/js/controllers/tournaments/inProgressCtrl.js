@@ -45,12 +45,12 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
 
   const determineTemplate = (options) => {
     const hash = { singles: 'duel', doubles: 'duel', groupstage: 'groupstage', ffa: 'ffa', masters: 'masters' };
-    return options.last ? 'duel' : hash[options.type]; // backwards compatibility. damn alpha testers
+    return hash[options.type];
   };
 
   const determineTournament = (options) => {
     const hash = { singles: Duel, doubles: Duel, groupstage: GroupStage, ffa: FFA , masters: Masters };
-    return options.last ? Duel : hash[options.type]; // backwards compatibility. damn alpha testers
+    return hash[options.type];
   };
 
   $scope.toCharacter = (round) => {
@@ -190,6 +190,7 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
 
   $scope.ref.$loaded().then(() => {
     $scope.loadTournament($scope.ref);
+    console.log($scope.ref);
 
     const horizMatches = _.max($scope.trn.matches, 'id.r').id.r; // these start at 1 I guess.
     const totalSections = _.max($scope.trn.matches, 'id.s').id.s; // get the highest section

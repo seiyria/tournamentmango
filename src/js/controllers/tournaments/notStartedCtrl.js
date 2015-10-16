@@ -34,7 +34,7 @@ site.controller('notStartedController', ($scope, Auth, EnsureLoggedIn, UserStatu
 
   $scope.getOptions = () => {
     const type = $scope.tournamentOptions.type;
-    if(type === 'singles' || type === 'doubles') return _.extend({ last: type === 'singles' ? Duel.WB : Duel.LB }, $scope.tournamentOptions);
+    if(type === 'singles' || type === 'doubles') return _.extend($scope.tournamentOptions, { last: type === 'singles' ? Duel.WB : Duel.LB });
     return $scope.tournamentOptions;
   };
 
