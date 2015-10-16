@@ -117,7 +117,6 @@
     "angular-material-icons": "^0.6.0",
     "angular-ui-router": "^0.2.15",
     "angularfire": "^1.1.2",
-    "duel": "^3.0.1",
     "ngstorage": "^0.3.9"
   }
 }
