@@ -129,9 +129,23 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
 
   $scope.doOrOpen = (event) => $scope.isOpen ? $scope.doChange(event) : $scope.isOpen = true;
 
+  $scope.doExport = (event) => SetManagement.exportSet(event, _.reject($scope.listKeys, k => k.short === $scope.setObject.basename), $scope.exportToSet);
+
   $scope.openShareDialog = (event) => SetManagement.shareSet(event, $scope.setObject.realName, $scope.setObject.sharedWith, $scope.updateShareSettings);
 
-  $scope.changeSetFromRealname = (newSet) => $scope.changePlayerSet(_.findWhere($scope.listKeys, { realName: newSet }).short);
+  $scope.changeSetFromRealname = (newSet) => $scope.changePlayerSet(_.findWhere($scope.listKeys, { realName: newSet.short }).short);
+
+  $scope.exportToSet = (newSet) => {
+    const players = $scope.selected;
+
+    const newSetPlayers = $firebaseArray(new Firebase(`${FirebaseURL}/users/${newSet.uid}/players/${newSet.short}/list`));
+
+    const newPlayerObjs = _.map(players, p => _.omit(p, (v, key) => _.contains(key, '$') || _.contains(['wins', 'losses', 'points'], key)));
+
+    newSetPlayers.$loaded(() => {
+      _.each(newPlayerObjs, newSetPlayers.$add);
+    });
+  };
 
   $scope.updateShareSettings = (shareData) => {
     const oldSharedWith = _.keys($scope.setObject.shareIDs);

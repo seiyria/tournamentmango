@@ -31,8 +31,21 @@ site.service('SetManagement', (FirebaseURL, $mdDialog, InputPrompt, SelectPrompt
       title: 'Choose a player set',
       label: 'Player set'
     }, (string) => {
-      Toaster.show(`Successfully changed player set to "${string}"`);
-      callback(string);
+      const val = JSON.parse(string);
+      Toaster.show(`Successfully changed player set to "${val.realName}"`);
+      callback(val);
+    });
+  };
+
+  const exportSet = (event, choices, callback) => {
+    SelectPrompt.show(event, {
+      selectableValues: choices,
+      title: 'Choose a player set',
+      label: 'Player set'
+    }, (string) => {
+      const val = JSON.parse(string);
+      Toaster.show(`Successfully exported to player set "${val.realName}"`);
+      callback(val);
     });
   };
 
@@ -65,6 +78,7 @@ site.service('SetManagement', (FirebaseURL, $mdDialog, InputPrompt, SelectPrompt
     renameSet,
     deleteSet,
     shareSet,
-    changeSet
+    changeSet,
+    exportSet
   };
 });

@@ -105,8 +105,8 @@ script(type="text/ng-template", id="/user-manage")
           ng-md-icon(size="24", icon="edit", style="fill: white")
           md-tooltip(md-direction="left") Rename current player set
 
-        md-button.md-fab.md-raised.md-accent.md-hue-1(aria-label="export to set", ng-if="false")
-          ng-md-icon(size="24", icon="input", style="fill: white")
+        md-button.md-fab.md-raised.md-accent.md-hue-1(aria-label="export to set", ng-click="doExport($event)", ng-if="selected.length > 0 && hasMultipleSets()")
+          ng-md-icon(size="24", icon="recent_actors", style="fill: white")
           md-tooltip(md-direction="left") Export to another player set
 
         md-button.md-fab.md-raised.md-warn.md-hue-1(aria-label="share set", ng-click="openShareDialog($event)", ng-if="ownsCurrentSet()")
