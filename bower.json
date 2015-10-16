@@ -13,7 +13,6 @@
     "jquery": "~2.1.4",
     "jspdf": "~1.1.135",
     "lodash": "~3.10.1",
-    "sizzle": "~2.2.0",
     "svg-morpheus": "~0.1.8",
     "tournament": "~3.0.2"
   },
