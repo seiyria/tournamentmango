@@ -49,7 +49,7 @@ script(type="text/ng-template", id="/tournaments/in-progress")
 
   .abs-position-bottom-right(ng-click="isOpen = true", ng-mouseleave="isOpen = false")
 
-    md-fab-speed-dial.md-scale(md-direction="up", md-open="isOpen")
+    md-fab-speed-dial.md-scale(md-direction="up", md-open="isOpen", ng-if="trn")
       md-fab-trigger.align-with-text
 
         md-button.md-fab.md-primary(aria-label="menu or results", ng-click="doOrOpen($event)", ng-mouseenter="isOpen = true")
