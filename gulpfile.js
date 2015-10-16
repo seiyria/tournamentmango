@@ -24,4 +24,4 @@ gulp.task('build:all', ['copy:dist', 'build:lib', 'compile:all']);
 gulp.task('compile:all', ['compile:js', 'compile:sass', 'compile:jade']);
 gulp.task('check', ['build:all']);
 
-gulp.task('default', ['clean:all', 'build:all', 'connect', 'open', 'watch:all']);
+gulp.task('default', ['clean:all', 'build:all', 'connect', 'watch:all']);

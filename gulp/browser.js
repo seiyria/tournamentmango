@@ -4,9 +4,10 @@ const _ = require('lodash');
 const gulp = require('gulp');
 const util = require('gulp-util');
 const filter = require('gulp-filter');
-const connect = require('gulp-connect');
 const open = require('gulp-open');
 const ghPages = require('gulp-gh-pages');
+
+const browserSync = require('browser-sync').create();
 
 const getPaths = require('./_common').getPaths;
 
@@ -20,22 +21,14 @@ gulp.task('deploy', () => {
 });
 
 gulp.task('reload', () => {
-  return gulp.src('dist/*.html')
-    .pipe(connect.reload())
-    .on('error', util.log);
+  browserSync.reload();
 });
 
-gulp.task('connect', () => {
-  connect.server({
-    root: ['./dist'],
+gulp.task('connect', ['build:all'], () => {
+  browserSync.init({
     port: 8000,
-    livereload: true
+    server: {
+      baseDir: './dist'
+    }
   });
-});
-
-gulp.task('open', ['build:all'], () => {
-  gulp.src('./dist/index.html')
-    .pipe(open({
-      uri: 'http://127.0.0.1:8000'
-    }));
 });
