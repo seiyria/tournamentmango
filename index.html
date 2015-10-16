@@ -361,7 +361,7 @@
             <label>{{label}}</label>
             <md-select ng-model="string" required="required">
               <md-optgroup ng-repeat="group in groups" label="{{group}}">
-                <md-option ng-repeat="value in selectableValues | filter:{group:group}">{{value.realName}}</md-option>
+                <md-option ng-repeat="value in selectableValues | filter:{group:group}" value="{{value}}">{{value.realName}}</md-option>
               </md-optgroup>
             </md-select>
           </md-input-container>
@@ -693,8 +693,8 @@
           <ng-md-icon size="24" icon="edit" style="fill: white"></ng-md-icon>
           <md-tooltip md-direction="left">Rename current player set</md-tooltip>
         </md-button>
-        <md-button aria-label="export to set" ng-if="false" class="md-fab md-raised md-accent md-hue-1">
-          <ng-md-icon size="24" icon="input" style="fill: white"></ng-md-icon>
+        <md-button aria-label="export to set" ng-click="doExport($event)" ng-if="selected.length &gt; 0 &amp;&amp; hasMultipleSets()" class="md-fab md-raised md-accent md-hue-1">
+          <ng-md-icon size="24" icon="recent_actors" style="fill: white"></ng-md-icon>
           <md-tooltip md-direction="left">Export to another player set</md-tooltip>
         </md-button>
         <md-button aria-label="share set" ng-click="openShareDialog($event)" ng-if="ownsCurrentSet()" class="md-fab md-raised md-warn md-hue-1">
@@ -780,9 +780,15 @@
 <script type="text/ng-template" id="/tournaments/not-started">
   <div layout="row" flex="flex">
     <md-card layout="column" flex="40" class="almost-max-height">
-      <md-content flex="flex" md-scroll-y="md-scroll-y">
+      <md-content ng-class="{ 'player-bucket-list-container': showBucketButton() }" flex="flex" md-scroll-y="md-scroll-y">
         <md-list flex="flex" sv-root="sv-root" sv-part="bucket" class="player-bucket-list">
-          <md-subheader>Players ({{bucket.length}})</md-subheader>
+          <md-subheader class="no-padding">
+            <div flex="flex" layout="row" layout-align="center center"><span flex="flex" offset="5">Players ({{bucket.length}})</span><span flex="flex"></span><span flex="flex" class="text-right">
+                <md-button ng-show="showBucketButton()" ng-click="addBucketToBucket()" class="md-fab md-mini md-primary">
+                  <ng-md-icon size="24" icon="group_add" style="fill:white"></ng-md-icon>
+                  <md-tooltip>Add player bucket ({{currentPlayerBucket().length}} players)</md-tooltip>
+                </md-button></span></div>
+          </md-subheader>
           <md-list-item ng-if="bucket.length === 0" class="md-2-line">
             <div class="md-list-item-text">
               <h3>No players available</h3>
