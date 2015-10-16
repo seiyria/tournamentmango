@@ -6,7 +6,7 @@ site.directive('scrollObserve', ($timeout) => {
   return (scope, element, attrs) => {
     const window = $('.scroller');
     const setSize = () => {
-      const width = $('.duel-area').hasClass('big-scores') ? 495 : 330;
+      const width = $('.duel-area').hasClass('big-scores') ? 510 : 340;
       $(element).css('left', -window.scrollLeft()+width*(+attrs.scrollObserve)+'px');
     };
     $timeout(setSize, 0);

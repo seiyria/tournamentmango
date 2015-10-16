@@ -4,6 +4,12 @@
   width: $width;
 }
 
+@mixin all-heights($height) {
+  min-height: $height;
+  max-height: $height;
+  height: $height;
+}
+
 .hidden {
   visibility: hidden;
 }
@@ -20,7 +26,7 @@
   height: 85%;
 }
 
-$round-column-width: 330px;
+$round-column-width: 340px;
 $match-column-width: 130px;
 
 .subhead {
@@ -33,9 +39,7 @@ $match-column-width: 130px;
 }
 
 .header-bar {
-  min-height: 54px;
-  height: 54px;
-  max-height: 54px;
+  @include all-heights(54px);
 
   .md-title {
     margin-top: 10px;
@@ -56,9 +60,7 @@ $match-column-width: 130px;
 }
 
 .match-column-container {
-  min-height: 24px;
-  height: 24px;
-  max-height: 24px;
+  @include all-heights(24px);
   background-color: #fff;
   width: 100%;
 }
@@ -114,9 +116,7 @@ $card-border: 1px solid #eee;
       }
 
       .round-type {
-        width: 60px;
-        min-width: 60px;
-        max-width: 60px;
+        @include all-widths(70px);
         text-align: center;
       }
 
