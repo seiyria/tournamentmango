@@ -285,6 +285,21 @@ md-data-table-toolbar > form > input:focus {
   z-index: 12;
 }
 
+.color-facebook {
+  background-color: #3b5998!important;
+  color: #fff!important;
+}
+
+.color-google {
+  background-color: #dc4e41!important;
+  color: #fff!important;
+}
+
+.color-twitter {
+  background-color: #55acee!important;
+  color: #fff!important;
+}
+
 $paddings: top bottom left right;
 
 @for $size from 1 to 11 {
