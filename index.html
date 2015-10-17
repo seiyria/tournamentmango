@@ -32,6 +32,15 @@
     <input type="number" ng-model="editStuff.value" ng-blur="unedit()" ng-keydown="watchKeyPresses($event)" ng-max="{{maxScore}}" class="score-input hide-spinner"/>
   </div>
 </script>
+<script type="text/ng-template" id="station">
+  <div ng-click="edit()" ng-if="!editing &amp;&amp; !editStuff.value" ng-class="{'clickable': canClick}" class="station pointer text-center unentered">
+    <ng-md-icon size="16" icon="tv"></ng-md-icon>
+  </div>
+  <div ng-click="edit()" ng-if="!editing &amp;&amp; editStuff.value" class="station text-center entered">{{editStuff.value}}</div>
+  <div ng-if="editing">
+    <input ng-model="editStuff.value" ng-blur="unedit()" ng-keydown="watchKeyPresses($event)" maxlength="6" class="station-input"/>
+  </div>
+</script>
 <script type="text/ng-template" id="/home">
   <div layout="row" flex="flex">
     <div flex="flex">
@@ -714,11 +723,20 @@
     <div flex="flex"></div>
     <div flex="flex" class="text-center md-title"><span ng-show="!ref.public &amp;&amp; !hasAccess">Unavailable</span><span ng-show="ref.public || hasAccess">{{tournamentName}}{{trn.isDone() ? ' (Complete)' : ' (' + matchesLeft() + ' matches left)'}}</span></div>
     <div flex="flex" layout="row" layout-align="end center" class="text-right auto-vert-margin">
-      <div ng-show="ref.public &amp;&amp; hasAccess" class="hide-underline"><a data-clipboard-text="{{url}}" class="copy-url">
-          <ng-md-icon size="20" icon="link" class="pointer margin-left-10"></ng-md-icon></a><a ng-click="share('facebook')">
-          <ng-md-icon size="20" icon="facebook" class="pointer margin-left-10"></ng-md-icon></a><a ng-click="share('twitter')">
-          <ng-md-icon size="20" icon="twitter" class="pointer margin-left-10"></ng-md-icon></a><a ng-click="share('google')">
-          <ng-md-icon size="20" icon="google-plus" class="pointer margin-left-10 margin-right-10"></ng-md-icon></a></div>
+      <div ng-show="ref.public &amp;&amp; hasAccess" class="hide-underline">
+        <md-button data-clipboard-text="{{url}}" aria-label="copy url to clipboard" class="md-fab md-mini md-accent copy-url">
+          <ng-md-icon size="20" icon="link" style="fill:white"></ng-md-icon>
+        </md-button>
+        <md-button ng-click="share('facebook')" aria-label="share on facebook" class="md-fab md-mini color-facebook">
+          <ng-md-icon size="20" icon="facebook" style="fill:white"></ng-md-icon>
+        </md-button>
+        <md-button ng-click="share('twitter')" aria-label="share on twitter" class="md-fab md-mini color-twitter">
+          <ng-md-icon size="20" icon="twitter" style="fill:white"></ng-md-icon>
+        </md-button>
+        <md-button ng-click="share('google')" aria-label="share on google+" class="md-fab md-mini color-google">
+          <ng-md-icon size="20" icon="google-plus" style="fill:white"></ng-md-icon>
+        </md-button>
+      </div>
     </div>
   </div>
   <div layout="row" hide-gt-sm="hide-gt-sm" class="header-bar">
@@ -735,15 +753,15 @@
           <ng-md-icon size="24" icon="link" style="fill: white"></ng-md-icon>
           <md-tooltip md-direction="top">Copy link to clipboard</md-tooltip>
         </md-button>
-        <md-button aria-label="share on facebook" ng-click="share('facebook')" class="md-fab md-mini md-raised md-accent md-hue-1">
+        <md-button aria-label="share on facebook" ng-click="share('facebook')" class="md-fab md-mini md-raised md-accent color-facebook">
           <ng-md-icon size="24" icon="facebook" style="fill: white"></ng-md-icon>
           <md-tooltip md-direction="top">Share on facebook</md-tooltip>
         </md-button>
-        <md-button aria-label="share on twitter" ng-click="share('twitter')" class="md-fab md-mini md-raised md-accent md-hue-1">
+        <md-button aria-label="share on twitter" ng-click="share('twitter')" class="md-fab md-mini md-raised md-accent color-twitter">
           <ng-md-icon size="24" icon="twitter" style="fill: white"></ng-md-icon>
           <md-tooltip md-direction="top">Share on twitter</md-tooltip>
         </md-button>
-        <md-button aria-label="share on google plus" ng-click="share('google')" class="md-fab md-mini md-raised md-accent md-hue-1">
+        <md-button aria-label="share on google plus" ng-click="share('google')" class="md-fab md-mini md-raised md-accent color-google">
           <ng-md-icon size="24" icon="google-plus" style="fill: white"></ng-md-icon>
           <md-tooltip md-direction="top">Share on google plus</md-tooltip>
         </md-button>
@@ -751,7 +769,7 @@
     </md-fab-speed-dial>
   </div>
   <div ng-click="isOpen = true" ng-mouseleave="isOpen = false" class="abs-position-bottom-right">
-    <md-fab-speed-dial md-direction="up" md-open="isOpen" class="md-scale">
+    <md-fab-speed-dial md-direction="up" md-open="isOpen" ng-if="trn" class="md-scale">
       <md-fab-trigger class="align-with-text">
         <md-button aria-label="menu or results" ng-click="doOrOpen($event)" ng-mouseenter="isOpen = true" class="md-fab md-primary">
           <ng-md-icon size="24" icon="{{isOpen &amp;&amp; trn.isDone() ? 'assessment' : 'menu'}}" style="fill: white"></ng-md-icon>
@@ -937,7 +955,10 @@
           <div ng-show="false">{{getIdForMatch(match)}}</div>
         </div>
         <div ng-if="!noRender(match)" layout="row" layout-align="center center" class="match-data">
-          <div class="round-type subhead">{{match.id.s}}-{{toCharacter(getIdForMatch(match))}}</div>
+          <div flex="flex" layout="column" class="round-type">
+            <div flex="flex" class="subhead">{{getMatchIdString(match)}}</div>
+            <station flex="flex" value="ref.stations[getMatchStationIdString(match)]" can-click="{{hasAccess}}" on-unedit="save()"></station>
+          </div>
           <div layout="column" class="match-name">
             <div ng-repeat="p in match.p track by $index" hover-highlight="hover-highlight" hover-name="{{getName(match.p[$index]-1)}}" class="member padding-5 member-{{$index}}">{{getName(match.p[$index]-1) || getString(match.id, $index) || '???'}}
               <md-tooltip ng-if="bucket[match.p[$index]-1]">{{bucket[match.p[$index]-1].alias || 'no alias'}}: {{bucket[match.p[$index]-1].name}}</md-tooltip>
@@ -970,7 +991,10 @@
           <div ng-show="false">{{getIdForMatch(match)}}</div>
         </div>
         <div ng-if="!noRender(match)" layout="row" layout-align="center center" class="match-data">
-          <div class="round-type subhead">{{match.id.s}}-{{toCharacter(getIdForMatch(match))}}</div>
+          <div flex="flex" layout="column" class="round-type">
+            <div flex="flex" class="subhead">{{getMatchIdString(match)}}</div>
+            <station flex="flex" value="ref.stations[getMatchStationIdString(match)]" can-click="{{hasAccess}}" on-unedit="save()"></station>
+          </div>
           <div layout="column" class="match-name">
             <div ng-repeat="p in match.p track by $index" hover-highlight="hover-highlight" hover-name="{{getName(match.p[$index]-1)}}" class="member padding-5 member-{{$index}}">{{getName(match.p[$index]-1) || getString(match.id, $index) || '???'}}
               <md-tooltip ng-if="bucket[match.p[$index]-1]">{{bucket[match.p[$index]-1].alias || 'no alias'}}: {{bucket[match.p[$index]-1].name}}</md-tooltip>
@@ -1003,7 +1027,10 @@
           <div ng-show="false">{{getIdForMatch(match)}}</div>
         </div>
         <div ng-if="!noRender(match)" layout="row" layout-align="center center" class="match-data">
-          <div class="round-type subhead">{{match.id.s}}-{{toCharacter(getIdForMatch(match))}}</div>
+          <div flex="flex" layout="column" class="round-type">
+            <div flex="flex" class="subhead">{{getMatchIdString(match)}}</div>
+            <station flex="flex" value="ref.stations[getMatchStationIdString(match)]" can-click="{{hasAccess}}" on-unedit="save()"></station>
+          </div>
           <div layout="column" class="match-name">
             <div ng-repeat="p in match.p track by $index" hover-highlight="hover-highlight" hover-name="{{getName(match.p[$index]-1)}}" class="member padding-5 member-{{$index}}">{{getName(match.p[$index]-1) || getString(match.id, $index) || '???'}}
               <md-tooltip ng-if="bucket[match.p[$index]-1]">{{bucket[match.p[$index]-1].alias || 'no alias'}}: {{bucket[match.p[$index]-1].name}}</md-tooltip>
@@ -1036,7 +1063,10 @@
           <div ng-show="false">{{getIdForMatch(match)}}</div>
         </div>
         <div ng-if="!noRender(match)" layout="row" layout-align="center center" class="match-data">
-          <div class="round-type subhead">{{match.id.s}}-{{toCharacter(getIdForMatch(match))}}</div>
+          <div flex="flex" layout="column" class="round-type">
+            <div flex="flex" class="subhead">{{getMatchIdString(match)}}</div>
+            <station flex="flex" value="ref.stations[getMatchStationIdString(match)]" can-click="{{hasAccess}}" on-unedit="save()"></station>
+          </div>
           <div layout="column" class="match-name">
             <div ng-repeat="p in match.p track by $index" hover-highlight="hover-highlight" hover-name="{{getName(match.p[$index]-1)}}" class="member padding-5 member-{{$index}}">{{getName(match.p[$index]-1) || getString(match.id, $index) || '???'}}
               <md-tooltip ng-if="bucket[match.p[$index]-1]">{{bucket[match.p[$index]-1].alias || 'no alias'}}: {{bucket[match.p[$index]-1].name}}</md-tooltip>
