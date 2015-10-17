@@ -22,8 +22,11 @@ script(type="text/ng-template", id="tournament-duel")
 
         div(ng-if="noRender(match)", flex)
           div(ng-show="false") {{getIdForMatch(match)}}
+
         .match-data(ng-if="!noRender(match)", layout="row", layout-align="center center")
-          .round-type.subhead {{match.id.s}}-{{toCharacter(getIdForMatch(match))}}
+          .round-type(flex, layout="column")
+            .subhead(flex) {{getMatchIdString(match)}}
+            station(flex, value="ref.stations[getMatchStationIdString(match)]", can-click="{{hasAccess}}", on-unedit="save()")
 
           .match-name(layout="column")
             .member.padding-5(ng-repeat="p in match.p track by $index", class="member-{{$index}}", hover-highlight, hover-name="{{getName(match.p[$index]-1)}}") {{getName(match.p[$index]-1) || getString(match.id, $index) || '???'}}

@@ -1,0 +1,9 @@
+script(type="text/ng-template", id="station")
+
+  .station.pointer.text-center.unentered(ng-click="edit()", ng-if="!editing && !editStuff.value", ng-class="{'clickable': canClick}")
+    ng-md-icon(size="16", icon="tv")
+
+  .station.text-center.entered(ng-click="edit()", ng-if="!editing && editStuff.value") {{editStuff.value}}
+
+  div(ng-if="editing")
+    input.station-input(ng-model="editStuff.value", ng-blur="unedit()", ng-keydown="watchKeyPresses($event)", maxlength="6")

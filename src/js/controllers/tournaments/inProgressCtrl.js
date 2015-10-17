@@ -121,7 +121,6 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
     _.each(matchInfo, info => {
       _.each($scope.trn.matches, match => {
 
-
         if(isBad(match)) {
           return;
         }
@@ -227,6 +226,14 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
     $scope.confirmScore = (match) => {
       $scope.trn.score(match.id, _.map(match.score, i => +i));
       $scope.save();
+    };
+
+    $scope.getMatchIdString = (match) => {
+      return `${match.id.s}-${$scope.toCharacter($scope.getIdForMatch(match))}`;
+    };
+
+    $scope.getMatchStationIdString = (match) => {
+      return ''+match.id;
     };
 
     $scope.save = () => {

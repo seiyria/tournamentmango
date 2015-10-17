@@ -34,6 +34,20 @@ $match-column-width: 130px;
   font-weight: 500;
 }
 
+station {
+  .station {
+    font-size: 13px;
+
+    &.unentered:not(.clickable) {
+      display: none;
+    }
+  }
+
+  input {
+    width: 100%;
+  }
+}
+
 .max-height {
   height: 100%;
 }

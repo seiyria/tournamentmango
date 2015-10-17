@@ -8,6 +8,7 @@ import './directives/score';
 import './directives/draw-to';
 import './directives/hover-highlight';
 import './directives/scroll-observe';
+import './directives/station';
 
 import './services/scoring';
 import './services/userStatus';
