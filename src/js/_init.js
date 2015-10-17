@@ -19,6 +19,7 @@ import './services/toaster';
 import './services/filterUtils';
 import './services/auth';
 import './services/shareToken';
+import './services/tournamentInformaton';
 
 import './services/currents/currentUsers';
 import './services/currents/currentEvents';
