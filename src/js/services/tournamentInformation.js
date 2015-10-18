@@ -31,7 +31,8 @@ site.service('TournamentInformation', () => {
     const id = match.id;
     const strId = JSON.stringify(id);
     if(idMap[strId]) return idMap[strId];
-    return idMap[strId] = noRender(match) ? ++badIds : ++numMatchesPerSection[id.s-1];
+    idMap[strId] = noRender(match) ? ++badIds : ++numMatchesPerSection[id.s-1];
+    return idMap[strId];
   };
 
   const getMatchIdString = (match) => {
