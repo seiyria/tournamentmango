@@ -2,9 +2,7 @@
 const _ = require('lodash');
 
 const gulp = require('gulp');
-const util = require('gulp-util');
 const filter = require('gulp-filter');
-const open = require('gulp-open');
 const ghPages = require('gulp-gh-pages');
 
 const browserSync = require('browser-sync').create();

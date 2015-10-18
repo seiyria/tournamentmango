@@ -6,7 +6,6 @@ const filter = require('gulp-filter');
 const tagVersion = require('gulp-tag-version');
 const runSequence = require('run-sequence');
 
-const getPaths = require('./_common').getPaths;
 const currentTag = require('./_common').currentTag;
 
 const versionSources = ['./bower.json', './package.json'];
