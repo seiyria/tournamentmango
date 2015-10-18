@@ -4,6 +4,7 @@ const git = require('gulp-git');
 const bump = require('gulp-bump');
 const filter = require('gulp-filter');
 const tagVersion = require('gulp-tag-version');
+const runSequence = require('run-sequence');
 
 const getPaths = require('./_common').getPaths;
 const currentTag = require('./_common').currentTag;
@@ -19,7 +20,7 @@ const versionStream = (type) => {
 };
 
 const commitStream = (type) => {
-  var tag = currentTag();
+  const tag = currentTag();
   return gulp.src(versionSources.concat('CHANGELOG.md'))
     .pipe(git.commit(`chore(version): release ${type} version ${tag}`, function() {
       git.push();
@@ -36,6 +37,6 @@ gulp.task('bump:patch:tag', () => versionStream('patch'));
 gulp.task('bump:minor:tag', () => versionStream('minor'));
 gulp.task('bump:major:tag', () => versionStream('major'));
 
-gulp.task('bump:patch:commit', ['bump:patch:tag', 'generate:changelog'], () => commitStream('patch') && pushStream());
-gulp.task('bump:minor:commit', ['bump:minor:tag', 'generate:changelog'], () => commitStream('minor') && pushStream());
-gulp.task('bump:major:commit', ['bump:major:tag', 'generate:changelog'], () => commitStream('major') && pushStream());
+gulp.task('bump:patch:commit', () => runSequence('bump:patch:tag', 'generate:changelog', () => commitStream('patch') && pushStream()));
+gulp.task('bump:minor:commit', () => runSequence('bump:minor:tag', 'generate:changelog', () => commitStream('minor') && pushStream()));
+gulp.task('bump:major:commit', () => runSequence('bump:major:tag', 'generate:changelog', () => commitStream('major') && pushStream()));
