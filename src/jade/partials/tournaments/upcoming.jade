@@ -1,0 +1,50 @@
+script(type="text/ng-template", id="/tournaments/upcoming")
+
+  .header-bar(layout="row", hide-sm)
+    div(flex)
+
+    .text-center.md-title(flex)
+      span(ng-show="!ref.public && !hasAccess") Unavailable
+      span(ng-show="ref.public || hasAccess") {{tournamentName}}{{trn.isDone() ? ' (Complete)' : ' (' + matchesLeft() + ' matches left)'}}
+
+    .text-right.auto-vert-margin(flex, layout="row", layout-align="end center")
+      .hide-underline(ng-show="ref.public && hasAccess")
+        md-button.md-fab.md-mini.md-accent.copy-url(data-clipboard-text="{{url}}", aria-label="copy url to clipboard")
+          ng-md-icon(size="20", icon="link", style="fill:white")
+        md-button.md-fab.md-mini.color-facebook(ng-click="share('facebook')", aria-label="share on facebook")
+          ng-md-icon(size="20", icon="facebook", style="fill:white")
+        md-button.md-fab.md-mini.color-twitter(ng-click="share('twitter')", aria-label="share on twitter")
+          ng-md-icon(size="20", icon="twitter", style="fill:white")
+        md-button.md-fab.md-mini.color-google(ng-click="share('google')", aria-label="share on google+")
+          ng-md-icon(size="20", icon="google-plus", style="fill:white")
+
+  .header-bar(layout="row", hide-gt-sm)
+    .text-center.md-title(flex)
+      span(ng-show="!ref.public && !hasAccess") Unavailable
+      span(ng-show="ref.public || hasAccess") {{tournamentName}}{{trn.isDone() ? ' (Complete)' : ' (' + matchesLeft() + ' matches left)'}}
+
+  .abs-position-bottom-right
+
+    md-fab-speed-dial.md-scale(md-direction="up", md-open="isOpen", ng-mouseleave="isOpen = false")
+      md-fab-trigger.align-with-text
+
+        md-button.md-fab.md-primary(aria-label="menu view bracket", ng-click="isOpen = true", ng-mouseenter="isOpen = true")
+          ng-md-icon(size="24", icon="menu", style="fill: white")
+
+      md-fab-actions(ng-if="isOpen")
+        md-button.md-fab.md-raised.md-accent(aria-label="view bracket", ng-click="viewBracket()")
+          ng-md-icon(size="24", icon="call_merge", style="fill: white")
+          md-tooltip(md-direction="left") View bracket
+
+  md-content.duel-area(flex, layout="column", layout-align="start center")
+
+    md-card.upcoming-match(ng-repeat="match in trn.matches | orderBy:isReady:true", upcoming-highlight="isReady(match)", layout-gt-sm="row", layout-sm="column", layout-sm-align="center center", ng-if="!noRender(match) && shouldShow(match)", ng-class="{small: $mdMedia('sm')}")
+      .round-station-container(layout="row", layout-align="start center", flex, flex-offset="10")
+
+        .subhead.match-id.padding-15.text-center(flex-gt-sm="30", flex-sm="50") {{getMatchIdString(match)}}
+        .station.padding-15(flex-gt-sm="70", flex-sm="50", layout="row", layout-align="start center")
+          ng-md-icon(icon="tv", style="fill:{{isReady(match) < 2 ? '#000' : '#fff'}}")
+          span(ng-class="{indeterminate: !getStation(match)}") &nbsp;{{getStation(match) || 'TBD'}}
+      .player-container.padding-15(flex="65", layout="row", layout-wrap)
+        .player.padding-5(flex="50", ng-repeat="player in match.p track by $index")
+          span(ng-class="{indeterminate: match.p[$index] === 0}") {{getName(match.p[$index]-1) || getString(match.id, $index) || '???'}}

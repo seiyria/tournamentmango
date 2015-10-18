@@ -57,6 +57,11 @@ script(type="text/ng-template", id="/tournaments/in-progress")
           md-tooltip(md-direction="left", ng-show="isOpen && trn.isDone()") View results
 
       md-fab-actions(ng-if="isOpen")
+
+        md-button.md-fab.md-raised.md-accent(aria-label="view upcoming", ng-click="viewUpcoming()")
+          ng-md-icon(size="24", icon="dashboard", style="fill: white")
+          md-tooltip(md-direction="left") Upcoming matches
+
         md-button.md-fab.md-raised.md-accent(aria-label="toggle public", ng-click="ref.public = !ref.public; savePublicity()", ng-if="hasAccess")
           ng-md-icon(size="24", icon="{{ref.public ? 'lock' : 'lock_open'}}", style="fill: white")
           md-tooltip(md-direction="left") Make {{ref.public ? 'private' : 'public'}}

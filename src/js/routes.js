@@ -51,5 +51,11 @@ site.config(($stateProvider, $urlRouterProvider) => {
       views: {
         'content@': { templateUrl: '/tournaments/in-progress', controller: 'inProgressController' }
       }
+    })
+    .state('upcomingTournament', {
+      url: '/tournaments/:userId/:setId/:tournamentId/upcoming',
+      views: {
+        'content@': { templateUrl: '/tournaments/upcoming', controller: 'upcomingController' }
+      }
     });
 });

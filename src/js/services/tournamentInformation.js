@@ -7,10 +7,12 @@ site.service('TournamentInformation', () => {
   let idMap = {};
   let badIds = 0;
 
-  const reset = (opts) => {
+  const reset = (trn) => {
     idMap = {};
     badIds = 0;
-    numMatchesPerSection = _.map(new Array(opts.totalSections), () => 0);
+
+    const totalSections = _.max(trn.matches, 'id.s').id.s; // get the highest section
+    numMatchesPerSection = _.map(new Array(totalSections), () => 0);
   };
 
   const toCharacter = (round) => {
@@ -39,6 +41,14 @@ site.service('TournamentInformation', () => {
   const getMatchStationIdString = (match) => {
     return ''+match.id;
   };
+
+  const determineTournament = (options) => {
+    const hash = { singles: Duel, doubles: Duel, groupstage: GroupStage, ffa: FFA , masters: Masters };
+    if(!options.type && options.last) return Duel;
+    return hash[options.type];
+  };
+
+  const matchesLeft = (trn) => trn ? _.reduce(trn.matches, ((prev, m) => prev + (noRender(m) ? 0 : ~~!m.m)), 0) : 0;
 
   const loadTournamentWinnerStrings = (trn) => {
 
@@ -94,12 +104,28 @@ site.service('TournamentInformation', () => {
     return strings;
   };
 
+  const playerName = (user) => {
+    if(!user) return;
+    if(user.alias) return user.alias;
+    return user.name;
+  };
+
+  const getString = (strings, matchId, idx = 0) => {
+    const obj = _.findWhere(strings, { id: matchId });
+    if(!obj) return 'TBD';
+    return obj.strings[idx];
+  };
+
   return {
     loadTournamentWinnerStrings,
+    determineTournament,
     getIdForMatch,
     getMatchIdString,
     getMatchStationIdString,
+    getString,
+    matchesLeft,
     noRender,
+    playerName,
     reset
   };
 });

@@ -9,6 +9,7 @@ import './directives/draw-to';
 import './directives/hover-highlight';
 import './directives/scroll-observe';
 import './directives/station';
+import './directives/upcoming-highlight';
 
 import './services/scoring';
 import './services/userStatus';
@@ -19,7 +20,7 @@ import './services/toaster';
 import './services/filterUtils';
 import './services/auth';
 import './services/shareToken';
-import './services/tournamentInformaton';
+import './services/tournamentInformation';
 
 import './services/currents/currentUsers';
 import './services/currents/currentEvents';
@@ -48,6 +49,7 @@ import './controllers/tournamentSidebarCtrl';
 
 import './controllers/tournaments/notStartedCtrl';
 import './controllers/tournaments/inProgressCtrl';
+import './controllers/tournaments/upcomingCtrl';
 
 import './controllers/dialogs/userDialogCtrl';
 import './controllers/dialogs/eventDialogCtrl';

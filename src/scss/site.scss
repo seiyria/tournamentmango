@@ -10,6 +10,14 @@
   height: $height;
 }
 
+$duel-bg: #eee;
+$card-border: 1px solid #eee;
+
+$round-column-width: 340px;
+$match-column-width: 130px;
+
+$player-not-ready: #c76e06;
+
 .hidden {
   visibility: hidden;
 }
@@ -25,9 +33,6 @@
 .almost-max-height {
   height: 85%;
 }
-
-$round-column-width: 340px;
-$match-column-width: 130px;
 
 .subhead {
   font-size: 14px;
@@ -82,9 +87,6 @@ station {
 .pull-right { float: right; }
 .pull-left { float: left; }
 
-$duel-bg: #eee;
-$card-border: 1px solid #eee;
-
 .pointer {
   cursor: pointer;
 }
@@ -96,6 +98,49 @@ $card-border: 1px solid #eee;
 
 .hide-underline a {
   text-decoration: none;
+}
+
+.upcoming-match {
+
+  &:not(.small) {
+    @include all-widths(600px);
+
+    .player-container {
+      border-left: $card-border;
+    }
+  }
+
+  &.small {
+    width: 100%;
+
+    .round-station-container {
+      border-bottom: $card-border;
+    }
+
+    .match-id {
+      text-align: right;
+    }
+
+    .player {
+      text-align: center;
+    }
+  }
+
+  .station {
+    border-left: $card-border;
+    .indeterminate {
+      font-style: italic;
+    }
+  }
+
+  .player-container {
+    .player {
+      .indeterminate {
+        font-style: italic;
+        color: $player-not-ready
+      }
+    }
+  }
 }
 
 .duel-area {
@@ -116,7 +161,7 @@ $card-border: 1px solid #eee;
       min-height: 57px;
 
       &.unplayable {
-        color: #c76e06;
+        color: $player-not-ready;
       }
 
       &.complete {

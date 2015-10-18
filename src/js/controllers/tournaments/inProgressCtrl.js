@@ -23,6 +23,7 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
     });
   }
 
+  $scope.strings = [];
   $timeout(() => $scope.url = window.location.href, 0);
   $scope.includedTemplate = 'duel';
 
@@ -41,12 +42,6 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
   const determineTemplate = (options) => {
     const hash = { singles: 'duel', doubles: 'duel', groupstage: 'groupstage', ffa: 'ffa', masters: 'masters' };
     if(!options.type && options.last) return 'duel';
-    return hash[options.type];
-  };
-
-  const determineTournament = (options) => {
-    const hash = { singles: Duel, doubles: Duel, groupstage: GroupStage, ffa: FFA , masters: Masters };
-    if(!options.type && options.last) return Duel;
     return hash[options.type];
   };
 
@@ -69,14 +64,15 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
 
   $scope.loadTournament = (ref, makeNew = false) => {
     $scope.tournamentName = $scope.ref.name;
-    $scope.includedTemplate = determineTemplate(ref.options);
 
     $scope.bucket = ref.players;
 
     const oldScores = _.cloneDeep(ref.trn);
-    const tournamentProto = determineTournament(ref.options);
+    const tournamentProto = TournamentInformation.determineTournament(ref.options);
 
     $scope.trn = ref.trn && !makeNew ? tournamentProto.restore($scope.bucket.length, ref.options, ref.trn) : new tournamentProto($scope.bucket.length, ref.options);
+
+    $scope.includedTemplate = determineTemplate(ref.options);
 
     if(ref.trn && !makeNew) {
       _.each(oldScores, match => {
@@ -87,13 +83,7 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
     }
   };
 
-  $scope.strings = [];
-  $scope.getString = (matchId, idx = 0) => {
-    const obj = _.findWhere($scope.strings, { id: matchId });
-    if(!obj) return 'TBD';
-    return obj.strings[idx];
-  };
-
+  $scope.getString = (id, idx) => TournamentInformation.getString($scope.strings, id, idx);
   $scope.getMatchIdString = TournamentInformation.getMatchIdString;
   $scope.getMatchStationIdString = TournamentInformation.getMatchStationIdString;
   $scope.noRender = TournamentInformation.noRender;
@@ -122,9 +112,9 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
     $scope.ref.$save();
   };
 
-  $scope.changeOptions = () => {
-    $state.go('setupTournament', { tournamentId: $scope.ref.$id });
-  };
+  $scope.viewUpcoming = () => $state.go('upcomingTournament', $stateParams);
+
+  $scope.changeOptions = () => $state.go('setupTournament', { tournamentId: $scope.ref.$id });
 
   $scope.ref.$watch(() => $scope.loadTournament($scope.ref));
 
@@ -132,23 +122,17 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
     $scope.loadTournament($scope.ref);
 
     const horizMatches = _.max($scope.trn.matches, 'id.r').id.r; // these start at 1 I guess.
-    const totalSections = _.max($scope.trn.matches, 'id.s').id.s; // get the highest section
 
-    TournamentInformation.reset({ totalSections });
+    TournamentInformation.reset($scope.trn);
 
     $scope.maxMatches = new Array(horizMatches);
     $scope.nextMatch = (match) => $scope.trn.right(match);
 
-    $scope.matchesLeft = () => _.reduce($scope.trn.matches, ((prev, m) => prev + ($scope.noRender(m) ? 0 : ~~!m.m)), 0);
+    $scope.matchesLeft = () => TournamentInformation.matchesLeft($scope.trn);
 
     $scope.getIdForMatch = TournamentInformation.getIdForMatch;
 
-    $scope.getName = (idx) => {
-      const user = $scope.bucket[idx];
-      if(!user) return;
-      if(user.alias) return user.alias;
-      return user.name;
-    };
+    $scope.getName = (idx) => TournamentInformation.playerName($scope.bucket[idx]);
 
     $scope.invalidMatch = (match) => !$scope.trn.isPlayable(match);
     $scope.scoresEqual = (match) => {
