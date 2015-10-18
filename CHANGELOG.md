@@ -1,6 +1,29 @@
-<a name="0.4.3"></a>
-## [0.4.3](https://github.com/seiyria/openchallenge/compare/0.4.4...v0.4.3) (2015-10-14)
+<a name="0.5.0"></a>
+# [0.5.0](https://github.com/seiyria/openchallenge/compare/0.5.0...v0.5.0) (2015-10-18)
 
+
+### Bug Fixes
+
+* **tournament:** changing options won't break tournaments ([2e9c0c9](https://github.com/seiyria/openchallenge/commit/2e9c0c9))
+* **tournamentPrep:** rounding score in player display ([85fb8c1](https://github.com/seiyria/openchallenge/commit/85fb8c1))
+* **tournaments:** bring back some backwards compatibility ([0e65287](https://github.com/seiyria/openchallenge/commit/0e65287))
+* **tournaments:** hide tournament menu when tournament is unavailable ([6ff8b71](https://github.com/seiyria/openchallenge/commit/6ff8b71))
+* **tournaments:** it is always possible to change between all possible tournament configs now ([a81acd7](https://github.com/seiyria/openchallenge/commit/a81acd7))
+* **tournaments:** social icons have appropriate colors ([ed48cfa](https://github.com/seiyria/openchallenge/commit/ed48cfa)), closes [#68](https://github.com/seiyria/openchallenge/issues/68)
+* **userManager:** player bucket no longer clears when adding a new player ([e43b7eb](https://github.com/seiyria/openchallenge/commit/e43b7eb)), closes [#61](https://github.com/seiyria/openchallenge/issues/61)
+
+### Features
+
+* **tournaments:** can now assign station numbers to tournament rounds ([7ec6380](https://github.com/seiyria/openchallenge/commit/7ec6380)), closes [#60](https://github.com/seiyria/openchallenge/issues/60)
+* **tournaments:** there is now an upcoming matches view ([9de9c1f](https://github.com/seiyria/openchallenge/commit/9de9c1f)), closes [#62](https://github.com/seiyria/openchallenge/issues/62)
+* **tournaments:** tournaments with no scores can be reconfigured ([06849c8](https://github.com/seiyria/openchallenge/commit/06849c8)), closes [#48](https://github.com/seiyria/openchallenge/issues/48)
+* **tournaments:** when editing the options for a tournament, you can now add your player bucket ([0858626](https://github.com/seiyria/openchallenge/commit/0858626)), closes [#65](https://github.com/seiyria/openchallenge/issues/65)
+* **userManager:** selected users can now be exported between sets ([74f0a3c](https://github.com/seiyria/openchallenge/commit/74f0a3c)), closes [#46](https://github.com/seiyria/openchallenge/issues/46)
+
+
+### BREAKING CHANGES
+
+* tournaments: Some old tournaments may be broken.
 
 
 
