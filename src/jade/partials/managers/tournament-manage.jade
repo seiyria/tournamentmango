@@ -61,7 +61,7 @@ script(type="text/ng-template", id="/tournament-manage")
             td(ng-if="tournament.status !== tStatus.NOT_STARTED")
               md-button.md-raised.md-accent(aria-label="view tournament", ng-click="seeTournament(tournament.$id)") View
 
-    md-data-table-pagination(md-row-select="[10, 25, 50]", md-limit="datatable.limit", md-page="datatable.page", md-total="{{users.length}}", md-trigger="getUsers")
+    md-data-table-pagination(md-row-select="[10, 25, 50]", md-limit="datatable.limit", md-page="datatable.page", md-total="{{tournaments.length}}", md-trigger="getTournaments")
 
   .abs-position-bottom-right
     md-fab-speed-dial.md-scale(md-direction="up", md-open="isOpen", ng-mouseleave="isOpen = false")
