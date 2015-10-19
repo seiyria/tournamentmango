@@ -1,7 +1,7 @@
 
 script(type="text/ng-template", id="navbar")
   .md-toolbar-tools
-    md-button(hide-gt-sm, ng-if="sidebar.hasSidebar", ng-click="toggleList()", aria-label="Toggle Menu")
+    md-button.md-icon-button(hide-gt-sm, ng-if="sidebar.hasSidebar", ng-click="toggleList()", aria-label="Toggle Menu")
       ng-md-icon(icon="menu", style="fill: white")
         md-tooltip Open Navigation
     h1
