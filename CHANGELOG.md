@@ -1,6 +1,20 @@
-<a name="0.6.1"></a>
-## [0.6.1](https://github.com/seiyria/openchallenge/compare/0.6.1...v0.6.1) (2015-10-18)
+<a name="0.6.2"></a>
+## [0.6.2](https://github.com/seiyria/openchallenge/compare/0.6.2...v0.6.2) (2015-10-19)
 
+
+
+
+<a name="0.6.2"></a>
+## [0.6.2](https://github.com/seiyria/openchallenge/compare/0.6.1...0.6.2) (2015-10-19)
+
+
+### Bug Fixes
+
+* **consistency:** all pages alert you if you do not own the player set now ([916ab22](https://github.com/seiyria/openchallenge/commit/916ab22))
+* **homePage:** blocks should be more normal sized ([a49517c](https://github.com/seiyria/openchallenge/commit/a49517c))
+* **navigation:** the menu button is no longer a giant hitbox ([202c4e8](https://github.com/seiyria/openchallenge/commit/202c4e8))
+* **tournamentManager:** you can now see page 2 of tournaments ([728ed61](https://github.com/seiyria/openchallenge/commit/728ed61))
+* **tournaments:** the station and round number are now separate again ([2d3af71](https://github.com/seiyria/openchallenge/commit/2d3af71))
 
 
 
