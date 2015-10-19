@@ -26,14 +26,29 @@
     <script src="./js/main.min.js"></script>
   </body>
 </html>
+<script type="text/ng-template" id="score">
+  <div ng-click="edit()" ng-if="!editing" class="score-value text-center">{{getValue()}}</div>
+  <div ng-if="editing">
+    <input type="number" ng-model="editStuff.value" ng-blur="unedit()" ng-keydown="watchKeyPresses($event)" ng-max="{{maxScore}}" class="score-input hide-spinner"/>
+  </div>
+</script>
+<script type="text/ng-template" id="station">
+  <div ng-click="edit()" ng-if="!editing &amp;&amp; !editStuff.value" ng-class="{'clickable': canClick}" class="station pointer text-center unentered">
+    <ng-md-icon size="16" icon="tv"></ng-md-icon>
+  </div>
+  <div ng-click="edit()" ng-if="!editing &amp;&amp; editStuff.value" class="station text-center entered">{{editStuff.value}}</div>
+  <div ng-if="editing">
+    <input ng-model="editStuff.value" ng-blur="unedit()" ng-keydown="watchKeyPresses($event)" maxlength="6" class="station-input"/>
+  </div>
+</script>
 <script type="text/ng-template" id="/home">
-  <div layout="row" flex="flex">
+  <div layout="row" flex="10">
     <div flex="flex">
       <div class="text-center padding-top-20">OpenChallenge is a great way to manage your tournaments. It supports many features.</div>
     </div>
   </div>
   <div layout-gt-sm="row" layout="column" flex="flex" class="text-center">
-    <div flex-gt-sm="33" flex-sm="100" ng-repeat="block in blocks" class="text-center padding-50"><a ng-if="block.link" ng-href="{{block.link}}" target="_blank">
+    <div flex-gt-sm="33" flex-sm="40" ng-repeat="block in blocks" class="text-center padding-50"><a ng-if="block.link" ng-href="{{block.link}}" target="_blank">
         <ng-md-icon icon="{{block.icon}}" size="100"></ng-md-icon></a>
       <ng-md-icon icon="{{block.icon}}" size="100" ng-if="!block.link"></ng-md-icon>
       <div class="md-title">{{block.name}}</div>
@@ -43,7 +58,7 @@
 </script>
 <script type="text/ng-template" id="navbar">
   <div class="md-toolbar-tools">
-    <md-button hide-gt-sm="hide-gt-sm" ng-if="sidebar.hasSidebar" ng-click="toggleList()" aria-label="Toggle Menu">
+    <md-button hide-gt-sm="hide-gt-sm" ng-if="sidebar.hasSidebar" ng-click="toggleList()" aria-label="Toggle Menu" class="md-icon-button">
       <ng-md-icon icon="menu" style="fill: white">
         <md-tooltip>Open Navigation</md-tooltip>
       </ng-md-icon>
@@ -172,19 +187,543 @@
     </md-list>
   </md-card>
 </script>
-<script type="text/ng-template" id="score">
-  <div ng-click="edit()" ng-if="!editing" class="score-value text-center">{{getValue()}}</div>
-  <div ng-if="editing">
-    <input type="number" ng-model="editStuff.value" ng-blur="unedit()" ng-keydown="watchKeyPresses($event)" ng-max="{{maxScore}}" class="score-input hide-spinner"/>
+<script type="text/ng-template" id="/dialog/addevent">
+  <md-dialog>
+    <md-dialog-content>
+      <h2 class="md-title">{{label}} Event</h2>
+      <p ng-if="item.form.$submitted &amp;&amp; item.form.$invalid" layout="row" layout-align="start center" class="md-warn">
+        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
+      </p>
+      <form name="item.form" ng-submit="addItem()">
+        <div layout-gt-sm="row" layout-sm="column" class="input-row">
+          <md-input-container flex="flex">
+            <label>Name</label>
+            <input name="name" ng-model="item.name" md-maxlength="30" required="required"/>
+          </md-input-container>
+          <md-autocomplete flex="flex" required="required" md-input-name="location" md-selected-item="selectedlocation" md-floating-label="Location" md-search-text="item.location" md-items="place in getLocations(item.location)" md-item-text="place" md-input-maxlength="30">
+            <md-item-template><span md-highlight-text="searchText">{{place}}</span></md-item-template>
+            <md-not-found>No matches.</md-not-found>
+          </md-autocomplete>
+        </div>
+        <h3 class="md-subhead subhead">When</h3>
+        <div layout="row" class="input-row">
+          <md-datepicker ng-model="item.date" md-placeholder="Enter date" required="required" style="margin-top: 14px"></md-datepicker>
+          <md-input-container flex="flex">
+            <label>Time</label>
+            <input name="time" type="time" ng-model="item.date"/>
+          </md-input-container>
+        </div>
+        <h3 class="md-subhead subhead">Extra</h3>
+        <div layout="row" class="input-row">
+          <md-input-container flex="flex">
+            <label>Description</label>
+            <textarea name="description" ng-model="item.description" md-maxlength="200"></textarea>
+          </md-input-container>
+        </div>
+      </form>
+    </md-dialog-content>
+    <div class="md-actions">
+      <md-button ng-click="addItem()" ng-disabled="item.form.$invalid" aria-label="submit" class="md-primary">{{label}} Event</md-button>
+      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
+    </div>
+  </md-dialog>
+</script>
+<script type="text/ng-template" id="/dialog/addtournament">
+  <md-dialog>
+    <md-dialog-content>
+      <h2 class="md-title">{{label}} Tournament</h2>
+      <p ng-if="item.form.$submitted &amp;&amp; item.form.$invalid" layout="row" layout-align="start center" class="md-warn">
+        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
+      </p>
+      <form name="item.form" ng-submit="addItem()">
+        <div layout="row" class="input-row">
+          <md-input-container flex="flex">
+            <label>Name</label>
+            <input name="name" ng-model="item.name" md-maxlength="30" required="required"/>
+          </md-input-container>
+        </div>
+        <div layout="row" class="input-row">
+          <md-input-container flex="flex">
+            <label>Event</label>
+            <md-select ng-model="item.event">
+              <md-option ng-repeat="event in allEvents" value="{{event.$id}}">{{event.name}}</md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+        <div layout="row" class="input-row">
+          <md-autocomplete flex="flex" required="required" md-input-name="game" md-selected-item="selectedGame" md-floating-label="Game" md-search-text="item.game" md-items="game in getGames(item.game)" md-item-text="game" md-input-maxlength="30">
+            <md-item-template><span md-highlight-text="searchText">{{game}}</span></md-item-template>
+            <md-not-found>No matches.</md-not-found>
+          </md-autocomplete>
+        </div>
+      </form>
+    </md-dialog-content>
+    <div class="md-actions">
+      <md-button ng-click="addItem()" ng-disabled="item.form.$invalid" aria-label="submit" class="md-primary">{{label}} Tournament</md-button>
+      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
+    </div>
+  </md-dialog>
+</script>
+<script type="text/ng-template" id="/dialog/adduser">
+  <md-dialog>
+    <md-dialog-content>
+      <h2 ng-if="!viewOnly" class="md-title">{{label}} Player</h2>
+      <h2 ng-if="viewOnly" class="md-title">{{item.name}} {{item.location ? 'from ' + item.location : ''}}</h2>
+      <p ng-if="item.form.$submitted &amp;&amp; item.form.$invalid" layout="row" layout-align="start center" class="md-warn">
+        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
+      </p>
+      <form name="item.form" ng-submit="addItem()">
+        <div layout-gt-sm="row" layout-sm="column" ng-if="!viewOnly" class="input-row">
+          <md-input-container flex="flex">
+            <label>Name</label>
+            <input name="name" ng-model="item.name" md-maxlength="30" required="required"/>
+          </md-input-container>
+          <md-autocomplete flex="flex" md-input-name="location" md-selected-item="selectedlocation" md-floating-label="Location" md-search-text="item.location" md-items="place in getLocations(item.location)" md-item-text="place" md-input-maxlength="30">
+            <md-item-template><span md-highlight-text="searchText">{{place}}</span></md-item-template>
+            <md-not-found>No matches.</md-not-found>
+          </md-autocomplete>
+        </div>
+        <h3 class="md-subhead subhead">Aliases</h3>
+        <div layout="row" class="input-row">
+          <md-chips ng-model="item.aliases" secondary-placeholder="Add aliases" placeholder="+Alias" required="required" readonly="viewOnly"><span md-highlight-text="searchText">{{item}}</span></md-chips>
+          <md-chip ng-if="item.aliases.length === 0 &amp;&amp; viewOnly">None</md-chip>
+        </div>
+        <h3 class="md-subhead subhead">Games Played</h3>
+        <div layout="row" class="input-row">
+          <md-chips ng-model="item.games" secondary-placeholder="Add games" placeholder="+Game" required="required" md-autocomplete-snap="md-autocomplete-snap" readonly="viewOnly">
+            <md-autocomplete md-selected-item="selectedItem" md-search-text="searchText" md-items="item in getGames(searchText)" md-item-text="item" placeholder="+Game"><span md-highlight-text="searchText">{{item}}</span></md-autocomplete>
+          </md-chips>
+          <md-chip ng-if="item.games.length === 0 &amp;&amp; viewOnly">None</md-chip>
+        </div>
+        <h3 class="md-subhead subhead">Characters Used</h3>
+        <div layout="row" class="input-row">
+          <md-chips ng-model="item.characters" secondary-placeholder="Add characters" placeholder="+Character" required="required" md-autocomplete-snap="md-autocomplete-snap" readonly="viewOnly">
+            <md-autocomplete md-selected-item="selectedItem" md-search-text="searchText" md-items="item in getCharacters(searchText)" md-item-text="item" placeholder="+Character"><span md-highlight-text="searchText">{{item}}</span></md-autocomplete>
+          </md-chips>
+          <md-chip ng-if="item.characters.length === 0 &amp;&amp; viewOnly">None</md-chip>
+        </div>
+      </form>
+    </md-dialog-content>
+    <div ng-if="!viewOnly" class="md-actions">
+      <md-button ng-click="addItem()" ng-disabled="item.form.$invalid" aria-label="submit" class="md-primary">{{label}} Player</md-button>
+      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
+    </div>
+    <div ng-if="viewOnly" class="md-actions">
+      <md-button ng-click="cancel()" aria-label="close" class="md-primary">Close</md-button>
+    </div>
+  </md-dialog>
+</script>
+<script type="text/ng-template" id="/dialog/input-prompt">
+  <md-dialog>
+    <md-dialog-content>
+      <h2 class="md-title">{{title}}</h2>
+      <p ng-if="form.$submitted &amp;&amp; form.$invalid" layout="row" layout-align="start center" class="md-warn">
+        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
+      </p>
+      <p ng-if="!isValid()" layout="row" layout-align="start center" class="md-warn">
+        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;Set name taken.</span>
+      </p>
+      <form name="form" ng-submit="submit()">
+        <div layout="row" class="input-row">
+          <md-input-container flex="flex">
+            <label>{{label}}</label>
+            <input name="string" ng-model="string" md-maxlength="30" required="required"/>
+          </md-input-container>
+        </div>
+      </form>
+    </md-dialog-content>
+    <div class="md-actions">
+      <md-button ng-click="submit()" ng-disabled="form.$invalid || !isValid()" aria-label="submit" class="md-primary">Submit</md-button>
+      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
+    </div>
+  </md-dialog>
+</script>
+<script type="text/ng-template" id="/dialog/results">
+  <md-dialog>
+    <md-dialog-content>
+      <h2 class="md-title">Results for {{tournamentName}}</h2>
+      <md-list>
+        <md-list-item ng-repeat="result in results" class="md-2-line">
+          <div class="md-avatar subhead">{{toOrdinal(result.pos)}}</div>
+          <div class="md-list-item-text">
+            <h3>{{nameString(result.seed)}}</h3>
+            <p>Wins: {{result.wins}}, Total Points Scored: {{result.for}}</p>
+          </div>
+        </md-list-item>
+      </md-list>
+    </md-dialog-content>
+    <div class="md-actions">
+      <md-button ng-click="cancel()" aria-label="close" class="md-primary">Close</md-button>
+    </div>
+  </md-dialog>
+</script>
+<script type="text/ng-template" id="/dialog/select-prompt">
+  <md-dialog>
+    <md-dialog-content>
+      <h2 class="md-title">{{title}}</h2>
+      <p ng-if="form.$submitted &amp;&amp; form.$invalid" layout="row" layout-align="start center" class="md-warn">
+        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
+      </p>
+      <form name="form" ng-submit="submit()">
+        <div layout="row" class="input-row">
+          <md-input-container flex="flex">
+            <label>{{label}}</label>
+            <md-select ng-model="string" required="required">
+              <md-optgroup ng-repeat="group in groups" label="{{group}}">
+                <md-option ng-repeat="value in selectableValues | filter:{group:group}" value="{{value}}">{{value.realName}}</md-option>
+              </md-optgroup>
+            </md-select>
+          </md-input-container>
+        </div>
+      </form>
+    </md-dialog-content>
+    <div class="md-actions">
+      <md-button ng-click="submit()" ng-disabled="form.$invalid" aria-label="submit" class="md-primary">Submit</md-button>
+      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
+    </div>
+  </md-dialog>
+</script>
+<script type="text/ng-template" id="/dialog/share-prompt">
+  <md-dialog>
+    <md-dialog-content>
+      <h2 class="md-title">Share "{{title}}"</h2>
+      <form name="form" ng-submit="submit()">
+        <div layout="row" class="input-row">
+          <md-chips flex="flex" ng-model="sharedWith" secondary-placeholder="Share with users" placeholder="+User" md-require-match="true" md-autocomplete-snap="md-autocomplete-snap">
+            <md-autocomplete flex="flex" required="required" md-selected-item="sharedwith" md-search-text="searchKey" md-items="user in getUser(searchKey)" md-item-text="user.name">
+              <md-item-template><span>{{user.name}}</span></md-item-template>
+              <md-not-found>No matches.</md-not-found>
+            </md-autocomplete>
+            <md-chip-template><span>{{$chip.name}}</span></md-chip-template>
+          </md-chips>
+        </div>
+      </form>
+    </md-dialog-content>
+    <div class="md-actions">
+      <md-button ng-click="submit()" aria-label="submit" class="md-primary">Submit</md-button>
+      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
+    </div>
+  </md-dialog>
+</script>
+<script type="text/ng-template" id="/event-manage">
+  <md-card>
+    <md-data-table-toolbar ng-hide="selected.length || filter.show">
+      <h2 class="md-title">
+        <ng-md-icon size="24" icon="warning" ng-if="!isMine">
+          <md-tooltip>This set was not made by you</md-tooltip>
+        </ng-md-icon>Event Management {{showArchived ? '(archived)' : ''}}
+      </h2>
+      <div flex="flex"></div>
+      <md-button ng-click="filter.show = true" aria-label="search" class="md-icon-button">
+        <ng-md-icon icon="search" size="24">
+          <md-tooltip>Search for events</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+      <md-button ng-click="addItem($event)" aria-label="add event" class="md-icon-button">
+        <ng-md-icon icon="note_add" size="24">
+          <md-tooltip>Add new event</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+    </md-data-table-toolbar>
+    <md-data-table-toolbar ng-show="filter.show &amp;&amp; !selected.length">
+      <ng-md-icon icon="search" size="24"></ng-md-icon>
+      <form flex="flex" name="filter.form">
+        <input type="text" ng-model="datatable.filter" ng-model-options="filter.options" placeholder="Search..."/>
+      </form>
+      <md-button ng-click="hideSearch()" aria-label="hide search" class="md-icon-button">
+        <ng-md-icon icon="close">
+          <md-tooltip>Close search</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+    </md-data-table-toolbar>
+    <md-data-table-toolbar ng-show="selected.length">
+      <div>{{selected.length}} {{selected.length > 1 ? 'events' : 'event'}} selected</div>
+      <div flex="flex"></div>
+      <md-button ng-if="selected.length == 1" ng-click="editItem($event)" aria-label="edit event" class="md-icon-button">
+        <ng-md-icon icon="edit">
+          <md-tooltip>Edit tournament</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+      <md-button ng-click="archiveItem($event)" aria-label="archive events" class="md-icon-button">
+        <ng-md-icon icon="archive">
+          <md-tooltip>Archive event</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+      <md-button ng-click="removeItem($event)" aria-label="remove events" class="md-icon-button">
+        <ng-md-icon icon="delete">
+          <md-tooltip>Remove event</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+    </md-data-table-toolbar>
+    <md-data-table-container>
+      <table md-data-table="md-data-table" md-row-select="selected">
+        <thead md-order="datatable.order" md-trigger="getEvents">
+          <tr>
+            <th name="Name" order-by="name"></th>
+            <th name="Description" order-by="description"></th>
+            <th name="Location" order-by="location"></th>
+            <th name="Date" order-by="date" style="width: 170px"></th>
+            <th name="Time" style="width: 100px"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr md-auto-select="md-auto-select" ng-repeat="event in visibleEvents">
+            <td>{{event.name}}</td>
+            <td ng-class="{empty: !event.description}">{{event.description}}</td>
+            <td>{{event.location}}</td>
+            <td>{{event.date | date:'fullDate'}}</td>
+            <td>{{event.date | date:'shortTime'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </md-data-table-container>
+    <md-data-table-pagination md-row-select="[10, 25, 50]" md-limit="datatable.limit" md-page="datatable.page" md-total="{{events.length}}" md-trigger="getEvents"></md-data-table-pagination>
+  </md-card>
+  <div class="abs-position-bottom-right">
+    <md-fab-speed-dial md-direction="up" md-open="isOpen" ng-mouseleave="isOpen = false" class="md-scale">
+      <md-fab-trigger class="align-with-text">
+        <md-button aria-label="menu" ng-click="isOpen = true" ng-mouseenter="isOpen = true" class="md-fab md-primary">
+          <ng-md-icon size="24" icon="menu" style="fill: white"></ng-md-icon>
+        </md-button>
+      </md-fab-trigger>
+      <md-fab-actions ng-if="isOpen">
+        <md-button aria-label="toggle archived" ng-click="toggleShowArchived()" class="md-fab md-raised md-accent md-hue-1">
+          <ng-md-icon size="24" icon="archive" style="fill: white"></ng-md-icon>
+          <md-tooltip md-direction="left">{{showArchived ? 'Hide' : 'Show'}} archived events</md-tooltip>
+        </md-button>
+      </md-fab-actions>
+    </md-fab-speed-dial>
   </div>
 </script>
-<script type="text/ng-template" id="station">
-  <div ng-click="edit()" ng-if="!editing &amp;&amp; !editStuff.value" ng-class="{'clickable': canClick}" class="station pointer text-center unentered">
-    <ng-md-icon size="16" icon="tv"></ng-md-icon>
+<script type="text/ng-template" id="/tournament-manage">
+  <md-card>
+    <md-data-table-toolbar ng-hide="selected.length || filter.show">
+      <h2 class="md-title">
+        <ng-md-icon size="24" icon="warning" ng-if="!isMine">
+          <md-tooltip>This set was not made by you</md-tooltip>
+        </ng-md-icon>Tournament Management {{showArchived ? '(archived)' : ''}}
+      </h2>
+      <div flex="flex"></div>
+      <md-button ng-click="filter.show = true" aria-label="search" class="md-icon-button">
+        <ng-md-icon icon="search" size="24">
+          <md-tooltip>Search for tournaments</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+      <md-button ng-click="addItem($event)" aria-label="add tournament" class="md-icon-button">
+        <ng-md-icon icon="playlist_add" size="24">
+          <md-tooltip>Add new tournament</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+    </md-data-table-toolbar>
+    <md-data-table-toolbar ng-show="filter.show &amp;&amp; !selected.length">
+      <ng-md-icon icon="search" size="24"></ng-md-icon>
+      <form flex="flex" name="filter.form">
+        <input type="text" ng-model="datatable.filter" ng-model-options="filter.options" placeholder="Search..."/>
+      </form>
+      <md-button ng-click="hideSearch()" aria-label="hide search" class="md-icon-button">
+        <ng-md-icon icon="close">
+          <md-tooltip>Close search</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+    </md-data-table-toolbar>
+    <md-data-table-toolbar ng-show="selected.length">
+      <div>{{selected.length}} {{selected.length > 1 ? 'tournaments' : 'tournament'}} selected</div>
+      <div flex="flex"></div>
+      <md-button ng-if="selected.length == 1" ng-click="editItem($event)" aria-label="edit tournament" class="md-icon-button">
+        <ng-md-icon icon="edit">
+          <md-tooltip>Edit tournament</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+      <md-button ng-click="archiveItem($event)" aria-label="archive tournaments" class="md-icon-button">
+        <ng-md-icon icon="archive">
+          <md-tooltip>Archive tournament</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+      <md-button ng-click="removeItem($event)" aria-label="remove tournaments" class="md-icon-button">
+        <ng-md-icon icon="delete">
+          <md-tooltip>Remove tournament</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+    </md-data-table-toolbar>
+    <md-data-table-container>
+      <table md-data-table="md-data-table" md-row-select="selected">
+        <thead md-order="datatable.order" md-trigger="getTournaments">
+          <tr>
+            <th name="Name" order-by="name"></th>
+            <th name="Game" order-by="game"></th>
+            <th name="Event"></th>
+            <th name="Status" order-by="status"></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr md-auto-select="md-auto-select" ng-repeat="tournament in visibleTournaments">
+            <td>{{tournament.name}}</td>
+            <td>{{tournament.game}}</td>
+            <td ng-class="{empty: !tournamentName(tournament.event)}">{{tournamentName(tournament.event)}}</td>
+            <td>{{tournament.status}}</td>
+            <td ng-if="tournament.status === tStatus.NOT_STARTED">
+              <md-button aria-label="start tournament" ng-disabled="playersAvailable &lt; 2" ng-click="startTournament(tournament.$id)" class="md-raised md-primary">Start
+                <md-tooltip ng-if="playersAvailable &lt; 2" md-direction="left">You need more players to start a tournament</md-tooltip>
+              </md-button>
+            </td>
+            <td ng-if="tournament.status !== tStatus.NOT_STARTED">
+              <md-button aria-label="view tournament" ng-click="seeTournament(tournament.$id)" class="md-raised md-accent">View</md-button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </md-data-table-container>
+    <md-data-table-pagination md-row-select="[10, 25, 50]" md-limit="datatable.limit" md-page="datatable.page" md-total="{{tournaments.length}}" md-trigger="getTournaments"></md-data-table-pagination>
+  </md-card>
+  <div class="abs-position-bottom-right">
+    <md-fab-speed-dial md-direction="up" md-open="isOpen" ng-mouseleave="isOpen = false" class="md-scale">
+      <md-fab-trigger class="align-with-text">
+        <md-button aria-label="menu" ng-click="isOpen = true" ng-mouseenter="isOpen = true" class="md-fab md-primary">
+          <ng-md-icon size="24" icon="menu" style="fill: white"></ng-md-icon>
+        </md-button>
+      </md-fab-trigger>
+      <md-fab-actions ng-if="isOpen">
+        <md-button aria-label="toggle archived" ng-click="toggleShowArchived()" class="md-fab md-raised md-accent md-hue-1">
+          <ng-md-icon size="24" icon="archive" style="fill: white"></ng-md-icon>
+          <md-tooltip md-direction="left">{{showArchived ? 'Hide' : 'Show'}} archived tournaments</md-tooltip>
+        </md-button>
+      </md-fab-actions>
+    </md-fab-speed-dial>
   </div>
-  <div ng-click="edit()" ng-if="!editing &amp;&amp; editStuff.value" class="station text-center entered">{{editStuff.value}}</div>
-  <div ng-if="editing">
-    <input ng-model="editStuff.value" ng-blur="unedit()" ng-keydown="watchKeyPresses($event)" maxlength="6" class="station-input"/>
+</script>
+<script type="text/ng-template" id="/user-manage">
+  <md-card ng-if="anyCompletedTournaments()" layout-gt-sm="row" layout-sm="column">
+    <h2 class="md-title margin-left-25">Scoring</h2>
+    <div flex="5" hide-sm="hide-sm"></div>
+    <md-input-container>
+      <label>Game</label>
+      <md-select ng-model="userData.firebase.scoreGame" ng-change="saveFirebase()">
+        <md-option ng-repeat="tournament in allTournamentGames()" value="{{tournament.game}}">{{tournament.game}}</md-option>
+      </md-select>
+    </md-input-container>
+    <div flex="5" hide-sm="hide-sm"></div>
+    <md-input-container>
+      <label>Score Function</label>
+      <md-select ng-model="userData.firebase.scoreFunc" ng-change="saveFirebase()">
+        <md-option value="simple">Simple (Win-Loss)</md-option>
+        <md-option value="ell">ELL</md-option>
+      </md-select>
+    </md-input-container>
+    <md-button ng-click="recalculateScore()" ng-disabled="calculating" class="md-warn">Force Recalculate</md-button>
+    <div flex="flex" hide-sm="hide-sm"></div>
+    <ng-md-icon icon="refresh" ng-if="calculating" class="auto-vert-margin margin-right-25 spin">
+      <md-tooltip>Recalculating scores...</md-tooltip>
+    </ng-md-icon>
+  </md-card>
+  <md-card>
+    <md-data-table-toolbar ng-hide="selected.length || filter.show">
+      <h2 class="md-title">
+        <ng-md-icon size="24" icon="warning" ng-if="!isMine">
+          <md-tooltip>This set was not made by you</md-tooltip>
+        </ng-md-icon>&nbsp;Player Management ({{setObject.realName || 'none'}})
+      </h2>
+      <div flex="flex"></div>
+      <md-button ng-click="filter.show = true" aria-label="search" class="md-icon-button">
+        <ng-md-icon icon="search" size="24">
+          <md-tooltip>Search for players</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+      <md-button ng-click="addItem($event)" aria-label="add user" class="md-icon-button">
+        <ng-md-icon icon="person_add" size="24">
+          <md-tooltip>Add new player</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+    </md-data-table-toolbar>
+    <md-data-table-toolbar ng-show="filter.show &amp;&amp; !selected.length">
+      <ng-md-icon icon="search" size="24"></ng-md-icon>
+      <form flex="flex" name="filter.form">
+        <input type="text" ng-model="datatable.filter" ng-model-options="filter.options" placeholder="Search..."/>
+      </form>
+      <md-button ng-click="hideSearch()" aria-label="hide search" class="md-icon-button">
+        <ng-md-icon icon="close">
+          <md-tooltip>Close search</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+    </md-data-table-toolbar>
+    <md-data-table-toolbar ng-show="selected.length">
+      <div>{{selected.length}} {{selected.length > 1 ? 'people' : 'person'}} selected</div>
+      <div flex="flex"></div>
+      <md-button ng-click="addToPlayerBucket()" aria-label="add to player bucket" class="md-icon-button">
+        <ng-md-icon icon="group_add">
+          <md-tooltip>Add to player bucket</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+      <md-button ng-if="selected.length == 1" ng-click="editItem($event)" aria-label="edit user" class="md-icon-button">
+        <ng-md-icon icon="edit">
+          <md-tooltip>Edit player</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+      <md-button ng-click="removeItem($event)" aria-label="remove users" class="md-icon-button">
+        <ng-md-icon icon="delete">
+          <md-tooltip>Remove player</md-tooltip>
+        </ng-md-icon>
+      </md-button>
+    </md-data-table-toolbar>
+    <md-data-table-container>
+      <table md-data-table="md-data-table" md-row-select="selected">
+        <thead md-order="datatable.order" md-trigger="getUsers">
+          <tr>
+            <th name="Name" order-by="name"></th>
+            <th name="Location" order-by="location"></th>
+            <th name="Wins" numeric="numeric" order-by="wins"></th>
+            <th name="Losses" numeric="numeric" order-by="losses"></th>
+            <th name="Points" numeric="numeric" order-by="points"></th>
+            <th name="Aliases, Games, Characters"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr md-auto-select="md-auto-select" ng-repeat="user in visibleUsers">
+            <td>{{user.name}}</td>
+            <td ng-class="{empty: !user.location}">{{user.location}}</td>
+            <td>{{user.wins || 0}}</td>
+            <td>{{user.losses || 0}}</td>
+            <td>{{(user.points || 0) | number:0}}</td>
+            <td>
+              <md-button ng-click="viewItem($event, user)" class="md-raised md-accent">View Info</md-button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </md-data-table-container>
+    <md-data-table-pagination md-row-select="[10, 25, 50]" md-limit="datatable.limit" md-page="datatable.page" md-total="{{users.length}}" md-trigger="getUsers"></md-data-table-pagination>
+  </md-card>
+  <div class="abs-position-bottom-right">
+    <md-fab-speed-dial md-direction="up" md-open="isOpen" ng-mouseleave="isOpen = false" class="md-scale">
+      <md-fab-trigger class="align-with-text">
+        <md-button aria-label="menu or switch set" ng-click="doOrOpen($event)" ng-mouseenter="isOpen = true" class="md-fab md-primary">
+          <ng-md-icon size="24" icon="{{isOpen &amp;&amp; hasMultipleSets() ? 'my_library_books' : 'menu'}}" style="fill: white"></ng-md-icon>
+          <md-tooltip md-direction="left" ng-if="hasMultipleSets()">Change current player set</md-tooltip>
+        </md-button>
+      </md-fab-trigger>
+      <md-fab-actions ng-if="isOpen">
+        <md-button aria-label="new set" ng-click="doNewSet($event)" class="md-fab md-raised md-accent md-hue-1">
+          <ng-md-icon size="24" icon="add_circle" style="fill: white"></ng-md-icon>
+          <md-tooltip md-direction="left">Create new player set</md-tooltip>
+        </md-button>
+        <md-button aria-label="rename set" ng-click="doRename($event)" ng-if="ownsCurrentSet()" class="md-fab md-raised md-accent md-hue-1">
+          <ng-md-icon size="24" icon="edit" style="fill: white"></ng-md-icon>
+          <md-tooltip md-direction="left">Rename current player set</md-tooltip>
+        </md-button>
+        <md-button aria-label="export to set" ng-click="doExport($event)" ng-if="selected.length &gt; 0 &amp;&amp; hasMultipleSets()" class="md-fab md-raised md-accent md-hue-1">
+          <ng-md-icon size="24" icon="recent_actors" style="fill: white"></ng-md-icon>
+          <md-tooltip md-direction="left">Export to another player set</md-tooltip>
+        </md-button>
+        <md-button aria-label="share set" ng-click="openShareDialog($event)" ng-if="ownsCurrentSet()" class="md-fab md-raised md-warn md-hue-1">
+          <ng-md-icon size="24" icon="share" style="fill: white"></ng-md-icon>
+          <md-tooltip md-direction="left">Share this player set</md-tooltip>
+        </md-button>
+        <md-button aria-label="delete set" ng-click="doDelete($event)" ng-if="ownsCurrentSet() &amp;&amp; hasMultipleSets()" class="md-fab md-raised md-warn md-hue-1">
+          <ng-md-icon size="24" icon="delete" style="fill: white"></ng-md-icon>
+          <md-tooltip md-direction="left">Remove this player set</md-tooltip>
+        </md-button>
+      </md-fab-actions>
+    </md-fab-speed-dial>
   </div>
 </script>
 <script type="text/ng-template" id="/tournaments/in-progress">
@@ -470,537 +1009,6 @@
     </md-card>
   </md-content>
 </script>
-<script type="text/ng-template" id="/event-manage">
-  <md-card>
-    <md-data-table-toolbar ng-hide="selected.length || filter.show">
-      <h2 class="md-title">Event Management {{showArchived ? '(archived)' : ''}}</h2>
-      <div flex="flex"></div>
-      <md-button ng-click="filter.show = true" aria-label="search" class="md-icon-button">
-        <ng-md-icon icon="search" size="24">
-          <md-tooltip>Search for events</md-tooltip>
-        </ng-md-icon>
-      </md-button>
-      <md-button ng-click="addItem($event)" aria-label="add event" class="md-icon-button">
-        <ng-md-icon icon="note_add" size="24">
-          <md-tooltip>Add new event</md-tooltip>
-        </ng-md-icon>
-      </md-button>
-    </md-data-table-toolbar>
-    <md-data-table-toolbar ng-show="filter.show &amp;&amp; !selected.length">
-      <ng-md-icon icon="search" size="24"></ng-md-icon>
-      <form flex="flex" name="filter.form">
-        <input type="text" ng-model="datatable.filter" ng-model-options="filter.options" placeholder="Search..."/>
-      </form>
-      <md-button ng-click="hideSearch()" aria-label="hide search" class="md-icon-button">
-        <ng-md-icon icon="close">
-          <md-tooltip>Close search</md-tooltip>
-        </ng-md-icon>
-      </md-button>
-    </md-data-table-toolbar>
-    <md-data-table-toolbar ng-show="selected.length">
-      <div>{{selected.length}} {{selected.length > 1 ? 'events' : 'event'}} selected</div>
-      <div flex="flex"></div>
-      <md-button ng-if="selected.length == 1" ng-click="editItem($event)" aria-label="edit event" class="md-icon-button">
-        <ng-md-icon icon="edit">
-          <md-tooltip>Edit tournament</md-tooltip>
-        </ng-md-icon>
-      </md-button>
-      <md-button ng-click="archiveItem($event)" aria-label="archive events" class="md-icon-button">
-        <ng-md-icon icon="archive">
-          <md-tooltip>Archive event</md-tooltip>
-        </ng-md-icon>
-      </md-button>
-      <md-button ng-click="removeItem($event)" aria-label="remove events" class="md-icon-button">
-        <ng-md-icon icon="delete">
-          <md-tooltip>Remove event</md-tooltip>
-        </ng-md-icon>
-      </md-button>
-    </md-data-table-toolbar>
-    <md-data-table-container>
-      <table md-data-table="md-data-table" md-row-select="selected">
-        <thead md-order="datatable.order" md-trigger="getEvents">
-          <tr>
-            <th name="Name" order-by="name"></th>
-            <th name="Description" order-by="description"></th>
-            <th name="Location" order-by="location"></th>
-            <th name="Date" order-by="date" style="width: 170px"></th>
-            <th name="Time" style="width: 100px"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr md-auto-select="md-auto-select" ng-repeat="event in visibleEvents">
-            <td>{{event.name}}</td>
-            <td ng-class="{empty: !event.description}">{{event.description}}</td>
-            <td>{{event.location}}</td>
-            <td>{{event.date | date:'fullDate'}}</td>
-            <td>{{event.date | date:'shortTime'}}</td>
-          </tr>
-        </tbody>
-      </table>
-    </md-data-table-container>
-    <md-data-table-pagination md-row-select="[10, 25, 50]" md-limit="datatable.limit" md-page="datatable.page" md-total="{{events.length}}" md-trigger="getEvents"></md-data-table-pagination>
-  </md-card>
-  <div class="abs-position-bottom-right">
-    <md-fab-speed-dial md-direction="up" md-open="isOpen" ng-mouseleave="isOpen = false" class="md-scale">
-      <md-fab-trigger class="align-with-text">
-        <md-button aria-label="menu" ng-click="isOpen = true" ng-mouseenter="isOpen = true" class="md-fab md-primary">
-          <ng-md-icon size="24" icon="menu" style="fill: white"></ng-md-icon>
-        </md-button>
-      </md-fab-trigger>
-      <md-fab-actions ng-if="isOpen">
-        <md-button aria-label="toggle archived" ng-click="toggleShowArchived()" class="md-fab md-raised md-accent md-hue-1">
-          <ng-md-icon size="24" icon="archive" style="fill: white"></ng-md-icon>
-          <md-tooltip md-direction="left">{{showArchived ? 'Hide' : 'Show'}} archived events</md-tooltip>
-        </md-button>
-      </md-fab-actions>
-    </md-fab-speed-dial>
-  </div>
-</script>
-<script type="text/ng-template" id="/tournament-manage">
-  <md-card>
-    <md-data-table-toolbar ng-hide="selected.length || filter.show">
-      <h2 class="md-title">Tournament Management {{showArchived ? '(archived)' : ''}}</h2>
-      <div flex="flex"></div>
-      <md-button ng-click="filter.show = true" aria-label="search" class="md-icon-button">
-        <ng-md-icon icon="search" size="24">
-          <md-tooltip>Search for tournaments</md-tooltip>
-        </ng-md-icon>
-      </md-button>
-      <md-button ng-click="addItem($event)" aria-label="add tournament" class="md-icon-button">
-        <ng-md-icon icon="playlist_add" size="24">
-          <md-tooltip>Add new tournament</md-tooltip>
-        </ng-md-icon>
-      </md-button>
-    </md-data-table-toolbar>
-    <md-data-table-toolbar ng-show="filter.show &amp;&amp; !selected.length">
-      <ng-md-icon icon="search" size="24"></ng-md-icon>
-      <form flex="flex" name="filter.form">
-        <input type="text" ng-model="datatable.filter" ng-model-options="filter.options" placeholder="Search..."/>
-      </form>
-      <md-button ng-click="hideSearch()" aria-label="hide search" class="md-icon-button">
-        <ng-md-icon icon="close">
-          <md-tooltip>Close search</md-tooltip>
-        </ng-md-icon>
-      </md-button>
-    </md-data-table-toolbar>
-    <md-data-table-toolbar ng-show="selected.length">
-      <div>{{selected.length}} {{selected.length > 1 ? 'tournaments' : 'tournament'}} selected</div>
-      <div flex="flex"></div>
-      <md-button ng-if="selected.length == 1" ng-click="editItem($event)" aria-label="edit tournament" class="md-icon-button">
-        <ng-md-icon icon="edit">
-          <md-tooltip>Edit tournament</md-tooltip>
-        </ng-md-icon>
-      </md-button>
-      <md-button ng-click="archiveItem($event)" aria-label="archive tournaments" class="md-icon-button">
-        <ng-md-icon icon="archive">
-          <md-tooltip>Archive tournament</md-tooltip>
-        </ng-md-icon>
-      </md-button>
-      <md-button ng-click="removeItem($event)" aria-label="remove tournaments" class="md-icon-button">
-        <ng-md-icon icon="delete">
-          <md-tooltip>Remove tournament</md-tooltip>
-        </ng-md-icon>
-      </md-button>
-    </md-data-table-toolbar>
-    <md-data-table-container>
-      <table md-data-table="md-data-table" md-row-select="selected">
-        <thead md-order="datatable.order" md-trigger="getTournaments">
-          <tr>
-            <th name="Name" order-by="name"></th>
-            <th name="Game" order-by="game"></th>
-            <th name="Event"></th>
-            <th name="Status" order-by="status"></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr md-auto-select="md-auto-select" ng-repeat="tournament in visibleTournaments">
-            <td>{{tournament.name}}</td>
-            <td>{{tournament.game}}</td>
-            <td ng-class="{empty: !tournamentName(tournament.event)}">{{tournamentName(tournament.event)}}</td>
-            <td>{{tournament.status}}</td>
-            <td ng-if="tournament.status === tStatus.NOT_STARTED">
-              <md-button aria-label="start tournament" ng-disabled="playersAvailable &lt; 2" ng-click="startTournament(tournament.$id)" class="md-raised md-primary">Start
-                <md-tooltip ng-if="playersAvailable &lt; 2" md-direction="left">You need more players to start a tournament</md-tooltip>
-              </md-button>
-            </td>
-            <td ng-if="tournament.status !== tStatus.NOT_STARTED">
-              <md-button aria-label="view tournament" ng-click="seeTournament(tournament.$id)" class="md-raised md-accent">View</md-button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </md-data-table-container>
-    <md-data-table-pagination md-row-select="[10, 25, 50]" md-limit="datatable.limit" md-page="datatable.page" md-total="{{users.length}}" md-trigger="getUsers"></md-data-table-pagination>
-  </md-card>
-  <div class="abs-position-bottom-right">
-    <md-fab-speed-dial md-direction="up" md-open="isOpen" ng-mouseleave="isOpen = false" class="md-scale">
-      <md-fab-trigger class="align-with-text">
-        <md-button aria-label="menu" ng-click="isOpen = true" ng-mouseenter="isOpen = true" class="md-fab md-primary">
-          <ng-md-icon size="24" icon="menu" style="fill: white"></ng-md-icon>
-        </md-button>
-      </md-fab-trigger>
-      <md-fab-actions ng-if="isOpen">
-        <md-button aria-label="toggle archived" ng-click="toggleShowArchived()" class="md-fab md-raised md-accent md-hue-1">
-          <ng-md-icon size="24" icon="archive" style="fill: white"></ng-md-icon>
-          <md-tooltip md-direction="left">{{showArchived ? 'Hide' : 'Show'}} archived tournaments</md-tooltip>
-        </md-button>
-      </md-fab-actions>
-    </md-fab-speed-dial>
-  </div>
-</script>
-<script type="text/ng-template" id="/user-manage">
-  <md-card ng-if="anyCompletedTournaments()" layout-gt-sm="row" layout-sm="column">
-    <h2 class="md-title margin-left-25">Scoring</h2>
-    <div flex="5" hide-sm="hide-sm"></div>
-    <md-input-container>
-      <label>Game</label>
-      <md-select ng-model="userData.firebase.scoreGame" ng-change="saveFirebase()">
-        <md-option ng-repeat="tournament in allTournamentGames()" value="{{tournament.game}}">{{tournament.game}}</md-option>
-      </md-select>
-    </md-input-container>
-    <div flex="5" hide-sm="hide-sm"></div>
-    <md-input-container>
-      <label>Score Function</label>
-      <md-select ng-model="userData.firebase.scoreFunc" ng-change="saveFirebase()">
-        <md-option value="simple">Simple (Win-Loss)</md-option>
-        <md-option value="ell">ELL</md-option>
-      </md-select>
-    </md-input-container>
-    <md-button ng-click="recalculateScore()" ng-disabled="calculating" class="md-warn">Force Recalculate</md-button>
-    <div flex="flex" hide-sm="hide-sm"></div>
-    <ng-md-icon icon="refresh" ng-if="calculating" class="auto-vert-margin margin-right-25 spin">
-      <md-tooltip>Recalculating scores...</md-tooltip>
-    </ng-md-icon>
-  </md-card>
-  <md-card>
-    <md-data-table-toolbar ng-hide="selected.length || filter.show">
-      <h2 class="md-title">
-        <ng-md-icon size="24" icon="warning" ng-if="!isMine">
-          <md-tooltip>This set was not made by you</md-tooltip>
-        </ng-md-icon>&nbsp;Player Management ({{setObject.realName || 'none'}})
-      </h2>
-      <div flex="flex"></div>
-      <md-button ng-click="filter.show = true" aria-label="search" class="md-icon-button">
-        <ng-md-icon icon="search" size="24">
-          <md-tooltip>Search for players</md-tooltip>
-        </ng-md-icon>
-      </md-button>
-      <md-button ng-click="addItem($event)" aria-label="add user" class="md-icon-button">
-        <ng-md-icon icon="person_add" size="24">
-          <md-tooltip>Add new player</md-tooltip>
-        </ng-md-icon>
-      </md-button>
-    </md-data-table-toolbar>
-    <md-data-table-toolbar ng-show="filter.show &amp;&amp; !selected.length">
-      <ng-md-icon icon="search" size="24"></ng-md-icon>
-      <form flex="flex" name="filter.form">
-        <input type="text" ng-model="datatable.filter" ng-model-options="filter.options" placeholder="Search..."/>
-      </form>
-      <md-button ng-click="hideSearch()" aria-label="hide search" class="md-icon-button">
-        <ng-md-icon icon="close">
-          <md-tooltip>Close search</md-tooltip>
-        </ng-md-icon>
-      </md-button>
-    </md-data-table-toolbar>
-    <md-data-table-toolbar ng-show="selected.length">
-      <div>{{selected.length}} {{selected.length > 1 ? 'people' : 'person'}} selected</div>
-      <div flex="flex"></div>
-      <md-button ng-click="addToPlayerBucket()" aria-label="add to player bucket" class="md-icon-button">
-        <ng-md-icon icon="group_add">
-          <md-tooltip>Add to player bucket</md-tooltip>
-        </ng-md-icon>
-      </md-button>
-      <md-button ng-if="selected.length == 1" ng-click="editItem($event)" aria-label="edit user" class="md-icon-button">
-        <ng-md-icon icon="edit">
-          <md-tooltip>Edit player</md-tooltip>
-        </ng-md-icon>
-      </md-button>
-      <md-button ng-click="removeItem($event)" aria-label="remove users" class="md-icon-button">
-        <ng-md-icon icon="delete">
-          <md-tooltip>Remove player</md-tooltip>
-        </ng-md-icon>
-      </md-button>
-    </md-data-table-toolbar>
-    <md-data-table-container>
-      <table md-data-table="md-data-table" md-row-select="selected">
-        <thead md-order="datatable.order" md-trigger="getUsers">
-          <tr>
-            <th name="Name" order-by="name"></th>
-            <th name="Location" order-by="location"></th>
-            <th name="Wins" numeric="numeric" order-by="wins"></th>
-            <th name="Losses" numeric="numeric" order-by="losses"></th>
-            <th name="Points" numeric="numeric" order-by="points"></th>
-            <th name="Aliases, Games, Characters"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr md-auto-select="md-auto-select" ng-repeat="user in visibleUsers">
-            <td>{{user.name}}</td>
-            <td ng-class="{empty: !user.location}">{{user.location}}</td>
-            <td>{{user.wins || 0}}</td>
-            <td>{{user.losses || 0}}</td>
-            <td>{{(user.points || 0) | number:0}}</td>
-            <td>
-              <md-button ng-click="viewItem($event, user)" class="md-raised md-accent">View Info</md-button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </md-data-table-container>
-    <md-data-table-pagination md-row-select="[10, 25, 50]" md-limit="datatable.limit" md-page="datatable.page" md-total="{{users.length}}" md-trigger="getUsers"></md-data-table-pagination>
-  </md-card>
-  <div class="abs-position-bottom-right">
-    <md-fab-speed-dial md-direction="up" md-open="isOpen" ng-mouseleave="isOpen = false" class="md-scale">
-      <md-fab-trigger class="align-with-text">
-        <md-button aria-label="menu or switch set" ng-click="doOrOpen($event)" ng-mouseenter="isOpen = true" class="md-fab md-primary">
-          <ng-md-icon size="24" icon="{{isOpen &amp;&amp; hasMultipleSets() ? 'my_library_books' : 'menu'}}" style="fill: white"></ng-md-icon>
-          <md-tooltip md-direction="left" ng-if="hasMultipleSets()">Change current player set</md-tooltip>
-        </md-button>
-      </md-fab-trigger>
-      <md-fab-actions ng-if="isOpen">
-        <md-button aria-label="new set" ng-click="doNewSet($event)" class="md-fab md-raised md-accent md-hue-1">
-          <ng-md-icon size="24" icon="add_circle" style="fill: white"></ng-md-icon>
-          <md-tooltip md-direction="left">Create new player set</md-tooltip>
-        </md-button>
-        <md-button aria-label="rename set" ng-click="doRename($event)" ng-if="ownsCurrentSet()" class="md-fab md-raised md-accent md-hue-1">
-          <ng-md-icon size="24" icon="edit" style="fill: white"></ng-md-icon>
-          <md-tooltip md-direction="left">Rename current player set</md-tooltip>
-        </md-button>
-        <md-button aria-label="export to set" ng-click="doExport($event)" ng-if="selected.length &gt; 0 &amp;&amp; hasMultipleSets()" class="md-fab md-raised md-accent md-hue-1">
-          <ng-md-icon size="24" icon="recent_actors" style="fill: white"></ng-md-icon>
-          <md-tooltip md-direction="left">Export to another player set</md-tooltip>
-        </md-button>
-        <md-button aria-label="share set" ng-click="openShareDialog($event)" ng-if="ownsCurrentSet()" class="md-fab md-raised md-warn md-hue-1">
-          <ng-md-icon size="24" icon="share" style="fill: white"></ng-md-icon>
-          <md-tooltip md-direction="left">Share this player set</md-tooltip>
-        </md-button>
-        <md-button aria-label="delete set" ng-click="doDelete($event)" ng-if="ownsCurrentSet() &amp;&amp; hasMultipleSets()" class="md-fab md-raised md-warn md-hue-1">
-          <ng-md-icon size="24" icon="delete" style="fill: white"></ng-md-icon>
-          <md-tooltip md-direction="left">Remove this player set</md-tooltip>
-        </md-button>
-      </md-fab-actions>
-    </md-fab-speed-dial>
-  </div>
-</script>
-<script type="text/ng-template" id="/dialog/addevent">
-  <md-dialog>
-    <md-dialog-content>
-      <h2 class="md-title">{{label}} Event</h2>
-      <p ng-if="item.form.$submitted &amp;&amp; item.form.$invalid" layout="row" layout-align="start center" class="md-warn">
-        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
-      </p>
-      <form name="item.form" ng-submit="addItem()">
-        <div layout-gt-sm="row" layout-sm="column" class="input-row">
-          <md-input-container flex="flex">
-            <label>Name</label>
-            <input name="name" ng-model="item.name" md-maxlength="30" required="required"/>
-          </md-input-container>
-          <md-autocomplete flex="flex" required="required" md-input-name="location" md-selected-item="selectedlocation" md-floating-label="Location" md-search-text="item.location" md-items="place in getLocations(item.location)" md-item-text="place" md-input-maxlength="30">
-            <md-item-template><span md-highlight-text="searchText">{{place}}</span></md-item-template>
-            <md-not-found>No matches.</md-not-found>
-          </md-autocomplete>
-        </div>
-        <h3 class="md-subhead subhead">When</h3>
-        <div layout="row" class="input-row">
-          <md-datepicker ng-model="item.date" md-placeholder="Enter date" required="required" style="margin-top: 14px"></md-datepicker>
-          <md-input-container flex="flex">
-            <label>Time</label>
-            <input name="time" type="time" ng-model="item.date"/>
-          </md-input-container>
-        </div>
-        <h3 class="md-subhead subhead">Extra</h3>
-        <div layout="row" class="input-row">
-          <md-input-container flex="flex">
-            <label>Description</label>
-            <textarea name="description" ng-model="item.description" md-maxlength="200"></textarea>
-          </md-input-container>
-        </div>
-      </form>
-    </md-dialog-content>
-    <div class="md-actions">
-      <md-button ng-click="addItem()" ng-disabled="item.form.$invalid" aria-label="submit" class="md-primary">{{label}} Event</md-button>
-      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
-    </div>
-  </md-dialog>
-</script>
-<script type="text/ng-template" id="/dialog/addtournament">
-  <md-dialog>
-    <md-dialog-content>
-      <h2 class="md-title">{{label}} Tournament</h2>
-      <p ng-if="item.form.$submitted &amp;&amp; item.form.$invalid" layout="row" layout-align="start center" class="md-warn">
-        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
-      </p>
-      <form name="item.form" ng-submit="addItem()">
-        <div layout="row" class="input-row">
-          <md-input-container flex="flex">
-            <label>Name</label>
-            <input name="name" ng-model="item.name" md-maxlength="30" required="required"/>
-          </md-input-container>
-        </div>
-        <div layout="row" class="input-row">
-          <md-input-container flex="flex">
-            <label>Event</label>
-            <md-select ng-model="item.event">
-              <md-option ng-repeat="event in allEvents" value="{{event.$id}}">{{event.name}}</md-option>
-            </md-select>
-          </md-input-container>
-        </div>
-        <div layout="row" class="input-row">
-          <md-autocomplete flex="flex" required="required" md-input-name="game" md-selected-item="selectedGame" md-floating-label="Game" md-search-text="item.game" md-items="game in getGames(item.game)" md-item-text="game" md-input-maxlength="30">
-            <md-item-template><span md-highlight-text="searchText">{{game}}</span></md-item-template>
-            <md-not-found>No matches.</md-not-found>
-          </md-autocomplete>
-        </div>
-      </form>
-    </md-dialog-content>
-    <div class="md-actions">
-      <md-button ng-click="addItem()" ng-disabled="item.form.$invalid" aria-label="submit" class="md-primary">{{label}} Tournament</md-button>
-      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
-    </div>
-  </md-dialog>
-</script>
-<script type="text/ng-template" id="/dialog/adduser">
-  <md-dialog>
-    <md-dialog-content>
-      <h2 ng-if="!viewOnly" class="md-title">{{label}} Player</h2>
-      <h2 ng-if="viewOnly" class="md-title">{{item.name}} {{item.location ? 'from ' + item.location : ''}}</h2>
-      <p ng-if="item.form.$submitted &amp;&amp; item.form.$invalid" layout="row" layout-align="start center" class="md-warn">
-        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
-      </p>
-      <form name="item.form" ng-submit="addItem()">
-        <div layout-gt-sm="row" layout-sm="column" ng-if="!viewOnly" class="input-row">
-          <md-input-container flex="flex">
-            <label>Name</label>
-            <input name="name" ng-model="item.name" md-maxlength="30" required="required"/>
-          </md-input-container>
-          <md-autocomplete flex="flex" md-input-name="location" md-selected-item="selectedlocation" md-floating-label="Location" md-search-text="item.location" md-items="place in getLocations(item.location)" md-item-text="place" md-input-maxlength="30">
-            <md-item-template><span md-highlight-text="searchText">{{place}}</span></md-item-template>
-            <md-not-found>No matches.</md-not-found>
-          </md-autocomplete>
-        </div>
-        <h3 class="md-subhead subhead">Aliases</h3>
-        <div layout="row" class="input-row">
-          <md-chips ng-model="item.aliases" secondary-placeholder="Add aliases" placeholder="+Alias" required="required" readonly="viewOnly"><span md-highlight-text="searchText">{{item}}</span></md-chips>
-          <md-chip ng-if="item.aliases.length === 0 &amp;&amp; viewOnly">None</md-chip>
-        </div>
-        <h3 class="md-subhead subhead">Games Played</h3>
-        <div layout="row" class="input-row">
-          <md-chips ng-model="item.games" secondary-placeholder="Add games" placeholder="+Game" required="required" md-autocomplete-snap="md-autocomplete-snap" readonly="viewOnly">
-            <md-autocomplete md-selected-item="selectedItem" md-search-text="searchText" md-items="item in getGames(searchText)" md-item-text="item" placeholder="+Game"><span md-highlight-text="searchText">{{item}}</span></md-autocomplete>
-          </md-chips>
-          <md-chip ng-if="item.games.length === 0 &amp;&amp; viewOnly">None</md-chip>
-        </div>
-        <h3 class="md-subhead subhead">Characters Used</h3>
-        <div layout="row" class="input-row">
-          <md-chips ng-model="item.characters" secondary-placeholder="Add characters" placeholder="+Character" required="required" md-autocomplete-snap="md-autocomplete-snap" readonly="viewOnly">
-            <md-autocomplete md-selected-item="selectedItem" md-search-text="searchText" md-items="item in getCharacters(searchText)" md-item-text="item" placeholder="+Character"><span md-highlight-text="searchText">{{item}}</span></md-autocomplete>
-          </md-chips>
-          <md-chip ng-if="item.characters.length === 0 &amp;&amp; viewOnly">None</md-chip>
-        </div>
-      </form>
-    </md-dialog-content>
-    <div ng-if="!viewOnly" class="md-actions">
-      <md-button ng-click="addItem()" ng-disabled="item.form.$invalid" aria-label="submit" class="md-primary">{{label}} Player</md-button>
-      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
-    </div>
-    <div ng-if="viewOnly" class="md-actions">
-      <md-button ng-click="cancel()" aria-label="close" class="md-primary">Close</md-button>
-    </div>
-  </md-dialog>
-</script>
-<script type="text/ng-template" id="/dialog/input-prompt">
-  <md-dialog>
-    <md-dialog-content>
-      <h2 class="md-title">{{title}}</h2>
-      <p ng-if="form.$submitted &amp;&amp; form.$invalid" layout="row" layout-align="start center" class="md-warn">
-        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
-      </p>
-      <p ng-if="!isValid()" layout="row" layout-align="start center" class="md-warn">
-        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;Set name taken.</span>
-      </p>
-      <form name="form" ng-submit="submit()">
-        <div layout="row" class="input-row">
-          <md-input-container flex="flex">
-            <label>{{label}}</label>
-            <input name="string" ng-model="string" md-maxlength="30" required="required"/>
-          </md-input-container>
-        </div>
-      </form>
-    </md-dialog-content>
-    <div class="md-actions">
-      <md-button ng-click="submit()" ng-disabled="form.$invalid || !isValid()" aria-label="submit" class="md-primary">Submit</md-button>
-      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
-    </div>
-  </md-dialog>
-</script>
-<script type="text/ng-template" id="/dialog/results">
-  <md-dialog>
-    <md-dialog-content>
-      <h2 class="md-title">Results for {{tournamentName}}</h2>
-      <md-list>
-        <md-list-item ng-repeat="result in results" class="md-2-line">
-          <div class="md-avatar subhead">{{toOrdinal(result.pos)}}</div>
-          <div class="md-list-item-text">
-            <h3>{{nameString(result.seed)}}</h3>
-            <p>Wins: {{result.wins}}, Total Points Scored: {{result.for}}</p>
-          </div>
-        </md-list-item>
-      </md-list>
-    </md-dialog-content>
-    <div class="md-actions">
-      <md-button ng-click="cancel()" aria-label="close" class="md-primary">Close</md-button>
-    </div>
-  </md-dialog>
-</script>
-<script type="text/ng-template" id="/dialog/select-prompt">
-  <md-dialog>
-    <md-dialog-content>
-      <h2 class="md-title">{{title}}</h2>
-      <p ng-if="form.$submitted &amp;&amp; form.$invalid" layout="row" layout-align="start center" class="md-warn">
-        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
-      </p>
-      <form name="form" ng-submit="submit()">
-        <div layout="row" class="input-row">
-          <md-input-container flex="flex">
-            <label>{{label}}</label>
-            <md-select ng-model="string" required="required">
-              <md-optgroup ng-repeat="group in groups" label="{{group}}">
-                <md-option ng-repeat="value in selectableValues | filter:{group:group}" value="{{value}}">{{value.realName}}</md-option>
-              </md-optgroup>
-            </md-select>
-          </md-input-container>
-        </div>
-      </form>
-    </md-dialog-content>
-    <div class="md-actions">
-      <md-button ng-click="submit()" ng-disabled="form.$invalid" aria-label="submit" class="md-primary">Submit</md-button>
-      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
-    </div>
-  </md-dialog>
-</script>
-<script type="text/ng-template" id="/dialog/share-prompt">
-  <md-dialog>
-    <md-dialog-content>
-      <h2 class="md-title">Share "{{title}}"</h2>
-      <form name="form" ng-submit="submit()">
-        <div layout="row" class="input-row">
-          <md-chips flex="flex" ng-model="sharedWith" secondary-placeholder="Share with users" placeholder="+User" md-require-match="true" md-autocomplete-snap="md-autocomplete-snap">
-            <md-autocomplete flex="flex" required="required" md-selected-item="sharedwith" md-search-text="searchKey" md-items="user in getUser(searchKey)" md-item-text="user.name">
-              <md-item-template><span>{{user.name}}</span></md-item-template>
-              <md-not-found>No matches.</md-not-found>
-            </md-autocomplete>
-            <md-chip-template><span>{{$chip.name}}</span></md-chip-template>
-          </md-chips>
-        </div>
-      </form>
-    </md-dialog-content>
-    <div class="md-actions">
-      <md-button ng-click="submit()" aria-label="submit" class="md-primary">Submit</md-button>
-      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
-    </div>
-  </md-dialog>
-</script>
 <script type="text/ng-template" id="tournament-duel">
   <div layout="row" class="match-column-container margin-bottom-10">
     <div ng-repeat="match in maxMatches track by $index" scroll-observe="{{$index}}" class="match-column round-header md-subhead subhead">Round {{$index+1}}</div>
@@ -1012,9 +1020,9 @@
           <div ng-show="false">{{getIdForMatch(match)}}</div>
         </div>
         <div ng-if="!noRender(match)" layout="row" layout-align="center center" class="match-data">
-          <div flex="flex" layout="column" class="round-type">
-            <div flex="flex" class="subhead">{{getMatchIdString(match)}}</div>
-            <station flex="flex" value="ref.stations[getMatchStationIdString(match)]" can-click="{{hasAccess}}" on-unedit="save()"></station>
+          <div flex="flex" layout="column" layout-align="space-around center" class="round-type">
+            <div class="subhead">{{getMatchIdString(match)}}</div>
+            <station value="ref.stations[getMatchStationIdString(match)]" can-click="{{hasAccess}}" on-unedit="save()"></station>
           </div>
           <div layout="column" class="match-name">
             <div ng-repeat="p in match.p track by $index" hover-highlight="hover-highlight" hover-name="{{getName(match.p[$index]-1)}}" class="member padding-5 member-{{$index}}">{{getName(match.p[$index]-1) || getString(match.id, $index) || '???'}}
@@ -1048,9 +1056,9 @@
           <div ng-show="false">{{getIdForMatch(match)}}</div>
         </div>
         <div ng-if="!noRender(match)" layout="row" layout-align="center center" class="match-data">
-          <div flex="flex" layout="column" class="round-type">
-            <div flex="flex" class="subhead">{{getMatchIdString(match)}}</div>
-            <station flex="flex" value="ref.stations[getMatchStationIdString(match)]" can-click="{{hasAccess}}" on-unedit="save()"></station>
+          <div flex="flex" layout="column" layout-align="space-around center" class="round-type">
+            <div class="subhead">{{getMatchIdString(match)}}</div>
+            <station value="ref.stations[getMatchStationIdString(match)]" can-click="{{hasAccess}}" on-unedit="save()"></station>
           </div>
           <div layout="column" class="match-name">
             <div ng-repeat="p in match.p track by $index" hover-highlight="hover-highlight" hover-name="{{getName(match.p[$index]-1)}}" class="member padding-5 member-{{$index}}">{{getName(match.p[$index]-1) || getString(match.id, $index) || '???'}}
@@ -1084,9 +1092,9 @@
           <div ng-show="false">{{getIdForMatch(match)}}</div>
         </div>
         <div ng-if="!noRender(match)" layout="row" layout-align="center center" class="match-data">
-          <div flex="flex" layout="column" class="round-type">
-            <div flex="flex" class="subhead">{{getMatchIdString(match)}}</div>
-            <station flex="flex" value="ref.stations[getMatchStationIdString(match)]" can-click="{{hasAccess}}" on-unedit="save()"></station>
+          <div flex="flex" layout="column" layout-align="space-around center" class="round-type">
+            <div class="subhead">{{getMatchIdString(match)}}</div>
+            <station value="ref.stations[getMatchStationIdString(match)]" can-click="{{hasAccess}}" on-unedit="save()"></station>
           </div>
           <div layout="column" class="match-name">
             <div ng-repeat="p in match.p track by $index" hover-highlight="hover-highlight" hover-name="{{getName(match.p[$index]-1)}}" class="member padding-5 member-{{$index}}">{{getName(match.p[$index]-1) || getString(match.id, $index) || '???'}}
@@ -1120,9 +1128,9 @@
           <div ng-show="false">{{getIdForMatch(match)}}</div>
         </div>
         <div ng-if="!noRender(match)" layout="row" layout-align="center center" class="match-data">
-          <div flex="flex" layout="column" class="round-type">
-            <div flex="flex" class="subhead">{{getMatchIdString(match)}}</div>
-            <station flex="flex" value="ref.stations[getMatchStationIdString(match)]" can-click="{{hasAccess}}" on-unedit="save()"></station>
+          <div flex="flex" layout="column" layout-align="space-around center" class="round-type">
+            <div class="subhead">{{getMatchIdString(match)}}</div>
+            <station value="ref.stations[getMatchStationIdString(match)]" can-click="{{hasAccess}}" on-unedit="save()"></station>
           </div>
           <div layout="column" class="match-name">
             <div ng-repeat="p in match.p track by $index" hover-highlight="hover-highlight" hover-name="{{getName(match.p[$index]-1)}}" class="member padding-5 member-{{$index}}">{{getName(match.p[$index]-1) || getString(match.id, $index) || '???'}}
