@@ -1,6 +1,16 @@
-<a name="0.6.2"></a>
-## [0.6.2](https://github.com/seiyria/openchallenge/compare/0.6.2...v0.6.2) (2015-10-19)
+<a name="0.6.3"></a>
+## [0.6.3](https://github.com/seiyria/openchallenge/compare/0.6.3...v0.6.3) (2015-10-19)
 
+
+
+
+<a name="0.6.3"></a>
+## [0.6.3](https://github.com/seiyria/openchallenge/compare/0.6.2...0.6.3) (2015-10-19)
+
+
+### Bug Fixes
+
+* **scores:** scores should now calculate properly in more cases ([639f589](https://github.com/seiyria/openchallenge/commit/639f589))
 
 
 
