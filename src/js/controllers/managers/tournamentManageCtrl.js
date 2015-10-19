@@ -2,7 +2,7 @@ import site from '../../app';
 
 site.controller('tournamentManageController', ($scope, $state, ShareToken, SidebarManagement, EnsureLoggedIn, TournamentManagement, CurrentTournaments, CurrentPlayerBucket, TournamentStatus, UserStatus) => {
   SidebarManagement.hasSidebar = true;
-  EnsureLoggedIn.check();
+  const authData = EnsureLoggedIn.check();
 
   $scope.playersAvailable = CurrentPlayerBucket.get().length;
 
@@ -107,6 +107,10 @@ site.controller('tournamentManageController', ($scope, $state, ShareToken, Sideb
     $scope.tournaments.$loaded($scope.getTournaments);
     $scope.tournaments.$watch($scope.getTournaments);
   };
+
+  UserStatus.firebase.$loaded(() => {
+    $scope.isMine = UserStatus.firebase.playerSetUid === authData.uid;
+  });
 
   CurrentTournaments.watch.then(null, null, () => {
     $scope.loadTournaments();

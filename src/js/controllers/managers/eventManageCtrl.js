@@ -1,8 +1,8 @@
 import site from '../../app';
 
-site.controller('eventManageController', ($scope, SidebarManagement, EnsureLoggedIn, EventManagement, CurrentEvents, CurrentTournaments) => {
+site.controller('eventManageController', ($scope, SidebarManagement, EnsureLoggedIn, UserStatus, EventManagement, CurrentEvents, CurrentTournaments) => {
   SidebarManagement.hasSidebar = true;
-  EnsureLoggedIn.check();
+  const authData = EnsureLoggedIn.check();
 
   $scope.events = [];
   $scope.visibleEvents = [];
@@ -102,6 +102,10 @@ site.controller('eventManageController', ($scope, SidebarManagement, EnsureLogge
     $scope.events.$loaded($scope.getEvents);
     $scope.events.$watch($scope.getEvents);
   };
+
+  UserStatus.firebase.$loaded(() => {
+    $scope.isMine = UserStatus.firebase.playerSetUid === authData.uid;
+  });
 
   CurrentEvents.watch.then(null, null, () => {
     $scope.loadEvents();

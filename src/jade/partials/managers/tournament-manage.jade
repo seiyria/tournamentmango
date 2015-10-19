@@ -3,7 +3,10 @@ script(type="text/ng-template", id="/tournament-manage")
 
   md-card
     md-data-table-toolbar(ng-hide="selected.length || filter.show")
-      h2.md-title Tournament Management {{showArchived ? '(archived)' : ''}}
+      h2.md-title
+        ng-md-icon(size="24", icon="warning", ng-if="!isMine")
+          md-tooltip This set was not made by you
+        | Tournament Management {{showArchived ? '(archived)' : ''}}
       div(flex)
 
       md-button.md-icon-button(ng-click="filter.show = true", aria-label="search")
