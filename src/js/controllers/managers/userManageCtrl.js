@@ -239,6 +239,7 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
         if(_.any(match.p, id => id === -1)) return; // skip hidden matches
 
         const result = _.findWhere(tournament.trn, { id: match.id });
+        if(!result) return;
         _.each(match.p, (id, idx) => {
           const player = tournament.players[id-1];
           const ref = $scope.users.$getRecord(player.id);

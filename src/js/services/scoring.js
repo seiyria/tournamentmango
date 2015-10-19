@@ -25,6 +25,7 @@ site.service('ScoringFunctions', (CurrentTournaments, TournamentStatus) => {
           if(_.any(match.p, p => p === -1)) return; // ignore walkover matches
           _.each(match.p, p => {
             const currentPlayer = tournament.players[p-1];
+            if(!currentPlayer) return;
             const otherPlayersScore = _(match.p)
               .without(p)
               .map(p => tempScores[tournament.players[p-1].id])
