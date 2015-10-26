@@ -21,6 +21,6 @@ site.controller('userSettingsController', ($scope, SidebarManagement, EnsureLogg
       tournaments: data.tournaments
     };
     const blob = new Blob([JSON.stringify(importantData)], { type: 'text/plain;charset=utf-8' });
-    saveAs(blob, `info-${Date.now()}.openchallenge`);
+    saveAs(blob, `info-${Date.now()}.tournamentmango`);
   };
 });

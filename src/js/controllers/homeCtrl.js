@@ -21,7 +21,7 @@ site.controller('homeController', ($scope, SidebarManagement) => {
     },
     {
       name: 'Offline Capability',
-      info: 'You can use OpenChallenge without an internet connection. When you get a signal, OpenChallenge will save the data automatically.',
+      info: 'You can use TournamentMango without an internet connection. When you get a signal, TournamentMango will save the data automatically.',
       icon: 'desktop_windows'
     },
     {

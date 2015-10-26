@@ -2,6 +2,7 @@
 import './constants/firebaseURL';
 import './constants/tournamentStatus';
 
+import './configs/color';
 import './configs/location';
 
 import './directives/score';

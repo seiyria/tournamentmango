@@ -87,8 +87,12 @@
       "./node_modules/angular-material/angular-material.css",
       "./node_modules/angular-material-data-table/dist/md-data-table.min.css"
     ],
-    "favicon": [
+    "root": [
+      "CNAME",
       "favicon.ico"
+    ],
+    "assets": [
+      "src/assets/**/*"
     ],
     "jade": [
       "src/jade/**/*.jade"

@@ -292,9 +292,10 @@ input.hide-spinner[type="number"] {
       }
     }
   }
+}
 
-  md-list.no-padding {
-  }
+.header-img {
+  transform: translate(0, 5px);
 }
 
 md-menu ng-md-icon:not(.no-transform) svg, md-menu-item ng-md-icon:not(.no-transform) svg {
