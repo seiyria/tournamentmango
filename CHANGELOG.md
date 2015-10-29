@@ -1,6 +1,17 @@
-<a name="0.6.4"></a>
-## [0.6.4](https://github.com/seiyria/openchallenge/compare/0.6.4...v0.6.4) (2015-10-26)
+<a name="0.6.5"></a>
+## [0.6.5](https://github.com/seiyria/openchallenge/compare/0.6.5...v0.6.5) (2015-10-29)
 
+
+
+
+<a name="0.6.5"></a>
+## [0.6.5](https://github.com/seiyria/openchallenge/compare/0.6.4...0.6.5) (2015-10-29)
+
+
+### Bug Fixes
+
+* **tournaments:** made between-match lines not overlap in some testable cases ([e8e684b](https://github.com/seiyria/openchallenge/commit/e8e684b)), closes [#76](https://github.com/seiyria/openchallenge/issues/76)
+* **tournaments:** very long lines sometimes overlapped a match block ([8a5dbd0](https://github.com/seiyria/openchallenge/commit/8a5dbd0)), closes [#77](https://github.com/seiyria/openchallenge/issues/77)
 
 
 
