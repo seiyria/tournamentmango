@@ -48,9 +48,10 @@ site.directive('drawTo', ($timeout) => {
       const targetRound = drawTo[0].r;
 
       // if it's too far away, /2 is not a good midpoint
-      const modifier = targetRound - myRound === 1 ? 2 : 1.05;
+      const xModifier = targetRound - myRound === 1 ? 2 : 1;
+      const subModifier = targetRound - myRound === 1 ? 0 : 10;
 
-      const mid = x1+((x2-x1)/modifier);
+      const mid = x1+((x2-x1)/xModifier) - subModifier;
 
       drawLine(x1, y1, mid, y1);
       drawLine(mid, y1, mid, y2);
