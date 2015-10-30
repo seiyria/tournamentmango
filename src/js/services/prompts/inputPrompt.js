@@ -7,7 +7,6 @@ site.service('InputPrompt', ($mdDialog) => {
 
       const mdDialogOptions = {
         event, locals,
-        clickOutsideToClose: true,
         controller: 'inputPromptController',
         focusOnOpen: false,
         templateUrl: '/dialog/input-prompt'

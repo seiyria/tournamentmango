@@ -3,7 +3,6 @@ import site from '../../app';
 site.service('UserManagement', (FirebaseURL, $mdDialog, Toaster, FilterUtils) => {
 
   const defaultMdDialogOptions = {
-    clickOutsideToClose: true,
     controller: 'userDialogController',
     focusOnOpen: false,
     templateUrl: '/dialog/adduser'

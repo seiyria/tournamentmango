@@ -7,7 +7,6 @@ site.service('SharePrompt', ($mdDialog) => {
 
       const mdDialogOptions = {
         event, locals,
-        clickOutsideToClose: true,
         controller: 'sharePromptController',
         focusOnOpen: false,
         templateUrl: '/dialog/share-prompt'

@@ -7,7 +7,6 @@ site.service('SelectPrompt', ($mdDialog) => {
 
       const mdDialogOptions = {
         event, locals,
-        clickOutsideToClose: true,
         controller: 'selectPromptController',
         focusOnOpen: false,
         templateUrl: '/dialog/select-prompt'

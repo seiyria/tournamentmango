@@ -3,7 +3,6 @@ import site from '../../app';
 site.service('TournamentManagement', (FirebaseURL, $mdDialog, Toaster, $filter, FilterUtils, CurrentEvents) => {
 
   const defaultMdDialogOptions = {
-    clickOutsideToClose: true,
     controller: 'tournamentDialogController',
     focusOnOpen: false,
     templateUrl: '/dialog/addtournament'

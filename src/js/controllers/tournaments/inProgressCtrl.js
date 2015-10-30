@@ -47,7 +47,6 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
 
   $scope.showResults = (event) => {
     const mdDialogOptions = {
-      clickOutsideToClose: true,
       controller: 'resultsDialogController',
       focusOnOpen: false,
       templateUrl: '/dialog/results',

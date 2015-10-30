@@ -3,7 +3,6 @@ import site from '../../app';
 site.service('EventManagement', (FirebaseURL, $mdDialog, Toaster, $filter, FilterUtils) => {
 
   const defaultMdDialogOptions = {
-    clickOutsideToClose: true,
     controller: 'eventDialogController',
     focusOnOpen: false,
     templateUrl: '/dialog/addevent'
