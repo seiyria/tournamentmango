@@ -563,7 +563,7 @@
             <td ng-class="{empty: !tournamentName(tournament.event)}">{{tournamentName(tournament.event)}}</td>
             <td>{{tournament.status}}</td>
             <td ng-if="tournament.status === tStatus.NOT_STARTED">
-              <md-button aria-label="start tournament" ng-disabled="playersAvailable &lt; 2" ng-click="startTournament(tournament.$id)" class="md-raised md-primary">Start
+              <md-button aria-label="start tournament" ng-disabled="playersAvailable &lt; 2" ng-click="startTournament(tournament.$id)" class="md-raised md-primary">Set up
                 <md-tooltip ng-if="playersAvailable &lt; 2" md-direction="left">You need more players to start a tournament</md-tooltip>
               </md-button>
             </td>
