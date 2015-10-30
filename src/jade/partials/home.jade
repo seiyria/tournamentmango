@@ -3,7 +3,7 @@ script(type="text/ng-template", id="/home")
     div(flex)
       .text-center.padding-top-20 TournamentMango is a great way to manage your tournaments. It supports many features.
 
-  .text-center(layout-gt-sm="row", layout="column", flex)
+  .text-center(layout-gt-sm="row", layout="column", flex, layout-wrap)
     .text-center.padding-50(flex-gt-sm="33", flex-sm="40", ng-repeat="block in blocks")
       a(ng-if="block.link", ng-href="{{block.link}}", target="_blank")
         ng-md-icon(icon="{{block.icon}}", size="100")
