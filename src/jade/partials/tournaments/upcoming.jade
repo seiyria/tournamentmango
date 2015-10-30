@@ -39,7 +39,7 @@ script(type="text/ng-template", id="/tournaments/upcoming")
   md-content.duel-area(flex, layout="column", layout-align="start center")
 
     md-card.upcoming-match(ng-repeat="match in trn.matches | orderBy:isReady:true", upcoming-highlight="isReady(match)", layout-gt-sm="row", layout-sm="column", layout-sm-align="center center", ng-if="!noRender(match) && shouldShow(match)", ng-class="{small: $mdMedia('sm')}")
-      .round-station-container(layout="row", layout-align="start center", flex, flex-offset="10")
+      .round-station-container(layout="row", layout-align="start center", flex)
 
         .subhead.match-id.padding-15.text-center(flex-gt-sm="30", flex-sm="50") {{getMatchIdString(match)}}
         .station.padding-15(flex-gt-sm="70", flex-sm="50", layout="row", layout-align="start center")
