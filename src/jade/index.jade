@@ -20,7 +20,7 @@ html(ng-app='openchallenge', ng-controller="rootController")
     md-toolbar(layout="row", ng-controller="navController", ng-include="'navbar'")
 
     div(layout="row", flex)
-      md-sidenav.md-sidenav-left.md-whiteframe-z2(
+      md-sidenav.md-sidenav-left.md-whiteframe-z2.navigation(
         layout="column",
         ng-if="sidebar.hasSidebar",
         md-is-locked-open="$mdMedia('gt-sm')",

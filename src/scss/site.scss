@@ -57,6 +57,15 @@ station {
   height: 100%;
 }
 
+.navigation md-list-item .md-no-style {
+
+  transition: none!important;
+
+  &:hover {
+    background-color: #e0e0e0!important;
+  }
+}
+
 .header-bar {
   @include all-heights(54px);
 
@@ -258,13 +267,13 @@ station {
   }
 }
 
-input.hide-spinner[type="number"]::-webkit-outer-spin-button,
-input.hide-spinner[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
 input.hide-spinner[type="number"] {
   -moz-appearance: textfield;
+
+  &::-webkit-outer-spin-button, &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }
 
 .player-bucket-list-container {
