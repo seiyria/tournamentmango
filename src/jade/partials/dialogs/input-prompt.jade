@@ -1,7 +1,7 @@
 script(type="text/ng-template", id="/dialog/input-prompt")
   md-dialog
 
-    md-dialog-content
+    .md-dialog-content
       h2.md-title {{title}}
 
       p.md-warn(ng-if="form.$submitted && form.$invalid", layout="row", layout-align="start center")

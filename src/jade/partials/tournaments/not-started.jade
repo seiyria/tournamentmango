@@ -5,7 +5,7 @@ script(type="text/ng-template", id="/tournaments/not-started")
         md-list.player-bucket-list(flex, sv-root, sv-part="bucket")
           md-subheader.no-padding
             div(flex, layout="row", layout-align="center center")
-              span(flex, offset="5") Players ({{bucket.length}})
+              span(flex, flex-offset="5") Players ({{bucket.length}})
               span(flex)
               span.text-right(flex)
                 md-button.md-fab.md-mini.md-primary(ng-show="showBucketButton()", ng-click="addBucketToBucket()")

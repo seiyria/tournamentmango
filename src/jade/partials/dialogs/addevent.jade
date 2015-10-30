@@ -2,7 +2,7 @@
 script(type="text/ng-template", id="/dialog/addevent")
   md-dialog
 
-    md-dialog-content
+    .md-dialog-content
       h2.md-title {{label}} Event
 
       p.md-warn(ng-if="item.form.$submitted && item.form.$invalid", layout="row", layout-align="start center")

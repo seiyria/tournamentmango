@@ -2,7 +2,7 @@
 script(type="text/ng-template", id="/dialog/adduser")
   md-dialog
 
-    md-dialog-content
+    .md-dialog-content
       h2.md-title(ng-if="!viewOnly") {{label}} Player
       h2.md-title(ng-if="viewOnly") {{item.name}} {{item.location ? 'from ' + item.location : ''}}
 
