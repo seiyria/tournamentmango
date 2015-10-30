@@ -47,7 +47,7 @@
       <div class="text-center padding-top-20">TournamentMango is a great way to manage your tournaments. It supports many features.</div>
     </div>
   </div>
-  <div layout-gt-sm="row" layout="column" flex="flex" class="text-center">
+  <div layout-gt-sm="row" layout="column" flex="flex" layout-wrap="layout-wrap" class="text-center">
     <div flex-gt-sm="33" flex-sm="40" ng-repeat="block in blocks" class="text-center padding-50"><a ng-if="block.link" ng-href="{{block.link}}" target="_blank">
         <ng-md-icon icon="{{block.icon}}" size="100"></ng-md-icon></a>
       <ng-md-icon icon="{{block.icon}}" size="100" ng-if="!block.link"></ng-md-icon>
