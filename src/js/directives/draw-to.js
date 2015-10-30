@@ -10,7 +10,7 @@ site.directive('drawTo', ($timeout) => {
   return (scope, element, attrs) => {
     if(!attrs.drawTo) return;
     const drawTo = JSON.parse(attrs.drawTo);
-    if(!drawTo || $(`#line-${getId(JSON.stringify(drawTo))}`).length > 0) return;
+    if(!drawTo || $(`.line-${getId(JSON.stringify(drawTo))}`).length > 2) return;
 
     const checkDuplicates = (item) => {
 
