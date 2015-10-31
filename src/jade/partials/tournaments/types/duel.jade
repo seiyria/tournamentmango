@@ -23,7 +23,7 @@ script(type="text/ng-template", id="tournament-duel")
         div(ng-if="noRender(match)", flex)
           div(ng-show="false") {{getIdForMatch(match)}}
 
-        .match-data(ng-if="!noRender(match)", layout="row", layout-align="center center")
+        .match-data(ng-if="!noRender(match) && shouldMatchBeShown(match)", layout="row", layout-align="center center")
           .round-type(flex, layout="column", layout-align="space-around center")
             .subhead {{getMatchIdString(match)}}
             station(value="ref.stations[getMatchStationIdString(match)]", can-click="{{hasAccess}}", on-unedit="save()")

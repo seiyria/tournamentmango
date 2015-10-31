@@ -13,7 +13,7 @@ site.directive('drawTo', ($timeout) => {
     if(!drawTo || $(`.line-${getId(JSON.stringify(drawTo))}`).length > 2) return;
 
     const checkDuplicates = (item) => {
-      
+
       const xOffset = ~~item.attr('data-x');
 
       const otherItems = $(`[data-x='${xOffset}']`).not(item[0]).add(`[data-x='${xOffset+4}']`);

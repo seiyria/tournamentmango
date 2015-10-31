@@ -86,6 +86,7 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
   $scope.getMatchIdString = TournamentInformation.getMatchIdString;
   $scope.getMatchStationIdString = TournamentInformation.getMatchStationIdString;
   $scope.noRender = TournamentInformation.noRender;
+  $scope.shouldMatchBeShown = (match) => !(_.all(match.p, p => p === 0) && $scope.trn.isDone());
 
   $scope.ref = $firebaseObject(new Firebase(`${FirebaseURL}/users/${atob($stateParams.userId)}/players/${$stateParams.setId}/tournaments/${$stateParams.tournamentId}`));
 
