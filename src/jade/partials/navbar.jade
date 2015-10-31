@@ -54,6 +54,11 @@ script(type="text/ng-template", id="navbar")
             span &nbsp;Settings
 
         md-menu-item
+          md-button(target="_blank", href="https://github.com/seiyria/tournamentmango/wiki")
+            ng-md-icon(icon="help", size="24")
+            span &nbsp;Help
+
+        md-menu-item
           md-button(ng-click="auth.doLogout()")
             ng-md-icon(icon="logout", size="24")
             span &nbsp;Logout
