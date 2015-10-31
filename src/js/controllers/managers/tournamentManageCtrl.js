@@ -110,11 +110,11 @@ site.controller('tournamentManageController', ($scope, $state, ShareToken, Sideb
 
   UserStatus.firebase.$loaded(() => {
     $scope.isMine = UserStatus.firebase.playerSetUid === authData.uid;
-  });
 
-  CurrentTournaments.watch.then(null, null, () => {
+    CurrentTournaments.watch.then(null, null, () => {
+      $scope.loadTournaments();
+    });
+
     $scope.loadTournaments();
   });
-
-  $scope.loadTournaments();
 });

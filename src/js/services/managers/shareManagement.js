@@ -2,9 +2,9 @@ import site from '../../app';
 
 site.service('ShareManagement', (UserStatus, FirebaseURL, $firebaseArray) => {
 
-  const me = UserStatus.authData.uid;
-
   const manageSorting = (oldSortsPlucked, newSorts, docId) => {
+    const me = UserStatus.authData.uid;
+
     const newSortsPlucked = _.pluck(newSorts, 'uid');
     const removals = _.difference(oldSortsPlucked, newSortsPlucked);
     const additions = _.difference(newSortsPlucked, oldSortsPlucked);

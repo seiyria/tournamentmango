@@ -1,13 +1,21 @@
 import site from '../../app';
 
-site.service('CurrentTournaments', ($q, $firebaseArray, FirebaseURL, UserStatus) => {
+site.service('CurrentTournaments', ($q, $firebaseArray, FirebaseURL, Auth, UserStatus, EnsureLoggedIn) => {
+
+  EnsureLoggedIn.check();
+
   const defer = $q.defer();
 
-  let ref = $firebaseArray(new Firebase(`${FirebaseURL}/users/${UserStatus.firebase.playerSetUid}/players/${UserStatus.firebase.playerSet}/tournaments`));
+  let ref = {};
 
-  UserStatus.firebase.$watch(() => {
+  const load = () => {
     ref = $firebaseArray(new Firebase(`${FirebaseURL}/users/${UserStatus.firebase.playerSetUid}/players/${UserStatus.firebase.playerSet}/tournaments`));
     defer.notify(ref);
+  };
+
+  Auth.ready.then(() => {
+    UserStatus.firebase.$loaded(load);
+    UserStatus.firebase.$watch(load);
   });
 
   return {

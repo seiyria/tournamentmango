@@ -1,6 +1,6 @@
 import site from '../../app';
 
-site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject, FirebaseURL, ScoringFunctions, CurrentUsers, InputPrompt, UserStatus, CurrentPlayerBucket, CurrentTournaments, ShareManagement, SetManagement, SidebarManagement, EnsureLoggedIn, UserManagement, TournamentStatus, Toaster) => {
+site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject, Auth, FirebaseURL, ScoringFunctions, CurrentUsers, InputPrompt, UserStatus, CurrentPlayerBucket, CurrentTournaments, ShareManagement, SetManagement, SidebarManagement, EnsureLoggedIn, UserManagement, TournamentStatus, Toaster) => {
 
   SidebarManagement.hasSidebar = true;
   const authData = EnsureLoggedIn.check();
@@ -223,9 +223,6 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
     $scope.selected = [];
   };
 
-  $scope.tournaments = CurrentTournaments.get();
-  CurrentTournaments.watch.then(null, null, tournaments => $scope.tournaments = tournaments);
-
   $scope.anyCompletedTournaments = () => _.any($scope.tournaments, t => t.status === TournamentStatus.COMPLETED);
   $scope.allTournamentGames = () => _.uniq($scope.tournaments, t => t.game);
 
@@ -268,18 +265,23 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
   };
 
   $scope.load = () => {
-    UserStatus.firebase.$loaded(() => {
+    Auth.ready.then(() => {
+      UserStatus.firebase.$loaded(() => {
 
-      if(!UserStatus.firebase.playerSet) {
-        $scope.changePlayerSet('default');
-      }
+        if(!UserStatus.firebase.playerSet) {
+          $scope.changePlayerSet('default');
+        }
 
-      $scope.setCurrentPlayerSet(CurrentUsers.get());
+        $scope.setCurrentPlayerSet(CurrentUsers.get());
 
-      $scope.isMine = UserStatus.firebase.playerSetUid === authData.uid;
+        $scope.isMine = UserStatus.firebase.playerSetUid === authData.uid;
+
+        $scope.tournaments = CurrentTournaments.get();
+        CurrentTournaments.watch.then(null, null, tournaments => $scope.tournaments = tournaments);
+      });
+      $scope.loadAllLists();
+      $scope.loadSharedWithMe();
     });
-    $scope.loadAllLists();
-    $scope.loadSharedWithMe();
   };
 
   $scope.load();

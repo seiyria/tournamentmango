@@ -20,7 +20,6 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
       const data = currentUsersInfo.users;
       if(!data.shareIDs) return;
       $scope.hasAccess = data && data.shareIDs[authData.uid] || defaultHasAccess();
-      console.log(data, defaultHasAccess(), UserStatus.firebase.playerSetUid, authData);
     });
   }
 
