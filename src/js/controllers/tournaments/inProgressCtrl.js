@@ -11,7 +11,7 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
   const clipboard = new Clipboard('.copy-url');
   clipboard.on('success', () => Toaster.show(`Copied URL to clipboard!`));
 
-  const defaultHasAccess = () => authData && authData.uid === UserStatus.firebase.playerSetUid;
+  const defaultHasAccess = () => authData && authData.uid === atob($stateParams.userId);
 
   $scope.hasAccess = defaultHasAccess();
 
@@ -19,7 +19,8 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
     CurrentUsers.watch.then(null, null, currentUsersInfo => {
       const data = currentUsersInfo.users;
       if(!data.shareIDs) return;
-      $scope.hasAccess = defaultHasAccess() || data && data.shareIDs[authData.uid];
+      $scope.hasAccess = data && data.shareIDs[authData.uid] || defaultHasAccess();
+      console.log(data, defaultHasAccess(), UserStatus.firebase.playerSetUid, authData);
     });
   }
 
