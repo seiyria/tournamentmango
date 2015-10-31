@@ -23,7 +23,6 @@ site.controller('upcomingController', ($scope, $mdMedia, $state, $stateParams, $
 
   $scope.isReady = (match) => {
     if($scope.noRender(match) || !$scope.shouldShow(match)) return;
-    console.log($scope.getMatchIdString(match), ~~!!$scope.getStation(match), ~~!hasAnyZeroes(match));
     return ~~!!$scope.getStation(match) + ~~!hasAnyZeroes(match);
   };
 
