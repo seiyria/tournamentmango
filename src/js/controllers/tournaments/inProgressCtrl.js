@@ -126,7 +126,7 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
     TournamentInformation.reset($scope.trn);
 
     $scope.maxMatches = new Array(horizMatches);
-    $scope.nextMatch = (match) => $scope.trn.right(match);
+    $scope.nextMatch = (match) => $scope.trn.right ? $scope.trn.right(match) : null;
 
     $scope.matchesLeft = () => TournamentInformation.matchesLeft($scope.trn);
 
