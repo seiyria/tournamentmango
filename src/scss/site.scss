@@ -183,53 +183,57 @@ station {
         }
       }
 
-      .round-type {
-        @include all-widths(70px);
-        text-align: center;
-      }
+      .match-data {
+        align-items: stretch;
 
-      .match-name {
-        @include all-widths($match-column-width);
-
-        .member {
-          @include all-widths($match-column-width);
-          overflow: hidden;
-          white-space: nowrap;
+        .round-type {
+          @include all-widths(70px);
           text-align: center;
-          text-overflow: ellipsis;
+        }
 
-          border-left: $card-border;
+        .match-name {
+          @include all-widths($match-column-width);
 
-          &[hover-name=""] {
-            font-style: italic;
-          }
+          .member {
+            @include all-widths($match-column-width);
+            overflow: hidden;
+            white-space: nowrap;
+            text-align: center;
+            text-overflow: ellipsis;
 
-          &:not(:last-child) {
-            border-bottom: $card-border;
+            border-left: $card-border;
+
+            &[hover-name=""] {
+              font-style: italic;
+            }
+
+            &:not(:last-child) {
+              border-bottom: $card-border;
+            }
           }
         }
-      }
 
-      .confirm-score {
-        cursor: pointer;
-        @include all-widths(24px);
-      }
+        .confirm-score {
+          cursor: pointer;
+          @include all-widths(24px);
+        }
 
-      .scores {
-        .score-container {
-          width: 25px;
-          border-right: $card-border;
-          border-left: $card-border;
-
-          &:not(:last-child) {
-            border-bottom: $card-border;
-          }
-
-          .score-input {
+        .scores {
+          .score-container {
             width: 25px;
-            font-size: 12px;
-            margin: 0;
-            padding: 0;
+            border-right: $card-border;
+            border-left: $card-border;
+
+            &:not(:last-child) {
+              border-bottom: $card-border;
+            }
+
+            .score-input {
+              width: 25px;
+              font-size: 12px;
+              margin: 0;
+              padding: 0;
+            }
           }
         }
       }
