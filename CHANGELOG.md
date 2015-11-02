@@ -1,6 +1,29 @@
-<a name="0.6.5"></a>
-## [0.6.5](https://github.com/seiyria/openchallenge/compare/0.6.5...v0.6.5) (2015-10-29)
+<a name="0.6.6"></a>
+## [0.6.6](https://github.com/seiyria/openchallenge/compare/0.6.6...v0.6.6) (2015-11-02)
 
+
+
+
+<a name="0.6.6"></a>
+## [0.6.6](https://github.com/seiyria/openchallenge/compare/0.6.5...0.6.6) (2015-11-02)
+
+
+### Bug Fixes
+
+* **dialogs:** clicking outside of a dialog will not close it anymore ([01ee672](https://github.com/seiyria/openchallenge/commit/01ee672)), closes [#81](https://github.com/seiyria/openchallenge/issues/81)
+* **homepage:** the homepage blocks should now display correctly ([e411a13](https://github.com/seiyria/openchallenge/commit/e411a13))
+* **logout:** logging out should work in all browsers now ([b112436](https://github.com/seiyria/openchallenge/commit/b112436)), closes [#73](https://github.com/seiyria/openchallenge/issues/73)
+* **tournaments:** access levels are fixed and station id cannot be edited unless you're the owner ([5f979c2](https://github.com/seiyria/openchallenge/commit/5f979c2)), closes [#83](https://github.com/seiyria/openchallenge/issues/83)
+* **tournaments:** hide unnecessary grand final matches ([b4670c6](https://github.com/seiyria/openchallenge/commit/b4670c6)), closes [#79](https://github.com/seiyria/openchallenge/issues/79)
+* **tournaments:** lines will no longer furiously redraw if you score a match ([754cd81](https://github.com/seiyria/openchallenge/commit/754cd81)), closes [#78](https://github.com/seiyria/openchallenge/issues/78)
+* **tournaments:** masters tournaments don't throw a bunch of console errors anymore ([369fad6](https://github.com/seiyria/openchallenge/commit/369fad6)), closes [#85](https://github.com/seiyria/openchallenge/issues/85)
+* **upcoming:** change squished text to be less squished ([50a6e60](https://github.com/seiyria/openchallenge/commit/50a6e60))
+
+### Features
+
+* **navigation:** added a link to the wiki for help ([c863620](https://github.com/seiyria/openchallenge/commit/c863620)), closes [#82](https://github.com/seiyria/openchallenge/issues/82)
+* **navigation:** currently hovered item will now be shown better ([f462478](https://github.com/seiyria/openchallenge/commit/f462478)), closes [#72](https://github.com/seiyria/openchallenge/issues/72)
+* **tournaments:** tournament matches now have a colored plate if they are ready ([8c9ff97](https://github.com/seiyria/openchallenge/commit/8c9ff97)), closes [#80](https://github.com/seiyria/openchallenge/issues/80)
 
 
 
