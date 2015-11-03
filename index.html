@@ -192,6 +192,224 @@
     </md-list>
   </md-card>
 </script>
+<script type="text/ng-template" id="/dialog/addevent">
+  <md-dialog>
+    <div class="md-dialog-content">
+      <h2 class="md-title">{{label}} Event</h2>
+      <p ng-if="item.form.$submitted &amp;&amp; item.form.$invalid" layout="row" layout-align="start center" class="md-warn">
+        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
+      </p>
+      <form name="item.form" ng-submit="addItem()">
+        <div layout-gt-sm="row" layout-sm="column" class="input-row">
+          <md-input-container flex="flex">
+            <label>Name</label>
+            <input name="name" ng-model="item.name" md-maxlength="30" required="required"/>
+          </md-input-container>
+          <md-autocomplete flex="flex" required="required" md-input-name="location" md-selected-item="selectedlocation" md-floating-label="Location" md-search-text="item.location" md-items="place in getLocations(item.location)" md-item-text="place" md-input-maxlength="30">
+            <md-item-template><span md-highlight-text="searchText">{{place}}</span></md-item-template>
+            <md-not-found>No matches.</md-not-found>
+          </md-autocomplete>
+        </div>
+        <h3 class="md-subhead subhead">When</h3>
+        <div layout="row" class="input-row">
+          <md-datepicker ng-model="item.date" md-placeholder="Enter date" required="required" style="margin-top: 14px"></md-datepicker>
+          <md-input-container flex="flex">
+            <label>Time</label>
+            <input name="time" type="time" ng-model="item.date"/>
+          </md-input-container>
+        </div>
+        <h3 class="md-subhead subhead">Extra</h3>
+        <div layout="row" class="input-row">
+          <md-input-container flex="flex">
+            <label>Description</label>
+            <textarea name="description" ng-model="item.description" md-maxlength="200"></textarea>
+          </md-input-container>
+        </div>
+      </form>
+    </div>
+    <div class="md-actions">
+      <md-button ng-click="addItem()" ng-disabled="item.form.$invalid" aria-label="submit" class="md-primary">{{label}} Event</md-button>
+      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
+    </div>
+  </md-dialog>
+</script>
+<script type="text/ng-template" id="/dialog/addtournament">
+  <md-dialog>
+    <div class="md-dialog-content">
+      <h2 class="md-title">{{label}} Tournament</h2>
+      <p ng-if="item.form.$submitted &amp;&amp; item.form.$invalid" layout="row" layout-align="start center" class="md-warn">
+        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
+      </p>
+      <form name="item.form" ng-submit="addItem()">
+        <div layout="row" class="input-row">
+          <md-input-container flex="flex">
+            <label>Name</label>
+            <input name="name" ng-model="item.name" md-maxlength="30" required="required"/>
+          </md-input-container>
+        </div>
+        <div layout="row" class="input-row">
+          <md-input-container flex="flex">
+            <label>Event</label>
+            <md-select ng-model="item.event">
+              <md-option ng-repeat="event in allEvents" value="{{event.$id}}">{{event.name}}</md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+        <div layout="row" class="input-row">
+          <md-autocomplete flex="flex" required="required" md-input-name="game" md-selected-item="selectedGame" md-floating-label="Game" md-search-text="item.game" md-items="game in getGames(item.game)" md-item-text="game" md-input-maxlength="30">
+            <md-item-template><span md-highlight-text="searchText">{{game}}</span></md-item-template>
+            <md-not-found>No matches.</md-not-found>
+          </md-autocomplete>
+        </div>
+      </form>
+    </div>
+    <div class="md-actions">
+      <md-button ng-click="addItem()" ng-disabled="item.form.$invalid" aria-label="submit" class="md-primary">{{label}} Tournament</md-button>
+      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
+    </div>
+  </md-dialog>
+</script>
+<script type="text/ng-template" id="/dialog/adduser">
+  <md-dialog>
+    <div class="md-dialog-content">
+      <h2 ng-if="!viewOnly" class="md-title">{{label}} Player</h2>
+      <h2 ng-if="viewOnly" class="md-title">{{item.name}} {{item.location ? 'from ' + item.location : ''}}</h2>
+      <p ng-if="item.form.$submitted &amp;&amp; item.form.$invalid" layout="row" layout-align="start center" class="md-warn">
+        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
+      </p>
+      <form name="item.form" ng-submit="addItem()">
+        <div layout-gt-sm="row" layout-sm="column" ng-if="!viewOnly" class="input-row">
+          <md-input-container flex="flex">
+            <label>Name</label>
+            <input name="name" ng-model="item.name" md-maxlength="30" required="required"/>
+          </md-input-container>
+          <md-autocomplete flex="flex" md-input-name="location" md-selected-item="selectedlocation" md-floating-label="Location" md-search-text="item.location" md-items="place in getLocations(item.location)" md-item-text="place" md-input-maxlength="30">
+            <md-item-template><span md-highlight-text="searchText">{{place}}</span></md-item-template>
+            <md-not-found>No matches.</md-not-found>
+          </md-autocomplete>
+        </div>
+        <h3 class="md-subhead subhead">Aliases</h3>
+        <div layout="row" class="input-row">
+          <md-chips ng-model="item.aliases" secondary-placeholder="Add aliases" placeholder="+Alias" required="required" readonly="viewOnly"><span md-highlight-text="searchText">{{item}}</span></md-chips>
+          <md-chip ng-if="item.aliases.length === 0 &amp;&amp; viewOnly">None</md-chip>
+        </div>
+        <h3 class="md-subhead subhead">Games Played</h3>
+        <div layout="row" class="input-row">
+          <md-chips ng-model="item.games" secondary-placeholder="Add games" placeholder="+Game" required="required" md-autocomplete-snap="md-autocomplete-snap" readonly="viewOnly">
+            <md-autocomplete md-selected-item="selectedItem" md-search-text="searchText" md-items="item in getGames(searchText)" md-item-text="item" placeholder="+Game"><span md-highlight-text="searchText">{{item}}</span></md-autocomplete>
+          </md-chips>
+          <md-chip ng-if="item.games.length === 0 &amp;&amp; viewOnly">None</md-chip>
+        </div>
+        <h3 class="md-subhead subhead">Characters Used</h3>
+        <div layout="row" class="input-row">
+          <md-chips ng-model="item.characters" secondary-placeholder="Add characters" placeholder="+Character" required="required" md-autocomplete-snap="md-autocomplete-snap" readonly="viewOnly">
+            <md-autocomplete md-selected-item="selectedItem" md-search-text="searchText" md-items="item in getCharacters(searchText)" md-item-text="item" placeholder="+Character"><span md-highlight-text="searchText">{{item}}</span></md-autocomplete>
+          </md-chips>
+          <md-chip ng-if="item.characters.length === 0 &amp;&amp; viewOnly">None</md-chip>
+        </div>
+      </form>
+    </div>
+    <div ng-if="!viewOnly" class="md-actions">
+      <md-button ng-click="addItem()" ng-disabled="item.form.$invalid" aria-label="submit" class="md-primary">{{label}} Player</md-button>
+      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
+    </div>
+    <div ng-if="viewOnly" class="md-actions">
+      <md-button ng-click="cancel()" aria-label="close" class="md-primary">Close</md-button>
+    </div>
+  </md-dialog>
+</script>
+<script type="text/ng-template" id="/dialog/input-prompt">
+  <md-dialog>
+    <div class="md-dialog-content">
+      <h2 class="md-title">{{title}}</h2>
+      <p ng-if="form.$submitted &amp;&amp; form.$invalid" layout="row" layout-align="start center" class="md-warn">
+        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
+      </p>
+      <p ng-if="!isValid()" layout="row" layout-align="start center" class="md-warn">
+        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;Set name taken.</span>
+      </p>
+      <form name="form" ng-submit="submit()">
+        <div layout="row" class="input-row">
+          <md-input-container flex="flex">
+            <label>{{label}}</label>
+            <input name="string" ng-model="string" md-maxlength="30" required="required"/>
+          </md-input-container>
+        </div>
+      </form>
+    </div>
+    <div class="md-actions">
+      <md-button ng-click="submit()" ng-disabled="form.$invalid || !isValid()" aria-label="submit" class="md-primary">Submit</md-button>
+      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
+    </div>
+  </md-dialog>
+</script>
+<script type="text/ng-template" id="/dialog/results">
+  <md-dialog>
+    <div class="md-dialog-content">
+      <h2 class="md-title">Results for {{tournamentName}}</h2>
+      <md-list>
+        <md-list-item ng-repeat="result in results" class="md-2-line">
+          <div class="md-avatar subhead">{{toOrdinal(result.pos)}}</div>
+          <div class="md-list-item-text">
+            <h3>{{nameString(result.seed)}}</h3>
+            <p>Wins: {{result.wins}}, Total Points Scored: {{result.for}}</p>
+          </div>
+        </md-list-item>
+      </md-list>
+    </div>
+    <div class="md-actions">
+      <md-button ng-click="cancel()" aria-label="close" class="md-primary">Close</md-button>
+    </div>
+  </md-dialog>
+</script>
+<script type="text/ng-template" id="/dialog/select-prompt">
+  <md-dialog>
+    <div class="md-dialog-content">
+      <h2 class="md-title">{{title}}</h2>
+      <p ng-if="form.$submitted &amp;&amp; form.$invalid" layout="row" layout-align="start center" class="md-warn">
+        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
+      </p>
+      <form name="form" ng-submit="submit()">
+        <div layout="row" class="input-row">
+          <md-input-container flex="flex">
+            <label>{{label}}</label>
+            <md-select ng-model="string" required="required">
+              <md-optgroup ng-repeat="group in groups" label="{{group}}">
+                <md-option ng-repeat="value in selectableValues | filter:{group:group}" value="{{value}}">{{value.realName}}</md-option>
+              </md-optgroup>
+            </md-select>
+          </md-input-container>
+        </div>
+      </form>
+    </div>
+    <div class="md-actions">
+      <md-button ng-click="submit()" ng-disabled="form.$invalid" aria-label="submit" class="md-primary">Submit</md-button>
+      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
+    </div>
+  </md-dialog>
+</script>
+<script type="text/ng-template" id="/dialog/share-prompt">
+  <md-dialog>
+    <div class="md-dialog-content">
+      <h2 class="md-title">Share "{{title}}"</h2>
+      <form name="form" ng-submit="submit()">
+        <div layout="row" class="input-row">
+          <md-chips flex="flex" ng-model="sharedWith" secondary-placeholder="Share with users" placeholder="+User" md-require-match="true" md-autocomplete-snap="md-autocomplete-snap">
+            <md-autocomplete flex="flex" required="required" md-selected-item="sharedwith" md-search-text="searchKey" md-items="user in getUser(searchKey)" md-item-text="user.name">
+              <md-item-template><span>{{user.name}}</span></md-item-template>
+              <md-not-found>No matches.</md-not-found>
+            </md-autocomplete>
+            <md-chip-template><span>{{$chip.name}}</span></md-chip-template>
+          </md-chips>
+        </div>
+      </form>
+    </div>
+    <div class="md-actions">
+      <md-button ng-click="submit()" aria-label="submit" class="md-primary">Submit</md-button>
+      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
+    </div>
+  </md-dialog>
+</script>
 <script type="text/ng-template" id="/event-manage">
   <md-card>
     <md-data-table-toolbar ng-hide="selected.length || filter.show">
@@ -513,224 +731,6 @@
     </md-fab-speed-dial>
   </div>
 </script>
-<script type="text/ng-template" id="/dialog/addevent">
-  <md-dialog>
-    <div class="md-dialog-content">
-      <h2 class="md-title">{{label}} Event</h2>
-      <p ng-if="item.form.$submitted &amp;&amp; item.form.$invalid" layout="row" layout-align="start center" class="md-warn">
-        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
-      </p>
-      <form name="item.form" ng-submit="addItem()">
-        <div layout-gt-sm="row" layout-sm="column" class="input-row">
-          <md-input-container flex="flex">
-            <label>Name</label>
-            <input name="name" ng-model="item.name" md-maxlength="30" required="required"/>
-          </md-input-container>
-          <md-autocomplete flex="flex" required="required" md-input-name="location" md-selected-item="selectedlocation" md-floating-label="Location" md-search-text="item.location" md-items="place in getLocations(item.location)" md-item-text="place" md-input-maxlength="30">
-            <md-item-template><span md-highlight-text="searchText">{{place}}</span></md-item-template>
-            <md-not-found>No matches.</md-not-found>
-          </md-autocomplete>
-        </div>
-        <h3 class="md-subhead subhead">When</h3>
-        <div layout="row" class="input-row">
-          <md-datepicker ng-model="item.date" md-placeholder="Enter date" required="required" style="margin-top: 14px"></md-datepicker>
-          <md-input-container flex="flex">
-            <label>Time</label>
-            <input name="time" type="time" ng-model="item.date"/>
-          </md-input-container>
-        </div>
-        <h3 class="md-subhead subhead">Extra</h3>
-        <div layout="row" class="input-row">
-          <md-input-container flex="flex">
-            <label>Description</label>
-            <textarea name="description" ng-model="item.description" md-maxlength="200"></textarea>
-          </md-input-container>
-        </div>
-      </form>
-    </div>
-    <div class="md-actions">
-      <md-button ng-click="addItem()" ng-disabled="item.form.$invalid" aria-label="submit" class="md-primary">{{label}} Event</md-button>
-      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
-    </div>
-  </md-dialog>
-</script>
-<script type="text/ng-template" id="/dialog/addtournament">
-  <md-dialog>
-    <div class="md-dialog-content">
-      <h2 class="md-title">{{label}} Tournament</h2>
-      <p ng-if="item.form.$submitted &amp;&amp; item.form.$invalid" layout="row" layout-align="start center" class="md-warn">
-        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
-      </p>
-      <form name="item.form" ng-submit="addItem()">
-        <div layout="row" class="input-row">
-          <md-input-container flex="flex">
-            <label>Name</label>
-            <input name="name" ng-model="item.name" md-maxlength="30" required="required"/>
-          </md-input-container>
-        </div>
-        <div layout="row" class="input-row">
-          <md-input-container flex="flex">
-            <label>Event</label>
-            <md-select ng-model="item.event">
-              <md-option ng-repeat="event in allEvents" value="{{event.$id}}">{{event.name}}</md-option>
-            </md-select>
-          </md-input-container>
-        </div>
-        <div layout="row" class="input-row">
-          <md-autocomplete flex="flex" required="required" md-input-name="game" md-selected-item="selectedGame" md-floating-label="Game" md-search-text="item.game" md-items="game in getGames(item.game)" md-item-text="game" md-input-maxlength="30">
-            <md-item-template><span md-highlight-text="searchText">{{game}}</span></md-item-template>
-            <md-not-found>No matches.</md-not-found>
-          </md-autocomplete>
-        </div>
-      </form>
-    </div>
-    <div class="md-actions">
-      <md-button ng-click="addItem()" ng-disabled="item.form.$invalid" aria-label="submit" class="md-primary">{{label}} Tournament</md-button>
-      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
-    </div>
-  </md-dialog>
-</script>
-<script type="text/ng-template" id="/dialog/adduser">
-  <md-dialog>
-    <div class="md-dialog-content">
-      <h2 ng-if="!viewOnly" class="md-title">{{label}} Player</h2>
-      <h2 ng-if="viewOnly" class="md-title">{{item.name}} {{item.location ? 'from ' + item.location : ''}}</h2>
-      <p ng-if="item.form.$submitted &amp;&amp; item.form.$invalid" layout="row" layout-align="start center" class="md-warn">
-        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
-      </p>
-      <form name="item.form" ng-submit="addItem()">
-        <div layout-gt-sm="row" layout-sm="column" ng-if="!viewOnly" class="input-row">
-          <md-input-container flex="flex">
-            <label>Name</label>
-            <input name="name" ng-model="item.name" md-maxlength="30" required="required"/>
-          </md-input-container>
-          <md-autocomplete flex="flex" md-input-name="location" md-selected-item="selectedlocation" md-floating-label="Location" md-search-text="item.location" md-items="place in getLocations(item.location)" md-item-text="place" md-input-maxlength="30">
-            <md-item-template><span md-highlight-text="searchText">{{place}}</span></md-item-template>
-            <md-not-found>No matches.</md-not-found>
-          </md-autocomplete>
-        </div>
-        <h3 class="md-subhead subhead">Aliases</h3>
-        <div layout="row" class="input-row">
-          <md-chips ng-model="item.aliases" secondary-placeholder="Add aliases" placeholder="+Alias" required="required" readonly="viewOnly"><span md-highlight-text="searchText">{{item}}</span></md-chips>
-          <md-chip ng-if="item.aliases.length === 0 &amp;&amp; viewOnly">None</md-chip>
-        </div>
-        <h3 class="md-subhead subhead">Games Played</h3>
-        <div layout="row" class="input-row">
-          <md-chips ng-model="item.games" secondary-placeholder="Add games" placeholder="+Game" required="required" md-autocomplete-snap="md-autocomplete-snap" readonly="viewOnly">
-            <md-autocomplete md-selected-item="selectedItem" md-search-text="searchText" md-items="item in getGames(searchText)" md-item-text="item" placeholder="+Game"><span md-highlight-text="searchText">{{item}}</span></md-autocomplete>
-          </md-chips>
-          <md-chip ng-if="item.games.length === 0 &amp;&amp; viewOnly">None</md-chip>
-        </div>
-        <h3 class="md-subhead subhead">Characters Used</h3>
-        <div layout="row" class="input-row">
-          <md-chips ng-model="item.characters" secondary-placeholder="Add characters" placeholder="+Character" required="required" md-autocomplete-snap="md-autocomplete-snap" readonly="viewOnly">
-            <md-autocomplete md-selected-item="selectedItem" md-search-text="searchText" md-items="item in getCharacters(searchText)" md-item-text="item" placeholder="+Character"><span md-highlight-text="searchText">{{item}}</span></md-autocomplete>
-          </md-chips>
-          <md-chip ng-if="item.characters.length === 0 &amp;&amp; viewOnly">None</md-chip>
-        </div>
-      </form>
-    </div>
-    <div ng-if="!viewOnly" class="md-actions">
-      <md-button ng-click="addItem()" ng-disabled="item.form.$invalid" aria-label="submit" class="md-primary">{{label}} Player</md-button>
-      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
-    </div>
-    <div ng-if="viewOnly" class="md-actions">
-      <md-button ng-click="cancel()" aria-label="close" class="md-primary">Close</md-button>
-    </div>
-  </md-dialog>
-</script>
-<script type="text/ng-template" id="/dialog/input-prompt">
-  <md-dialog>
-    <div class="md-dialog-content">
-      <h2 class="md-title">{{title}}</h2>
-      <p ng-if="form.$submitted &amp;&amp; form.$invalid" layout="row" layout-align="start center" class="md-warn">
-        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
-      </p>
-      <p ng-if="!isValid()" layout="row" layout-align="start center" class="md-warn">
-        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;Set name taken.</span>
-      </p>
-      <form name="form" ng-submit="submit()">
-        <div layout="row" class="input-row">
-          <md-input-container flex="flex">
-            <label>{{label}}</label>
-            <input name="string" ng-model="string" md-maxlength="30" required="required"/>
-          </md-input-container>
-        </div>
-      </form>
-    </div>
-    <div class="md-actions">
-      <md-button ng-click="submit()" ng-disabled="form.$invalid || !isValid()" aria-label="submit" class="md-primary">Submit</md-button>
-      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
-    </div>
-  </md-dialog>
-</script>
-<script type="text/ng-template" id="/dialog/results">
-  <md-dialog>
-    <div class="md-dialog-content">
-      <h2 class="md-title">Results for {{tournamentName}}</h2>
-      <md-list>
-        <md-list-item ng-repeat="result in results" class="md-2-line">
-          <div class="md-avatar subhead">{{toOrdinal(result.pos)}}</div>
-          <div class="md-list-item-text">
-            <h3>{{nameString(result.seed)}}</h3>
-            <p>Wins: {{result.wins}}, Total Points Scored: {{result.for}}</p>
-          </div>
-        </md-list-item>
-      </md-list>
-    </div>
-    <div class="md-actions">
-      <md-button ng-click="cancel()" aria-label="close" class="md-primary">Close</md-button>
-    </div>
-  </md-dialog>
-</script>
-<script type="text/ng-template" id="/dialog/select-prompt">
-  <md-dialog>
-    <div class="md-dialog-content">
-      <h2 class="md-title">{{title}}</h2>
-      <p ng-if="form.$submitted &amp;&amp; form.$invalid" layout="row" layout-align="start center" class="md-warn">
-        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
-      </p>
-      <form name="form" ng-submit="submit()">
-        <div layout="row" class="input-row">
-          <md-input-container flex="flex">
-            <label>{{label}}</label>
-            <md-select ng-model="string" required="required">
-              <md-optgroup ng-repeat="group in groups" label="{{group}}">
-                <md-option ng-repeat="value in selectableValues | filter:{group:group}" value="{{value}}">{{value.realName}}</md-option>
-              </md-optgroup>
-            </md-select>
-          </md-input-container>
-        </div>
-      </form>
-    </div>
-    <div class="md-actions">
-      <md-button ng-click="submit()" ng-disabled="form.$invalid" aria-label="submit" class="md-primary">Submit</md-button>
-      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
-    </div>
-  </md-dialog>
-</script>
-<script type="text/ng-template" id="/dialog/share-prompt">
-  <md-dialog>
-    <div class="md-dialog-content">
-      <h2 class="md-title">Share "{{title}}"</h2>
-      <form name="form" ng-submit="submit()">
-        <div layout="row" class="input-row">
-          <md-chips flex="flex" ng-model="sharedWith" secondary-placeholder="Share with users" placeholder="+User" md-require-match="true" md-autocomplete-snap="md-autocomplete-snap">
-            <md-autocomplete flex="flex" required="required" md-selected-item="sharedwith" md-search-text="searchKey" md-items="user in getUser(searchKey)" md-item-text="user.name">
-              <md-item-template><span>{{user.name}}</span></md-item-template>
-              <md-not-found>No matches.</md-not-found>
-            </md-autocomplete>
-            <md-chip-template><span>{{$chip.name}}</span></md-chip-template>
-          </md-chips>
-        </div>
-      </form>
-    </div>
-    <div class="md-actions">
-      <md-button ng-click="submit()" aria-label="submit" class="md-primary">Submit</md-button>
-      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
-    </div>
-  </md-dialog>
-</script>
 <script type="text/ng-template" id="/tournaments/in-progress">
   <div layout="row" hide-sm="hide-sm" class="header-bar">
     <div flex="flex"></div>
@@ -1042,7 +1042,7 @@
               <div class="score-value">-</div>
             </div>
           </div>
-          <div class="margin-right-10 margin-left-10 confirm-score">
+          <div flex="flex" layout="column" layout-align="center center" class="margin-right-10 margin-left-10 confirm-score">
             <ng-md-icon size="24" icon="check_circle" ng-click="confirmScore(match)" ng-if="!invalidMatch(match) &amp;&amp; !scoresEqual(match)" style="fill: {{match.m ? '#ccc' : '#000'}}"></ng-md-icon>
           </div>
         </div>
