@@ -39,5 +39,5 @@ script(type="text/ng-template", id="tournament-duel")
             .score-container.padding-5(ng-repeat="p in match.p track by $index", hover-name="{{getName(match.p[$index]-1)}}")
               .score-value -
 
-          div.margin-right-10.margin-left-10.confirm-score
+          .margin-right-10.margin-left-10.confirm-score(flex, layout="column", layout-align="center center")
             ng-md-icon(size="24", icon="check_circle", ng-click="confirmScore(match)", ng-if="!invalidMatch(match) && !scoresEqual(match)", style="fill: {{match.m ? '#ccc' : '#000'}}")
