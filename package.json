@@ -1,9 +1,9 @@
 {
-  "name": "OpenChallenge",
+  "name": "TournamentMango",
   "description": "A tournament management tool.",
   "readme": "README.md",
   "repository": {
-    "url": "https://github.com/seiyria/openchallenge"
+    "url": "https://github.com/seiyria/tournamentmango"
   },
   "version": "0.6.6",
   "license": "MIT",
@@ -13,7 +13,7 @@
   "node-main": "nw.js",
   "main": "nw.html",
   "window": {
-    "title": "OpenChallenge - loading...",
+    "title": "TournamentMango - loading...",
     "width": 1024,
     "height": 768,
     "toolbar": false
@@ -57,7 +57,7 @@
     "watchify": "~3.4.0"
   },
   "scripts": {
-    "post-install": "node ./node_modules/bower/bin/bower install",
+    "postinstall": "node ./node_modules/bower/bin/bower install",
     "start": "node ./node_modules/gulp/bin/gulp.js",
     "build": "node ./node_modules/gulp/bin/gulp.js build",
     "test": "node ./node_modules/gulp/bin/gulp.js check"
