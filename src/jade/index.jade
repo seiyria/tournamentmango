@@ -19,7 +19,7 @@ html(ng-app='openchallenge', ng-controller="rootController")
 
     md-toolbar(layout="row", ng-controller="navController", ng-include="'navbar'")
 
-    div(layout="row", flex)
+    .overflow-auto(layout="row", flex)
       md-sidenav.md-sidenav-left.md-whiteframe-z2.navigation(
         layout="column",
         ng-if="sidebar.hasSidebar",
@@ -27,7 +27,7 @@ html(ng-app='openchallenge', ng-controller="rootController")
         md-component-id="left",
         ui-view="sidebar",
         md-swipe-left="dismissSidebar()")
-      div(layout="column", flex)
+      .max-width(layout="column", flex)
         md-content(layout="column", flex, ui-view="content")
 
     script(src='./js/lib.min.js')

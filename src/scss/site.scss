@@ -18,6 +18,14 @@ $match-column-width: 130px;
 
 $player-not-ready: #c76e06;
 
+.max-width {
+  @include all-widths(100%);
+}
+
+.overflow-auto {
+  overflow: auto;
+}
+
 .hidden {
   visibility: hidden;
 }
