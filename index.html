@@ -16,9 +16,9 @@
   </head>
   <body layout="column" ng-cloak="ng-cloak">
     <md-toolbar layout="row" ng-controller="navController" ng-include="'navbar'"></md-toolbar>
-    <div layout="row" flex="flex">
+    <div layout="row" flex="flex" class="overflow-auto">
       <md-sidenav layout="column" ng-if="sidebar.hasSidebar" md-is-locked-open="$mdMedia('gt-sm')" md-component-id="left" ui-view="sidebar" md-swipe-left="dismissSidebar()" class="md-sidenav-left md-whiteframe-z2 navigation"></md-sidenav>
-      <div layout="column" flex="flex">
+      <div layout="column" flex="flex" class="max-width">
         <md-content layout="column" flex="flex" ui-view="content"></md-content>
       </div>
     </div>
