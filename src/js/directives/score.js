@@ -34,9 +34,7 @@ site.directive('score', ($timeout, $filter) => {
         scope.unedit();
       };
 
-      scope.value = scope.value || 0;
-
-      scope.$watch('editStuff.value', (newVal) => scope.value = newVal);
+      scope.$watch('editStuff.value', (newVal) => scope.value = _.isNumber(newVal) ? newVal : 0);
     }
   };
 });
