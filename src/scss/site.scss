@@ -22,6 +22,10 @@ $player-not-ready: #c76e06;
   @include all-widths(100%);
 }
 
+.max-height {
+  @include all-heights(100%);
+}
+
 .overflow-auto {
   overflow: auto;
 }
@@ -59,10 +63,6 @@ station {
   input {
     width: 100%;
   }
-}
-
-.max-height {
-  height: 100%;
 }
 
 .navigation md-list-item .md-no-style {

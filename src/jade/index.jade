@@ -27,7 +27,7 @@ html(ng-app='openchallenge', ng-controller="rootController")
         md-component-id="left",
         ui-view="sidebar",
         md-swipe-left="dismissSidebar()")
-      .max-width(layout="column", flex)
+      div(layout="column", ng-class="{'max-width': isMaxWidth()}", flex)
         md-content(layout="column", flex, ui-view="content")
 
     script(src='./js/lib.min.js')

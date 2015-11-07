@@ -34,6 +34,8 @@ site.directive('score', ($timeout, $filter) => {
         scope.unedit();
       };
 
+      scope.value = scope.value || 0;
+
       scope.$watch('editStuff.value', (newVal) => scope.value = newVal);
     }
   };
