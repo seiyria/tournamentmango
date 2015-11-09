@@ -8,6 +8,9 @@ script(type="text/ng-template", id="/tournaments/not-started")
               span(flex, offset="5") Players ({{bucket.length}})
               span(flex)
               span.text-right(flex)
+                md-button.md-fab.md-mini.md-primary(ng-show="!showBucketButton()", ng-click="selectMorePlayers()")
+                  ng-md-icon(size="24", icon="group_add", style="fill:white")
+                  md-tooltip Add more players!
                 md-button.md-fab.md-mini.md-primary(ng-show="showBucketButton()", ng-click="addBucketToBucket()")
                   ng-md-icon(size="24", icon="group_add", style="fill:white")
                   md-tooltip Add player bucket ({{currentPlayerBucket().length}} players)
@@ -15,10 +18,10 @@ script(type="text/ng-template", id="/tournaments/not-started")
           md-list-item.md-2-line(
             ng-if="bucket.length === 0"
           )
-            .md-list-item-text
-              h3 No players available
+            .md-list-item-text.padding-left-15
+              h3 No players available.
               p
-                a(ui-sref="userManage") Add some more!
+                md-button.md-primary.md-raised.margin-left-0(ng-click="selectMorePlayers()") Add some more!
 
           md-list-item.md-2-line(
             ng-repeat="player in bucket",

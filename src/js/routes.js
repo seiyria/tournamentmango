@@ -13,6 +13,10 @@ site.config(($stateProvider, $urlRouterProvider) => {
     })
     .state('userManage', {
       url: '/players',
+      params: {
+        userSelectOnly: null,
+        tournamentId: null
+      },
       views: {
         'content@': { templateUrl: '/user-manage', controller: 'userManageController' },
         'sidebar@': { templateUrl: '/tournament-sidebar', controller: 'tournamentSidebarController' }

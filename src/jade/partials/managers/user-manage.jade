@@ -1,7 +1,15 @@
 
 script(type="text/ng-template", id="/user-manage")
 
-  md-card(ng-if="anyCompletedTournaments()", layout-gt-sm="row", layout-sm="column")
+  md-card(ng-if="canOnlySelectUsers()", layout="column")
+    h2.md-title.margin-left-25 Selecting Tournament Players
+
+    div(layout="row")
+      .padding-left-20(flex)
+        | When you are done selecting players (you currently have {{currentPlayerBucketSize() || 0}}), proceed here:
+        md-button.md-primary.md-raised(ng-click="backToTournamentsetup()") Back to Tournament Setup
+
+  md-card(ng-if="anyCompletedTournaments() && !canOnlySelectUsers()", layout-gt-sm="row", layout-sm="column")
 
     h2.md-title.margin-left-25 Scoring
 
@@ -88,7 +96,7 @@ script(type="text/ng-template", id="/user-manage")
 
     md-data-table-pagination(md-row-select="[10, 25, 50]", md-limit="datatable.limit", md-page="datatable.page", md-total="{{users.length}}", md-trigger="getUsers")
 
-  .abs-position-bottom-right
+  .abs-position-bottom-right(ng-if="!canOnlySelectUsers()")
     md-fab-speed-dial.md-scale(md-direction="up", md-open="isOpen", ng-mouseleave="isOpen = false")
       md-fab-trigger.align-with-text
 

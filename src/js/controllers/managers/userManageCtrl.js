@@ -1,8 +1,11 @@
 import site from '../../app';
 
-site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject, Auth, FirebaseURL, ScoringFunctions, CurrentUsers, InputPrompt, UserStatus, CurrentPlayerBucket, CurrentTournaments, ShareManagement, SetManagement, SidebarManagement, EnsureLoggedIn, UserManagement, TournamentStatus, Toaster) => {
+site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject, $state, $stateParams, Auth, FirebaseURL, ScoringFunctions, CurrentUsers, InputPrompt, UserStatus, CurrentPlayerBucket, CurrentTournaments, ShareManagement, SetManagement, SidebarManagement, EnsureLoggedIn, UserManagement, TournamentStatus, Toaster) => {
 
-  SidebarManagement.hasSidebar = true;
+  $scope.canOnlySelectUsers = () => $stateParams.userSelectOnly;
+  $scope.backToTournamentsetup = () => $state.go('setupTournament', { tournamentId: $stateParams.tournamentId });
+
+  SidebarManagement.hasSidebar = !$scope.canOnlySelectUsers();
   const authData = EnsureLoggedIn.check();
 
   $scope.datatable = {
@@ -92,7 +95,9 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
 
   $scope.setCurrentPlayerSet = (setData, name = UserStatus.firebase.playerSet) => {
     $scope.setObject = setData;
-    CurrentPlayerBucket.clear();
+    if(!$scope.canOnlySelectUsers()) {
+      CurrentPlayerBucket.clear();
+    }
     $scope.setObject.$loaded(() => {
       if(!$scope.setObject.basename && name) {
         $scope.setObject.basename = name;
@@ -222,6 +227,8 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
     Toaster.show(`Successfully added ${$scope.selected.length} players to bucket.`);
     $scope.selected = [];
   };
+
+  $scope.currentPlayerBucketSize = () => CurrentPlayerBucket.get().length;
 
   $scope.anyCompletedTournaments = () => _.any($scope.tournaments, t => t.status === TournamentStatus.COMPLETED);
   $scope.allTournamentGames = () => _.uniq($scope.tournaments, t => t.game);

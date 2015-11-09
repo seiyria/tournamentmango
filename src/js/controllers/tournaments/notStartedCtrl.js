@@ -7,6 +7,8 @@ site.controller('notStartedController', ($scope, Auth, EnsureLoggedIn, UserStatu
   $scope.bucket = [];
   $scope.tournamentOptions = {};
 
+  $scope.selectMorePlayers = () => $state.go('userManage', { userSelectOnly: true, tournamentId: $stateParams.tournamentId });
+
   $scope.currentPlayerBucket = () => CurrentPlayerBucket.get();
   $scope.showBucketButton = () => $scope.currentPlayerBucket().length !== 0 && $scope.ref && $scope.ref.status === TournamentStatus.IN_PROGRESS;
 

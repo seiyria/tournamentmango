@@ -369,7 +369,7 @@ md-data-table-toolbar > form > input:focus {
 
 $paddings: top bottom left right;
 
-@for $size from 1 to 11 {
+@for $size from 0 to 11 {
   .padding-#{$size*5} { padding: #{$size*5}px }
   .margin-#{$size*5} { margin: #{$size*5}px }
   @each $padding in $paddings {
