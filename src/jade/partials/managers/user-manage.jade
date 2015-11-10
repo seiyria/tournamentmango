@@ -18,7 +18,7 @@ script(type="text/ng-template", id="/user-manage")
     md-input-container
       label Game
       md-select(ng-model="userData.firebase.scoreGame", ng-change="saveFirebase()")
-        md-option(ng-repeat="tournament in allTournamentGames()", value="{{tournament.game}}") {{tournament.game}}
+        md-option(ng-repeat="tournament in allTournamentGames()", value="{{tournament}}") {{tournament}}
 
     div(flex="5", hide-sm)
 
