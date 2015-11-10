@@ -47,12 +47,11 @@
       <div class="text-center padding-top-20">TournamentMango is a great way to manage your tournaments. It supports many features.</div>
     </div>
   </div>
-  <div layout-gt-sm="row" layout="column" flex="flex" layout-wrap="layout-wrap" class="text-center">
-    <div flex-gt-sm="33" flex-sm="40" ng-repeat="block in blocks" class="text-center padding-50"><a ng-if="block.link" ng-href="{{block.link}}" target="_blank">
-        <ng-md-icon icon="{{block.icon}}" size="100"></ng-md-icon></a>
+  <div layout-gt-sm="row" layout="column" flex="flex" layout-wrap="layout-wrap" class="text-center max-width-1200">
+    <div flex-gt-sm="33" flex-sm="40" ng-repeat="block in blocks" class="text-center padding-50">
       <ng-md-icon icon="{{block.icon}}" size="100" ng-if="!block.link"></ng-md-icon>
       <div class="md-title">{{block.name}}</div>
-      <p>{{block.info}}</p>
+      <p ng-bind-html="block.info | rawHtml"></p>
     </div>
   </div>
 </script>
@@ -610,7 +609,7 @@
     <md-input-container>
       <label>Game</label>
       <md-select ng-model="userData.firebase.scoreGame" ng-change="saveFirebase()">
-        <md-option ng-repeat="tournament in allTournamentGames()" value="{{tournament.game}}">{{tournament.game}}</md-option>
+        <md-option ng-repeat="tournament in allTournamentGames()" value="{{tournament}}">{{tournament}}</md-option>
       </md-select>
     </md-input-container>
     <div flex="5" hide-sm="hide-sm"></div>
