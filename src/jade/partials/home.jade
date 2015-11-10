@@ -5,8 +5,6 @@ script(type="text/ng-template", id="/home")
 
   .text-center(layout-gt-sm="row", layout="column", flex, layout-wrap)
     .text-center.padding-50(flex-gt-sm="33", flex-sm="40", ng-repeat="block in blocks")
-      a(ng-if="block.link", ng-href="{{block.link}}", target="_blank")
-        ng-md-icon(icon="{{block.icon}}", size="100")
       ng-md-icon(icon="{{block.icon}}", size="100", ng-if="!block.link")
       .md-title {{block.name}}
-      p {{block.info}}
+      p(ng-bind-html="block.info | rawHtml")

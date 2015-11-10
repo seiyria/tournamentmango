@@ -61,4 +61,5 @@ import './controllers/dialogs/sharePromptCtrl';
 import './controllers/dialogs/selectPromptCtrl';
 import './controllers/dialogs/resultsDialogCtrl';
 
+import './filters/rawHtml.js';
 import './routes';
