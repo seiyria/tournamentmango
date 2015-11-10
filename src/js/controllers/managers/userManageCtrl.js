@@ -231,14 +231,16 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
   $scope.currentPlayerBucketSize = () => CurrentPlayerBucket.get().length;
 
   $scope.anyCompletedTournaments = () => _.any($scope.tournaments, t => t.status === TournamentStatus.COMPLETED);
-  $scope.allTournamentGames = () => _.uniq($scope.tournaments, t => t.game);
+  $scope.allTournamentGames = () => _($scope.tournaments).filter(t => t.game && t.status === TournamentStatus.COMPLETED).pluck('game').uniq().value();
 
   $scope.recalculateScore = () => {
     $scope.calculating = true;
 
+    const currentGame = $scope.userData.firebase.scoreGame;
+
     _.each($scope.users, user => user.points = user.wins = user.losses = 0);
 
-    _.each(_.filter($scope.tournaments, t => t.status === TournamentStatus.COMPLETED), tournament => {
+    _.each(_.filter($scope.tournaments, t => t.game === currentGame && t.status === TournamentStatus.COMPLETED), tournament => {
       _.each(tournament.matches, match => {
         if(_.any(match.p, id => id === -1)) return; // skip hidden matches
 
