@@ -31,8 +31,7 @@ site.controller('homeController', ($scope, SidebarManagement) => {
     },
     {
       name: 'Open Source',
-      link: 'https://github.com/seiyria/openchallenge',
-      info: 'No secrets here. Check out the source on GitHub by clicking the icon above. Feel free to open an issue if you have problems, or submit a pull request if you\'re inclined.',
+      info: 'No secrets here, <a href="https://github.com/seiyria/tournamentmango" target="_blank">check out the source on GitHub</a>. Feel free to open an issue if you have problems, or submit a pull request if you\'re inclined.',
       icon: 'github-circle'
     }
   ];

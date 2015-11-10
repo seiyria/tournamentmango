@@ -1,5 +1,6 @@
 
 export default angular.module('openchallenge', [
   'ngAria', 'ngAnimate', 'ngMaterial', 'ngMdIcons', 'ngStorage',
-  'ui.router', 'firebase', 'md.data.table', 'angular-sortable-view'
+  'ui.router', 'firebase', 'md.data.table', 'angular-sortable-view',
+  'ngSanitize'
 ]);
