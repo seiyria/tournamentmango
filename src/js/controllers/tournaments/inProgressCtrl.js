@@ -3,7 +3,7 @@ import site from '../../app';
 site.filter('inRound', () => (items, round) => _.filter(items, (i) => i.id.r === round));
 site.filter('inSection', () => (items, section) => _.filter(items, (i) => i.id.s === section));
 
-site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, SidebarManagement, TournamentInformation, Toaster, CurrentUsers, CurrentPlayerBucket, UserStatus, TournamentStatus, FirebaseURL, $firebaseObject, $state, $stateParams, $mdDialog) => {
+site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, SidebarManagement, TournamentInformation, Toaster, CurrentUsers, CurrentPlayerBucket, UserStatus, TournamentStatus, UrlShorten, FirebaseURL, $firebaseObject, $state, $stateParams, $mdDialog) => {
 
   SidebarManagement.hasSidebar = false;
   const authData = EnsureLoggedIn.check(false);
@@ -24,7 +24,15 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
   }
 
   $scope.strings = [];
-  $timeout(() => $scope.url = window.location.href, 0);
+  $timeout(() => {
+    $scope.url = window.location.href;
+
+    // if the url shortener fails, we have a fallback to the default url
+    UrlShorten.shorten($scope.url).then((response) => {
+      $scope.url = response.data.id;
+    });
+  }, 0);
+
   $scope.includedTemplate = 'duel';
 
   $scope.doOrOpen = (event) => $scope.isOpen && $scope.trn.isDone() ? $scope.showResults(event) : $scope.isOpen = true;
@@ -35,7 +43,6 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
       twitter: 'https://twitter.com/home?status=',
       google: 'https://plus.google.com/share?url='
     };
-
     window.open(services[service]+$scope.url, '_blank');
   };
 
