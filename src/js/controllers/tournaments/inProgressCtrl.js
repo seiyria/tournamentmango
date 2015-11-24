@@ -3,7 +3,7 @@ import site from '../../app';
 site.filter('inRound', () => (items, round) => _.filter(items, (i) => i.id.r === round));
 site.filter('inSection', () => (items, section) => _.filter(items, (i) => i.id.s === section));
 
-site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, SidebarManagement, TournamentInformation, Toaster, CurrentUsers, CurrentPlayerBucket, UserStatus, TournamentStatus, UrlShorten, FirebaseURL, $firebaseObject, $state, $stateParams, $mdDialog) => {
+site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, SidebarManagement, TournamentInformation, Toaster, CurrentUsers, CurrentPlayerBucket, UserStatus, TournamentStatus, UrlShorten, FirebaseURL, $firebaseObject, $state, $stateParams, $mdDialog, ScoreManagement) => {
 
   SidebarManagement.hasSidebar = false;
   const authData = EnsureLoggedIn.check(false);
@@ -161,7 +161,10 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
     $scope.save = () => {
       $scope.ref.trn = $scope.trn.state;
       $scope.ref.matches = $scope.trn.matches;
-      if($scope.trn.isDone()) $scope.ref.status = TournamentStatus.COMPLETED;
+      if($scope.trn.isDone()) {
+        $scope.ref.status = TournamentStatus.COMPLETED;
+        ScoreManagement.recalculateScore();
+      }
       $scope.ref.$save();
     };
 

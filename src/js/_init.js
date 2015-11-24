@@ -22,6 +22,7 @@ import './services/toaster';
 import './services/filterUtils';
 import './services/auth';
 import './services/shareToken';
+import './services/scoreManagement';
 import './services/tournamentInformation';
 import './services/urlShorten';
 
