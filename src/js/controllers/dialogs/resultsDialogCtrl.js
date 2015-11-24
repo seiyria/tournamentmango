@@ -1,6 +1,6 @@
 import site from '../../app';
 
-site.controller('resultsDialogController', ($scope, $mdDialog, tournamentName, results, players) => {
+site.controller('resultsDialogController', ($scope, $mdDialog, tournamentName, results, players, placeService) => {
 
   $scope.cancel = $mdDialog.cancel;
 
@@ -14,9 +14,5 @@ site.controller('resultsDialogController', ($scope, $mdDialog, tournamentName, r
     return player.name;
   };
 
-  $scope.toOrdinal = (num) => {
-    const s = ['th', 'st', 'nd', 'rd'];
-    const v = num % 100;
-    return num + (s[(v-20)%10] || s[v] || s[0]);
-  };
+  $scope.toOrdinal = placeService.getPlaceString;
 });

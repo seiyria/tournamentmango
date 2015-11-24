@@ -35,7 +35,23 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
 
   $scope.includedTemplate = 'duel';
 
-  $scope.doOrOpen = (event) => $scope.isOpen && $scope.trn.isDone() ? $scope.showResults(event) : $scope.isOpen = true;
+  const showResults = (event) => {
+    const mdDialogOptions = {
+      controller: 'resultsDialogController',
+      focusOnOpen: false,
+      templateUrl: '/dialog/results',
+      event,
+      locals: {
+        tournamentName: $scope.tournamentName,
+        results: $scope.trn.results(),
+        players: $scope.bucket
+      }
+    };
+
+    $mdDialog.show(mdDialogOptions);
+  };
+
+  $scope.doOrOpen = (event) => $scope.isOpen && $scope.trn.isDone() ? showResults(event) : $scope.isOpen = true;
 
   $scope.share = (service) => {
     const services = {
@@ -52,19 +68,19 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
     return hash[options.type];
   };
 
-  $scope.showResults = (event) => {
+  $scope.showBracketInformation = (event, match) => {
     const mdDialogOptions = {
-      controller: 'resultsDialogController',
+      controller: 'bracketInformationController',
       focusOnOpen: false,
-      templateUrl: '/dialog/results',
+      templateUrl: '/dialog/bracket-information',
       event,
       locals: {
-        tournamentName: $scope.tournamentName,
-        results: $scope.trn.results(),
+        title: $scope.getMatchIdString(match),
+        match: match,
         players: $scope.bucket
       }
     };
-
+    
     $mdDialog.show(mdDialogOptions);
   };
 
