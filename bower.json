@@ -14,7 +14,8 @@
     "jspdf": "~1.1.135",
     "lodash": "~3.10.1",
     "svg-morpheus": "~0.1.8",
-    "tournament": "~3.0.3"
+    "tournament": "~3.0.3",
+    "ng-inline-edit": "~0.7.0"
   },
   "resolutions": {
     "tournament": "~3.0.2",

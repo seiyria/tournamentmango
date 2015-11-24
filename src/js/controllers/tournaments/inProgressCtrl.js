@@ -62,6 +62,10 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
     window.open(services[service]+$scope.url, '_blank');
   };
 
+  $scope.saveRoundHeader = () => {
+    $timeout($scope.save, 0);
+  };
+
   const determineTemplate = (options) => {
     const hash = { singles: 'duel', doubles: 'duel', groupstage: 'groupstage', ffa: 'ffa', masters: 'masters' };
     if(!options.type && options.last) return 'duel';
@@ -86,6 +90,7 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
 
   $scope.loadTournament = (ref, makeNew = false) => {
     $scope.tournamentName = $scope.ref.name;
+    $scope.ref.headers = $scope.ref.headers || [];
 
     $scope.bucket = ref.players;
 

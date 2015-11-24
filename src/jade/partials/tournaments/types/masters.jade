@@ -2,7 +2,19 @@
 script(type="text/ng-template", id="tournament-masters")
 
   .match-column-container.margin-bottom-10(layout="row")
-    .match-column.round-header.md-subhead.subhead(ng-repeat="match in maxMatches track by $index", scroll-observe="{{$index}}") Round {{$index+1}}
+    .match-column.round-header.md-subhead.subhead(ng-repeat="match in maxMatches track by $index", scroll-observe="{{$index}}")
+      span(ng-if="!hasAccess") {{ref.headers[$index] || 'Round '+($index+1)}}
+      span(
+        ng-if="hasAccess",
+        inline-edit="ref.headers[$index]",
+        inline-edit-placeholder="Round {{$index+1}}",
+        inline-edit-callback="saveRoundHeader()",
+        inline-edit-on-blur="save",
+        inline-edit-btn-edit="&nbsp;<ng-md-icon icon='edit' size='16'></ng-md-icon>",
+        inline-edit-btn-save="<ng-md-icon icon='check' size='20'></ng-md-icon>",
+        inline-edit-btn-cancel="<ng-md-icon icon='close' size='20'></ng-md-icon>",
+        inline-edit-on-click
+      )
 
   .match-area(layout="row")
 
