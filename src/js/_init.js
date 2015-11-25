@@ -25,7 +25,7 @@ import './services/shareToken';
 import './services/scoreManagement';
 import './services/tournamentInformation';
 import './services/urlShorten';
-import './services/PlaceService';
+import './services/placeService';
 
 import './services/currents/currentUsers';
 import './services/currents/currentEvents';
