@@ -1,6 +1,6 @@
 import site from '../../app';
 
-site.controller('bracketInformationController', ($scope, $mdDialog, $filter, placeService, title, match, players) => {
+site.controller('bracketInformationController', ($scope, $mdDialog, $filter, PlaceService, title, match, players) => {
 
   $scope.title = title;
   $scope.cancel = $mdDialog.cancel;
@@ -20,7 +20,7 @@ site.controller('bracketInformationController', ($scope, $mdDialog, $filter, pla
   const state = (() => {
     let lastScore = 0;
     let currentPlace = 0;
-    let ordinal = placeService.getPlaceString(1);
+    let ordinal = PlaceService.getPlaceString(1);
     return {
       getOrdinal: (score) => {
         currentPlace++;
@@ -29,7 +29,7 @@ site.controller('bracketInformationController', ($scope, $mdDialog, $filter, pla
         }
 
         lastScore = score;
-        return ordinal = placeService.getPlaceString(currentPlace);
+        return ordinal = PlaceService.getPlaceString(currentPlace);
       }
     };
   })();

@@ -1,6 +1,6 @@
 import site from '../app';
 
-site.service('placeService', () => {
+site.service('PlaceService', () => {
 
   return {
     getPlaceString: (numberPlace) => {
