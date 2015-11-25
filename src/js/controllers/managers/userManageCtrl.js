@@ -1,6 +1,6 @@
 import site from '../../app';
 
-site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject, $state, $stateParams, Auth, FirebaseURL, ScoringFunctions, CurrentUsers, InputPrompt, UserStatus, CurrentPlayerBucket, CurrentTournaments, ShareManagement, SetManagement, SidebarManagement, EnsureLoggedIn, UserManagement, TournamentStatus, Toaster) => {
+site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject, $state, $stateParams, Auth, FirebaseURL, CurrentUsers, InputPrompt, UserStatus, CurrentPlayerBucket, ShareManagement, SetManagement, SidebarManagement, EnsureLoggedIn, UserManagement, Toaster, ScoreManagement) => {
 
   $scope.canOnlySelectUsers = () => $stateParams.userSelectOnly;
   $scope.backToTournamentsetup = () => $state.go('setupTournament', { tournamentId: $stateParams.tournamentId });
@@ -230,40 +230,13 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
 
   $scope.currentPlayerBucketSize = () => CurrentPlayerBucket.get().length;
 
-  $scope.anyCompletedTournaments = () => _.any($scope.tournaments, t => t.status === TournamentStatus.COMPLETED);
-  $scope.allTournamentGames = () => _($scope.tournaments).filter(t => t.game && t.status === TournamentStatus.COMPLETED).pluck('game').uniq().value();
+  $scope.anyCompletedTournaments = ScoreManagement.anyCompletedTournaments;
+  $scope.allCompletedTournamentGames = ScoreManagement.allCompletedTournamentGames;
 
   $scope.recalculateScore = () => {
     $scope.calculating = true;
 
-    const currentGame = $scope.userData.firebase.scoreGame;
-
-    _.each($scope.users, user => user.points = user.wins = user.losses = 0);
-
-    _.each(_.filter($scope.tournaments, t => t.game === currentGame && t.status === TournamentStatus.COMPLETED), tournament => {
-      _.each(tournament.matches, match => {
-        if(_.any(match.p, id => id === -1)) return; // skip hidden matches
-
-        const result = _.findWhere(tournament.trn, { id: match.id });
-        if(!result) return;
-        _.each(match.p, (id, idx) => {
-          const player = tournament.players[id-1];
-          const ref = $scope.users.$getRecord(player.id);
-          const winScore = _.max(result.score);
-          const playerScore = result.score[idx];
-
-          const key = playerScore === winScore ? 'wins' : 'losses';
-          if(!ref[key]) ref[key] = 0;
-          ref[key]++;
-        });
-      });
-    });
-
-    ScoringFunctions[UserStatus.firebase.scoreFunc]($scope.users);
-
-    _.each($scope.users, p => {
-      $scope.users.$save(p);
-    });
+    ScoreManagement.recalculateScore();
 
     $scope.calculating = false;
   };
@@ -284,9 +257,6 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
         $scope.setCurrentPlayerSet(CurrentUsers.get());
 
         $scope.isMine = UserStatus.firebase.playerSetUid === authData.uid;
-
-        $scope.tournaments = CurrentTournaments.get();
-        CurrentTournaments.watch.then(null, null, tournaments => $scope.tournaments = tournaments);
       });
       $scope.loadAllLists();
       $scope.loadSharedWithMe();
