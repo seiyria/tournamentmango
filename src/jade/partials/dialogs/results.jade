@@ -1,10 +1,8 @@
 
 script(type="text/ng-template", id="/dialog/results")
   md-dialog
-
+    h2.md-title Results for {{tournamentName}}
     .md-dialog-content
-      h2.md-title Results for {{tournamentName}}
-
       md-list
         md-list-item.md-2-line(ng-repeat="result in results")
           .md-avatar.subhead {{toOrdinal(result.pos)}}

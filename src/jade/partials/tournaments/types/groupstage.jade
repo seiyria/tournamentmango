@@ -35,7 +35,7 @@ script(type="text/ng-template", id="tournament-groupstage")
 
         .match-data(ng-if="!noRender(match)", layout="row", layout-align="center center")
           .round-type(flex, layout="column", layout-align="space-around center", background-highlight="!invalidMatch(match) && !match.m")
-            .subhead {{getMatchIdString(match)}}
+            .subhead(ng-click="showBracketInformation($event, match)") {{getMatchIdString(match)}}
             station(value="ref.stations[getMatchStationIdString(match)]", can-click="{{hasAccess}}", on-unedit="save()")
 
           .match-name(layout="column")

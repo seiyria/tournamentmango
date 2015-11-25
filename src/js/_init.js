@@ -25,6 +25,7 @@ import './services/shareToken';
 import './services/scoreManagement';
 import './services/tournamentInformation';
 import './services/urlShorten';
+import './services/placeService';
 
 import './services/currents/currentUsers';
 import './services/currents/currentEvents';
@@ -62,6 +63,7 @@ import './controllers/dialogs/inputPromptCtrl';
 import './controllers/dialogs/sharePromptCtrl';
 import './controllers/dialogs/selectPromptCtrl';
 import './controllers/dialogs/resultsDialogCtrl';
+import './controllers/dialogs/bracketInformationCtrl';
 
 import './filters/rawHtml.js';
 import './routes';
