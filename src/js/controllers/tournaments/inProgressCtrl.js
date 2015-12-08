@@ -140,6 +140,21 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
     $scope.ref.$save();
   };
 
+  $scope.viewDescription = (event) => {
+    const mdDialogOptions = {
+      controller: 'tournamentInfoController',
+      focusOnOpen: false,
+      templateUrl: '/dialog/tournament-info',
+      event,
+      locals: {
+        title: $scope.tournamentName,
+        description: $scope.ref.description
+      }
+    };
+
+    $mdDialog.show(mdDialogOptions);
+  };
+
   $scope.viewUpcoming = () => $state.go('upcomingTournament', $stateParams);
 
   $scope.changeOptions = () => $state.go('setupTournament', { tournamentId: $scope.ref.$id });

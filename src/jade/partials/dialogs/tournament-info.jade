@@ -1,0 +1,12 @@
+
+script(type="text/ng-template", id="/dialog/tournament-info")
+  md-dialog
+
+    .md-dialog-content
+      h2.md-title Match {{ title }}
+
+    div(layout="column" layout-align="center start" layout-padding)
+      {{description}}	
+
+    .md-actions
+      md-button.md-primary(ng-click="cancel()", aria-label="close") Close

@@ -9,7 +9,7 @@ script(type="text/ng-template", id="/dialog/addtournament")
         ng-md-icon(icon="error")
         span &nbsp;All fields are required.
 
-      form(name="item.form", ng-submit="addItem()")
+      form(name="item.form", ng-submit="addItem()", style="width:400px")
         .input-row(layout="row")
           md-input-container(flex)
             label Name
@@ -33,6 +33,11 @@ script(type="text/ng-template", id="/dialog/addtournament")
             md-item-template
               span(md-highlight-text="searchText") {{game}}
             md-not-found No matches.
+
+        .input-row(layout="row")
+          md-input-container(flex)
+            label Description
+            textarea(ng-model="item.description", md-maxlength="1000", required)
 
     .md-actions
       md-button.md-primary(ng-click="addItem()", ng-disabled="item.form.$invalid", aria-label="submit") {{label}} Tournament

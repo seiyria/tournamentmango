@@ -58,6 +58,10 @@ script(type="text/ng-template", id="/tournaments/in-progress")
 
       md-fab-actions(ng-if="isOpen")
 
+        md-button.md-fab.md-raised.md-accent(aria-label="view description", ng-click="viewDescription()")
+          ng-md-icon(size="24", icon="info_outline", style="fill: white")
+          md-tooltip(md-direction="left") View tournament description
+
         md-button.md-fab.md-raised.md-accent(aria-label="view upcoming", ng-click="viewUpcoming()")
           ng-md-icon(size="24", icon="dashboard", style="fill: white")
           md-tooltip(md-direction="left") Upcoming matches
