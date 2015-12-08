@@ -2,7 +2,7 @@
 script(type="text/ng-template", id="/dialog/addtournament")
   md-dialog
 
-    .md-dialog-content(class="description-popup")
+    .md-dialog-content.description-popup
       h2.md-title {{label}} Tournament
 
       p.md-warn(ng-if="item.form.$submitted && item.form.$invalid", layout="row", layout-align="start center")
