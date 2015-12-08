@@ -64,6 +64,7 @@ import './controllers/dialogs/sharePromptCtrl';
 import './controllers/dialogs/selectPromptCtrl';
 import './controllers/dialogs/resultsDialogCtrl';
 import './controllers/dialogs/bracketInformationCtrl';
+import './controllers/dialogs/tournamentInfoCtrl';
 
 import './filters/rawHtml.js';
 import './routes';

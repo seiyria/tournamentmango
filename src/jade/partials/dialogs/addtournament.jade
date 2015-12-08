@@ -2,7 +2,7 @@
 script(type="text/ng-template", id="/dialog/addtournament")
   md-dialog
 
-    .md-dialog-content
+    .md-dialog-content.description-popup
       h2.md-title {{label}} Tournament
 
       p.md-warn(ng-if="item.form.$submitted && item.form.$invalid", layout="row", layout-align="start center")
@@ -33,6 +33,11 @@ script(type="text/ng-template", id="/dialog/addtournament")
             md-item-template
               span(md-highlight-text="searchText") {{game}}
             md-not-found No matches.
+
+        .input-row(layout="row")
+          md-input-container(flex)
+            label Description
+            textarea(ng-model="item.description", md-maxlength="1000", required)
 
     .md-actions
       md-button.md-primary(ng-click="addItem()", ng-disabled="item.form.$invalid", aria-label="submit") {{label}} Tournament
