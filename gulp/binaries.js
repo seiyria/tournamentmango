@@ -50,7 +50,7 @@ gulp.task('generate:binaries', ['clean:binaries', 'copy:nw'], () => {
     .pipe(nwBuilder({
       version: 'v0.12.2',
       platforms: ['osx64', 'win64', 'linux64'],
-      appName: 'OpenChallenge',
+      appName: 'TournamentMango',
       appVersion: currentTag(),
       buildDir: paths.bin.build,
       cacheDir: paths.bin.cache,
