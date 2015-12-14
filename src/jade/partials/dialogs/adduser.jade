@@ -14,7 +14,7 @@ script(type="text/ng-template", id="/dialog/adduser")
         .input-row(layout-gt-sm="row", layout-sm="column", ng-if="!viewOnly")
           md-input-container(flex)
             label Name
-            input(name="name", ng-model="item.name", md-maxlength="30", required)
+            input(name="name", ng-model="item.name", md-maxlength="30", required, autofocus)
 
           md-autocomplete(flex,
             md-input-name="location",
