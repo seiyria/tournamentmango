@@ -43,12 +43,12 @@
 </script>
 <script type="text/ng-template" id="/home">
   <div layout="row" flex="10">
-    <h3 flex="flex">
-      <div class="text-center padding-top-20">TournamentMango is a great way to manage your tournaments. Here's what it can do for you:</div>
-    </h3>
+    <div flex="flex">
+      <div class="text-center padding-top-20"><strong>TournamentMango is a great way to manage your tournaments. Here's what it can do for you:</strong></div>
+    </div>
   </div>
-  <div layout-gt-sm="row" layout="column" flex="flex" layout-wrap="layout-wrap" class="text-center max-width-1200">
-    <div flex-gt-sm="33" flex-sm="40" ng-repeat="block in blocks" class="text-center padding-50">
+  <div layout-gt-sm="row" layout="column" layout-wrap="layout-wrap" class="text-center max-width-1200">
+    <div flex-gt-sm="33" flex-sm="30" ng-repeat="block in blocks" class="text-center margin-top-50 padding-20 margin-bottom-20">
       <ng-md-icon icon="{{block.icon}}" size="100" ng-if="!block.link"></ng-md-icon>
       <div class="md-title">{{block.name}}</div>
       <p ng-bind-html="block.info | rawHtml"></p>
@@ -202,7 +202,7 @@
         <div layout-gt-sm="row" layout-sm="column" class="input-row">
           <md-input-container flex="flex">
             <label>Name</label>
-            <input name="name" ng-model="item.name" md-maxlength="30" required="required"/>
+            <input name="name" ng-model="item.name" md-maxlength="30" required="required" autofocus="autofocus"/>
           </md-input-container>
           <md-autocomplete flex="flex" required="required" md-input-name="location" md-selected-item="selectedlocation" md-floating-label="Location" md-search-text="item.location" md-items="place in getLocations(item.location)" md-item-text="place" md-input-maxlength="30">
             <md-item-template><span md-highlight-text="searchText">{{place}}</span></md-item-template>
@@ -234,7 +234,7 @@
 </script>
 <script type="text/ng-template" id="/dialog/addtournament">
   <md-dialog>
-    <div class="md-dialog-content">
+    <div class="md-dialog-content description-popup">
       <h2 class="md-title">{{label}} Tournament</h2>
       <p ng-if="item.form.$submitted &amp;&amp; item.form.$invalid" layout="row" layout-align="start center" class="md-warn">
         <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
@@ -243,7 +243,7 @@
         <div layout="row" class="input-row">
           <md-input-container flex="flex">
             <label>Name</label>
-            <input name="name" ng-model="item.name" md-maxlength="30" required="required"/>
+            <input name="name" ng-model="item.name" md-maxlength="30" required="required" autofocus="autofocus"/>
           </md-input-container>
         </div>
         <div layout="row" class="input-row">
@@ -259,6 +259,12 @@
             <md-item-template><span md-highlight-text="searchText">{{game}}</span></md-item-template>
             <md-not-found>No matches.</md-not-found>
           </md-autocomplete>
+        </div>
+        <div layout="row" class="input-row">
+          <md-input-container flex="flex">
+            <label>Description</label>
+            <textarea ng-model="item.description" md-maxlength="1000" required="required"></textarea>
+          </md-input-container>
         </div>
       </form>
     </div>
@@ -280,7 +286,7 @@
         <div layout-gt-sm="row" layout-sm="column" ng-if="!viewOnly" class="input-row">
           <md-input-container flex="flex">
             <label>Name</label>
-            <input name="name" ng-model="item.name" md-maxlength="30" required="required"/>
+            <input name="name" ng-model="item.name" md-maxlength="30" required="required" autofocus="autofocus"/>
           </md-input-container>
           <md-autocomplete flex="flex" md-input-name="location" md-selected-item="selectedlocation" md-floating-label="Location" md-search-text="item.location" md-items="place in getLocations(item.location)" md-item-text="place" md-input-maxlength="30">
             <md-item-template><span md-highlight-text="searchText">{{place}}</span></md-item-template>
@@ -350,7 +356,7 @@
         <div layout="row" class="input-row">
           <md-input-container flex="flex">
             <label>{{label}}</label>
-            <input name="string" ng-model="string" md-maxlength="30" required="required"/>
+            <input name="string" ng-model="string" md-maxlength="30" required="required" autofocus="autofocus"/>
           </md-input-container>
         </div>
       </form>
@@ -425,6 +431,17 @@
     <div class="md-actions">
       <md-button ng-click="submit()" aria-label="submit" class="md-primary">Submit</md-button>
       <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
+    </div>
+  </md-dialog>
+</script>
+<script type="text/ng-template" id="/dialog/tournament-info">
+  <md-dialog>
+    <div class="md-dialog-content">
+      <h2 class="md-title">Match {{ title }}</h2>
+    </div>
+    <div layout="column" layout-align="center start" layout-padding="layout-padding">{{description}}	</div>
+    <div class="md-actions">
+      <md-button ng-click="cancel()" aria-label="close" class="md-primary">Close</md-button>
     </div>
   </md-dialog>
 </script>
@@ -814,6 +831,10 @@
         </md-button>
       </md-fab-trigger>
       <md-fab-actions ng-if="isOpen">
+        <md-button aria-label="view description" ng-click="viewDescription()" class="md-fab md-raised md-accent">
+          <ng-md-icon size="24" icon="info_outline" style="fill: white"></ng-md-icon>
+          <md-tooltip md-direction="left">View tournament description</md-tooltip>
+        </md-button>
         <md-button aria-label="view upcoming" ng-click="viewUpcoming()" class="md-fab md-raised md-accent">
           <ng-md-icon size="24" icon="dashboard" style="fill: white"></ng-md-icon>
           <md-tooltip md-direction="left">Upcoming matches</md-tooltip>
@@ -1108,7 +1129,7 @@
               <div class="score-value">-</div>
             </div>
           </div>
-          <div class="margin-right-10 margin-left-10 confirm-score">
+          <div flex="flex" layout="column" layout-align="center center" class="margin-right-10 margin-left-10 confirm-score">
             <ng-md-icon size="24" icon="check_circle" ng-click="confirmScore(match)" ng-if="!invalidMatch(match) &amp;&amp; !scoresEqual(match)" style="fill: {{match.m ? '#ccc' : '#000'}}"></ng-md-icon>
           </div>
         </div>
@@ -1144,7 +1165,7 @@
               <div class="score-value">-</div>
             </div>
           </div>
-          <div class="margin-right-10 margin-left-10 confirm-score">
+          <div flex="flex" layout="column" layout-align="center center" class="margin-right-10 margin-left-10 confirm-score">
             <ng-md-icon size="24" icon="check_circle" ng-click="confirmScore(match)" ng-if="!invalidMatch(match) &amp;&amp; !scoresEqual(match)" style="fill: {{match.m ? '#ccc' : '#000'}}"></ng-md-icon>
           </div>
         </div>
@@ -1180,7 +1201,7 @@
               <div class="score-value">-</div>
             </div>
           </div>
-          <div class="margin-right-10 margin-left-10 confirm-score">
+          <div flex="flex" layout="column" layout-align="center center" class="margin-right-10 margin-left-10 confirm-score">
             <ng-md-icon size="24" icon="check_circle" ng-click="confirmScore(match)" ng-if="!invalidMatch(match) &amp;&amp; !scoresEqual(match)" style="fill: {{match.m ? '#ccc' : '#000'}}"></ng-md-icon>
           </div>
         </div>
