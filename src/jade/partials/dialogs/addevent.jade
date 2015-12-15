@@ -13,7 +13,7 @@ script(type="text/ng-template", id="/dialog/addevent")
         .input-row(layout-gt-sm="row", layout-sm="column")
           md-input-container(flex)
             label Name
-            input(name="name", ng-model="item.name", md-maxlength="30", required)
+            input(name="name", ng-model="item.name", md-maxlength="30", required, autofocus)
 
           md-autocomplete(flex, required,
             md-input-name="location",

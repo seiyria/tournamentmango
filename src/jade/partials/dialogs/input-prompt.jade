@@ -16,7 +16,7 @@ script(type="text/ng-template", id="/dialog/input-prompt")
         .input-row(layout="row")
           md-input-container(flex)
             label {{label}}
-            input(name="string", ng-model="string", md-maxlength="30", required)
+            input(name="string", ng-model="string", md-maxlength="30", required, autofocus)
 
     .md-actions
       md-button.md-primary(ng-click="submit()", ng-disabled="form.$invalid || !isValid()", aria-label="submit") Submit
