@@ -227,7 +227,11 @@ station {
         }
 
         .confirm-score {
-          cursor: pointer;
+
+          ng-md-icon[icon="check_circle"] {
+            cursor: pointer;
+          }
+
           @include all-widths(24px);
         }
 

@@ -178,10 +178,9 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
     $scope.getName = (idx) => TournamentInformation.playerName($scope.bucket[idx]);
 
     $scope.invalidMatch = (match) => !$scope.trn.isPlayable(match);
+
     $scope.scoresEqual = (match) => {
-      if(match.score && match.score.length === 1 || _.filter(match.score, _.isNumber).length !== match.p.length) return true;
-      const sorted = _.sortBy(match.score).reverse();
-      return sorted[0] === sorted[1];
+      return $scope.trn.unscorable(match.id, match.score);
     };
 
     $scope.confirmScore = (match) => {
