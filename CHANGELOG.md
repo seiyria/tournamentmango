@@ -1,6 +1,21 @@
-<a name="0.6.7"></a>
-## [0.6.7](https://github.com/seiyria/tournamentmango/compare/0.6.7...v0.6.7) (2015-11-10)
+<a name="0.6.8"></a>
+## [0.6.8](https://github.com/seiyria/tournamentmango/compare/0.6.8...v0.6.8) (2015-12-15)
 
+
+### Bug Fixes
+
+* **frontpage:** the front page should now appear properly on mobile and on desktop ([16d6059](https://github.com/seiyria/tournamentmango/commit/16d6059)), closes [#118](https://github.com/seiyria/tournamentmango/issues/118)
+* **scoring:** tourmanent scoring should behave more consistently now. also, matches that are t ([e858b31](https://github.com/seiyria/tournamentmango/commit/e858b31)), closes [#110](https://github.com/seiyria/tournamentmango/issues/110)
+* **tournaments:** social links now should not break by default (the goo.gl url shortener is used c ([d6fe5f3](https://github.com/seiyria/tournamentmango/commit/d6fe5f3)), closes [#41](https://github.com/seiyria/tournamentmango/issues/41)
+* **tournaments:** the round advance check is now centered vertically ([d499d84](https://github.com/seiyria/tournamentmango/commit/d499d84)), closes [#105](https://github.com/seiyria/tournamentmango/issues/105)
+
+### Features
+
+* **tournaments:** Added tounament info popup to tournament page via bottom right menu ([10f60a4](https://github.com/seiyria/tournamentmango/commit/10f60a4)), closes [#102](https://github.com/seiyria/tournamentmango/issues/102)
+* **tournaments:** Clicking on match title will display popup of match summary ([baea6b8](https://github.com/seiyria/tournamentmango/commit/baea6b8)), closes [#87](https://github.com/seiyria/tournamentmango/issues/87)
+* **tournaments:** tournament headers can now be edited to display custom round titles ([d1416d3](https://github.com/seiyria/tournamentmango/commit/d1416d3)), closes [#101](https://github.com/seiyria/tournamentmango/issues/101)
+* **tournaments:** user scores are now recalculated automatically when a tournament is finished ([7995cfc](https://github.com/seiyria/tournamentmango/commit/7995cfc)), closes [#90](https://github.com/seiyria/tournamentmango/issues/90)
+* **ui:** autofocus text entry fields in modals where necessary ([f4032f9](https://github.com/seiyria/tournamentmango/commit/f4032f9)), closes [#113](https://github.com/seiyria/tournamentmango/issues/113)
 
 
 
