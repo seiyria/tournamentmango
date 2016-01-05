@@ -52,7 +52,7 @@ script(type="text/ng-template", id="/tournament-manage")
 
           tr(md-auto-select, ng-repeat="tournament in visibleTournaments")
             td {{tournament.name}}
-            td {{tournament.game}}
+            td(ng-class="{empty: !tournament.game }") {{tournament.game}}
             td(ng-class="{empty: !tournamentName(tournament.event)}") {{tournamentName(tournament.event)}}
             td {{tournament.status}}
             td(ng-if="tournament.status === tStatus.NOT_STARTED")

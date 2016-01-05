@@ -10,6 +10,9 @@ site.service('ScoreManagement', (CurrentTournaments, CurrentUsers, TournamentSta
     const users = $firebaseArray(CurrentUsers.get().$ref().child('list'));
     users.$loaded(() => {
 
+      if(!UserStatus.firebase.scoreFunc) {
+        return;
+      }
       const currentGame = UserStatus.firebase.scoreGame;
 
       _.each(users, user => user.points = user.wins = user.losses = 0);
