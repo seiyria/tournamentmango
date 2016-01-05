@@ -1,6 +1,6 @@
 script(type="text/ng-template", id="/dialog/input-prompt")
   md-dialog
-    form
+    form(name="form", ng-submit="submit()")
       md-toolbar
         .md-toolbar-tools
           h2.md-title {{title}}
@@ -15,11 +15,10 @@ script(type="text/ng-template", id="/dialog/input-prompt")
           ng-md-icon(icon="error")
           span &nbsp;Set name taken.
 
-        form(name="form", ng-submit="submit()")
-          .input-row(layout="row")
-            md-input-container(flex)
-              label {{label}}
-              input(name="string", ng-model="string", md-maxlength="30", required, autofocus)
+        .input-row(layout="row")
+          md-input-container(flex)
+            label {{label}}
+            input(name="string", ng-model="string", md-maxlength="30", required, autofocus)
 
       .md-actions
         md-button.md-primary(ng-click="cancel()", aria-label="cancel") Cancel

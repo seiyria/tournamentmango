@@ -1,7 +1,7 @@
 
 script(type="text/ng-template", id="/dialog/addtournament")
   md-dialog
-    form
+    form(name="item.form", ng-submit="addItem()")
       md-toolbar
         .md-toolbar-tools
           h2.md-title {{label}} Tournament
@@ -12,35 +12,34 @@ script(type="text/ng-template", id="/dialog/addtournament")
           ng-md-icon(icon="error")
           span &nbsp;All fields are required.
 
-        form(name="item.form", ng-submit="addItem()")
-          .input-row(layout="row")
-            md-input-container(flex)
-              label Name
-              input(name="name", ng-model="item.name", md-maxlength="30", required, autofocus)
+        .input-row(layout="row")
+          md-input-container(flex)
+            label Name
+            input(name="name", ng-model="item.name", md-maxlength="30", required, autofocus)
 
-          .input-row(layout="row")
-            md-input-container(flex)
-              label Event
-              md-select(ng-model="item.event")
-                md-option(ng-repeat="event in allEvents", value="{{event.$id}}") {{event.name}}
+        .input-row(layout="row")
+          md-input-container(flex)
+            label Event
+            md-select(ng-model="item.event")
+              md-option(ng-repeat="event in allEvents", value="{{event.$id}}") {{event.name}}
 
-          .input-row(layout="row")
-            md-autocomplete(flex,
-            md-input-name="game",
-            md-selected-item="selectedGame",
-            md-floating-label="Game",
-            md-search-text="item.game",
-            md-items="game in getGames(item.game)",
-            md-item-text="game",
-            md-input-maxlength="30")
-              md-item-template
-                span(md-highlight-text="searchText") {{game}}
-              md-not-found No matches.
+        .input-row(layout="row")
+          md-autocomplete(flex,
+          md-input-name="game",
+          md-selected-item="selectedGame",
+          md-floating-label="Game",
+          md-search-text="item.game",
+          md-items="game in getGames(item.game)",
+          md-item-text="game",
+          md-input-maxlength="30")
+            md-item-template
+              span(md-highlight-text="searchText") {{game}}
+            md-not-found No matches.
 
-          .input-row(layout="row")
-            md-input-container(flex)
-              label Description
-              textarea(ng-model="item.description", md-maxlength="1000", required)
+        .input-row(layout="row")
+          md-input-container(flex)
+            label Description
+            textarea(ng-model="item.description", md-maxlength="1000", required)
 
       .md-actions
         md-button.md-primary(ng-click="cancel()", aria-label="cancel") Cancel

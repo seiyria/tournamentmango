@@ -1,7 +1,7 @@
 
 script(type="text/ng-template", id="/dialog/adduser")
   md-dialog
-    form
+    form(name="item.form", ng-submit="addItem()")
       md-toolbar
         .md-toolbar-tools
           h2.md-title(ng-if="!viewOnly") {{label}} Player
@@ -13,72 +13,71 @@ script(type="text/ng-template", id="/dialog/adduser")
           ng-md-icon(icon="error")
           span &nbsp;All fields are required.
 
-        form(name="item.form", ng-submit="addItem()")
-          .input-row(layout-gt-sm="row", layout-sm="column", ng-if="!viewOnly")
-            md-input-container(flex)
-              label Name
-              input(name="name", ng-model="item.name", md-maxlength="30", required, autofocus)
+        .input-row(layout-gt-sm="row", layout-sm="column", ng-if="!viewOnly")
+          md-input-container(flex)
+            label Name
+            input(name="name", ng-model="item.name", md-maxlength="30", required, autofocus)
 
-            md-autocomplete(flex,
-              md-input-name="location",
-              md-selected-item="selectedlocation",
-              md-floating-label="Location",
-              md-search-text="item.location",
-              md-items="place in getLocations(item.location)",
-              md-item-text="place",
-              md-input-maxlength="30")
-              md-item-template
-                span(md-highlight-text="searchText") {{place}}
-              md-not-found No matches.
+          md-autocomplete(flex,
+            md-input-name="location",
+            md-selected-item="selectedlocation",
+            md-floating-label="Location",
+            md-search-text="item.location",
+            md-items="place in getLocations(item.location)",
+            md-item-text="place",
+            md-input-maxlength="30")
+            md-item-template
+              span(md-highlight-text="searchText") {{place}}
+            md-not-found No matches.
 
-          h3.md-subhead.subhead Aliases
-          .input-row(layout="row")
-            md-chips(
-              ng-model="item.aliases",
-              secondary-placeholder="Add aliases",
-              placeholder="+Alias",
-              required,
-              readonly="viewOnly")
-                span(md-highlight-text="searchText") {{item}}
-            md-chip(ng-if="item.aliases.length === 0 && viewOnly") None
-
-          h3.md-subhead.subhead Games Played
-          .input-row(layout="row")
-            md-chips(
-            ng-model="item.games",
-            secondary-placeholder="Add games",
-            placeholder="+Game",
+        h3.md-subhead.subhead Aliases
+        .input-row(layout="row")
+          md-chips(
+            ng-model="item.aliases",
+            secondary-placeholder="Add aliases",
+            placeholder="+Alias",
             required,
-            md-autocomplete-snap,
             readonly="viewOnly")
-              md-autocomplete(
-              md-selected-item="selectedItem",
-              md-search-text="searchText",
-              md-items="item in getGames(searchText)"
-              md-item-text="item"
-              placeholder="+Game"
-              )
-                span(md-highlight-text="searchText") {{item}}
-            md-chip(ng-if="item.games.length === 0 && viewOnly") None
+              span(md-highlight-text="searchText") {{item}}
+          md-chip(ng-if="item.aliases.length === 0 && viewOnly") None
 
-          h3.md-subhead.subhead Characters Used
-          .input-row(layout="row")
-            md-chips(
-            ng-model="item.characters",
-            secondary-placeholder="Add characters",
-            placeholder="+Character",
-            required,
-            md-autocomplete-snap,
-            readonly="viewOnly")
-              md-autocomplete(
-              md-selected-item="selectedItem",
-              md-search-text="searchText",
-              md-items="item in getCharacters(searchText)"
-              md-item-text="item"
-              placeholder="+Character"
-              )
-                span(md-highlight-text="searchText") {{item}}
-            md-chip(ng-if="item.characters.length === 0 && viewOnly") None
+        h3.md-subhead.subhead Games Played
+        .input-row(layout="row")
+          md-chips(
+          ng-model="item.games",
+          secondary-placeholder="Add games",
+          placeholder="+Game",
+          required,
+          md-autocomplete-snap,
+          readonly="viewOnly")
+            md-autocomplete(
+            md-selected-item="selectedItem",
+            md-search-text="searchText",
+            md-items="item in getGames(searchText)"
+            md-item-text="item"
+            placeholder="+Game"
+            )
+              span(md-highlight-text="searchText") {{item}}
+          md-chip(ng-if="item.games.length === 0 && viewOnly") None
+
+        h3.md-subhead.subhead Characters Used
+        .input-row(layout="row")
+          md-chips(
+          ng-model="item.characters",
+          secondary-placeholder="Add characters",
+          placeholder="+Character",
+          required,
+          md-autocomplete-snap,
+          readonly="viewOnly")
+            md-autocomplete(
+            md-selected-item="selectedItem",
+            md-search-text="searchText",
+            md-items="item in getCharacters(searchText)"
+            md-item-text="item"
+            placeholder="+Character"
+            )
+              span(md-highlight-text="searchText") {{item}}
+          md-chip(ng-if="item.characters.length === 0 && viewOnly") None
 
       .md-actions(ng-if="!viewOnly")
         md-button.md-primary(ng-click="cancel()", aria-label="cancel") Cancel
