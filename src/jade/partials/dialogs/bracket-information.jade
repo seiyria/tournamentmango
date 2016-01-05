@@ -1,15 +1,18 @@
 
 script(type="text/ng-template", id="/dialog/bracket-information")
   md-dialog
+    form
+      md-toolbar
+        .md-toolbar-tools
+          h2.md-title Match {{ title }}
 
-    .md-dialog-content
-      h2.md-title Match {{ title }}
-
-      md-list
-        md-list-item.md-2-line(ng-repeat="player in players")
-          .md-avatar.subhead {{ player.ordinal }}
-          .md-list-item-text
-            h3 {{ player.displayName }}
-            Total Points Scored: {{ player.score }}
-    .md-actions
-      md-button.md-primary(ng-click="cancel()", aria-label="close") Close
+      .md-dialog-content
+        md-list
+          md-list-item.md-2-line(ng-repeat="player in players")
+            .md-avatar.subhead {{ player.ordinal }}
+            .md-list-item-text
+              h3 {{ player.displayName }}
+              div Total Points Scored: {{ player.score }}
+                
+      .md-actions
+        md-button.md-primary(ng-click="cancel()", aria-label="close") Close

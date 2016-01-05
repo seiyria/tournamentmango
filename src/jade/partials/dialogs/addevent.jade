@@ -1,46 +1,48 @@
 
 script(type="text/ng-template", id="/dialog/addevent")
   md-dialog
+    form
+      md-toolbar
+        .md-toolbar-tools
+          h2 {{label}} Event
 
-    .md-dialog-content
-      h2.md-title {{label}} Event
+      .md-dialog-content
+        p.md-warn(ng-if="item.form.$submitted && item.form.$invalid", layout="row", layout-align="start center")
+          ng-md-icon(icon="error")
+          span &nbsp;All fields are required.
 
-      p.md-warn(ng-if="item.form.$submitted && item.form.$invalid", layout="row", layout-align="start center")
-        ng-md-icon(icon="error")
-        span &nbsp;All fields are required.
+        form(name="item.form", ng-submit="addItem()")
+          .input-row(layout-gt-sm="row", layout-sm="column")
+            md-input-container(flex)
+              label Name
+              input(name="name", ng-model="item.name", md-maxlength="30", required, autofocus)
 
-      form(name="item.form", ng-submit="addItem()")
-        .input-row(layout-gt-sm="row", layout-sm="column")
-          md-input-container(flex)
-            label Name
-            input(name="name", ng-model="item.name", md-maxlength="30", required, autofocus)
+            md-autocomplete(flex, required,
+              md-input-name="location",
+              md-selected-item="selectedlocation",
+              md-floating-label="Location",
+              md-search-text="item.location",
+              md-items="place in getLocations(item.location)",
+              md-item-text="place",
+              md-input-maxlength="30")
+              md-item-template
+                span(md-highlight-text="searchText") {{place}}
+              md-not-found No matches.
 
-          md-autocomplete(flex, required,
-            md-input-name="location",
-            md-selected-item="selectedlocation",
-            md-floating-label="Location",
-            md-search-text="item.location",
-            md-items="place in getLocations(item.location)",
-            md-item-text="place",
-            md-input-maxlength="30")
-            md-item-template
-              span(md-highlight-text="searchText") {{place}}
-            md-not-found No matches.
+          h3.md-subhead.subhead When
+          .input-row(layout="row")
+            md-datepicker(ng-model="item.date", md-placeholder="Enter date", required, style="margin-top: 14px")
 
-        h3.md-subhead.subhead When
-        .input-row(layout="row")
-          md-datepicker(ng-model="item.date", md-placeholder="Enter date", required, style="margin-top: 14px")
+            md-input-container(flex)
+              label Time
+              input(name="time", type="time", ng-model="item.date")
 
-          md-input-container(flex)
-            label Time
-            input(name="time", type="time", ng-model="item.date")
+          h3.md-subhead.subhead Extra
+          .input-row(layout="row")
+            md-input-container(flex)
+              label Description
+              textarea(name="description", ng-model="item.description", md-maxlength="200")
 
-        h3.md-subhead.subhead Extra
-        .input-row(layout="row")
-          md-input-container(flex)
-            label Description
-            textarea(name="description", ng-model="item.description", md-maxlength="200")
-
-    .md-actions
-      md-button.md-primary(ng-click="addItem()", ng-disabled="item.form.$invalid", aria-label="submit") {{label}} Event
-      md-button.md-primary(ng-click="cancel()", aria-label="cancel") Cancel
+      .md-actions
+        md-button.md-primary(ng-click="cancel()", aria-label="cancel") Cancel
+        md-button.md-primary(ng-click="addItem()", ng-disabled="item.form.$invalid", aria-label="submit") {{label}} Event
