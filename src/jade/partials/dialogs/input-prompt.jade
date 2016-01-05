@@ -1,23 +1,26 @@
 script(type="text/ng-template", id="/dialog/input-prompt")
   md-dialog
+    form
+      md-toolbar
+        .md-toolbar-tools
+          h2.md-title {{title}}
 
-    .md-dialog-content
-      h2.md-title {{title}}
+      .md-dialog-content
 
-      p.md-warn(ng-if="form.$submitted && form.$invalid", layout="row", layout-align="start center")
-        ng-md-icon(icon="error")
-        span &nbsp;All fields are required.
+        p.md-warn(ng-if="form.$submitted && form.$invalid", layout="row", layout-align="start center")
+          ng-md-icon(icon="error")
+          span &nbsp;All fields are required.
 
-      p.md-warn(ng-if="!isValid()", layout="row", layout-align="start center")
-        ng-md-icon(icon="error")
-        span &nbsp;Set name taken.
+        p.md-warn(ng-if="!isValid()", layout="row", layout-align="start center")
+          ng-md-icon(icon="error")
+          span &nbsp;Set name taken.
 
-      form(name="form", ng-submit="submit()")
-        .input-row(layout="row")
-          md-input-container(flex)
-            label {{label}}
-            input(name="string", ng-model="string", md-maxlength="30", required, autofocus)
+        form(name="form", ng-submit="submit()")
+          .input-row(layout="row")
+            md-input-container(flex)
+              label {{label}}
+              input(name="string", ng-model="string", md-maxlength="30", required, autofocus)
 
-    .md-actions
-      md-button.md-primary(ng-click="submit()", ng-disabled="form.$invalid || !isValid()", aria-label="submit") Submit
-      md-button.md-primary(ng-click="cancel()", aria-label="cancel") Cancel
+      .md-actions
+        md-button.md-primary(ng-click="cancel()", aria-label="cancel") Cancel
+        md-button.md-primary.md-raised(ng-click="submit()", ng-disabled="form.$invalid || !isValid()", aria-label="submit") Submit

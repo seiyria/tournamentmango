@@ -1,12 +1,14 @@
 
 script(type="text/ng-template", id="/dialog/tournament-info")
   md-dialog
+    form
+      md-toolbar
+        .md-toolbar-tools
+          h2.md-title Tournament "{{ title }}"
 
-    .md-dialog-content
-      h2.md-title Match {{ title }}
+      .md-dialog-content
+        div(layout="column", layout-align="center start", layout-padding)
+          div {{description}}
 
-    div(layout="column" layout-align="center start" layout-padding)
-      {{description}}	
-
-    .md-actions
-      md-button.md-primary(ng-click="cancel()", aria-label="close") Close
+      .md-actions
+        md-button.md-primary(ng-click="cancel()", aria-label="close") Close

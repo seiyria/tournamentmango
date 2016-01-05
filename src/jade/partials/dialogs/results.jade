@@ -1,14 +1,18 @@
 
 script(type="text/ng-template", id="/dialog/results")
   md-dialog
-    h2.md-title Results for {{tournamentName}}
-    .md-dialog-content
-      md-list
-        md-list-item.md-2-line(ng-repeat="result in results")
-          .md-avatar.subhead {{toOrdinal(result.pos)}}
-          .md-list-item-text
-            h3 {{nameString(result.seed)}}
-            p Wins: {{result.wins}}, Total Points Scored: {{result.for}}
+    form
+      md-toolbar
+        .md-toolbar-tools
+          h2.md-title Results for {{tournamentName}}
 
-    .md-actions
-      md-button.md-primary(ng-click="cancel()", aria-label="close") Close
+      .md-dialog-content
+        md-list
+          md-list-item.md-2-line(ng-repeat="result in results")
+            .md-avatar.subhead {{toOrdinal(result.pos)}}
+            .md-list-item-text
+              h3 {{nameString(result.seed)}}
+              p Wins: {{result.wins}}, Total Points Scored: {{result.for}}
+
+      .md-actions
+        md-button.md-primary(ng-click="cancel()", aria-label="close") Close
