@@ -25,7 +25,7 @@ script(type="text/ng-template", id="/dialog/addtournament")
                 md-option(ng-repeat="event in allEvents", value="{{event.$id}}") {{event.name}}
 
           .input-row(layout="row")
-            md-autocomplete(flex, required,
+            md-autocomplete(flex,
             md-input-name="game",
             md-selected-item="selectedGame",
             md-floating-label="Game",

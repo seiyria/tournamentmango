@@ -53,7 +53,7 @@ site.service('TournamentManagement', (FirebaseURL, $mdDialog, Toaster, $filter, 
     const func = archived ? 'filter' : 'reject';
     return _[func](FilterUtils.filterTable(events, datatable, tournament => [
       [tournament.name.toLowerCase()],
-      [tournament.game.toLowerCase()],
+      [tournament.game ? tournament.game.toLowerCase() : ''],
       [tournament.status.toLowerCase()],
       [getTournamentEventNameFromId(tournament.event).toLowerCase()]
     ]), 'archived');
