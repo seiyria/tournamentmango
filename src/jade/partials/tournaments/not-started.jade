@@ -63,26 +63,28 @@ script(type="text/ng-template", id="/tournaments/not-started")
 
         md-list-item
           md-radio-group.margin-left-20(ng-model="tournamentOptions.type", layout="row", layout-wrap)
-            md-radio-button.md-primary(flex="25", value="singles") Single Elimination
+            md-radio-button.md-primary.padding-10(flex="25", value="singles") Single Elimination
               md-tooltip A standard single elimination tournament
-            md-radio-button.md-primary(flex="25", value="doubles") Double Elimination
+            md-radio-button.md-primary.padding-10(flex="25", value="doubles") Double Elimination
               md-tooltip A standard double elimination tournament
-            md-radio-button.md-primary(flex="25", value="groupstage") GroupStage
+            md-radio-button.md-primary.padding-10(flex="25", value="groupstage") GroupStage
               md-tooltip A round-robin style tournament
-            md-radio-button.md-primary(flex="25", value="ffa") Free For All
+            md-radio-button.md-primary.padding-10(flex="25", value="ffa") Free For All
               md-tooltip A free-for-all tournament
-            md-radio-button.md-primary(flex="25", value="masters") Masters
+            md-radio-button.md-primary.padding-10(flex="25", value="masters") Masters
               md-tooltip A subset of free-for-all where only knockouts per round are calculated
 
         md-list-item
           ng-md-icon(icon="help", size="24")
             md-tooltip Increase the max score from 999 to 999,999,999,999
-          md-checkbox(ng-model="tournamentOptions.bigScore", aria-label="larger scores") Big Scores
+          md-checkbox(ng-model="tournamentOptions.bigScore", aria-label="larger scores")
+          span Big Scores
 
         md-list-item(ng-if="tournamentOptions.type === 'singles' || tournamentOptions.type === 'doubles'")
           ng-md-icon(icon="help", size="24")
             md-tooltip No 3rd/4th place matches or double grand final
-          md-checkbox(ng-model="tournamentOptions.short", aria-label="Short") Short tournament
+          md-checkbox(ng-model="tournamentOptions.short", aria-label="Short")
+          span Short tournament
 
         md-list-item(ng-if="tournamentOptions.type === 'groupstage'")
           ng-md-icon.margin-right-10(icon="help", size="24")
@@ -108,7 +110,8 @@ script(type="text/ng-template", id="/tournaments/not-started")
         md-list-item(ng-if="tournamentOptions.type === 'groupstage'")
           ng-md-icon.margin-right-5(icon="help", size="24")
             md-tooltip Look at the sum of scores in case of ties
-          md-checkbox(ng-model="tournamentOptions.breakScores") Break ties on score sum
+          md-checkbox(ng-model="tournamentOptions.breakScores")
+          span Break ties on score sum
 
         md-list-item(ng-if="tournamentOptions.type === 'ffa'")
           ng-md-icon.margin-right-5(icon="help", size="24")
