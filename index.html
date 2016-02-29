@@ -193,12 +193,16 @@
 </script>
 <script type="text/ng-template" id="/dialog/addevent">
   <md-dialog>
-    <div class="md-dialog-content">
-      <h2 class="md-title">{{label}} Event</h2>
-      <p ng-if="item.form.$submitted &amp;&amp; item.form.$invalid" layout="row" layout-align="start center" class="md-warn">
-        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
-      </p>
-      <form name="item.form" ng-submit="addItem()">
+    <form name="item.form" ng-submit="addItem()">
+      <md-toolbar>
+        <div class="md-toolbar-tools">
+          <h2>{{label}} Event</h2>
+        </div>
+      </md-toolbar>
+      <div class="md-dialog-content">
+        <p ng-if="item.form.$submitted &amp;&amp; item.form.$invalid" layout="row" layout-align="start center" class="md-warn">
+          <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
+        </p>
         <div layout-gt-sm="row" layout-sm="column" class="input-row">
           <md-input-container flex="flex">
             <label>Name</label>
@@ -224,22 +228,26 @@
             <textarea name="description" ng-model="item.description" md-maxlength="200"></textarea>
           </md-input-container>
         </div>
-      </form>
-    </div>
-    <div class="md-actions">
-      <md-button ng-click="addItem()" ng-disabled="item.form.$invalid" aria-label="submit" class="md-primary">{{label}} Event</md-button>
-      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
-    </div>
+      </div>
+      <div class="md-actions">
+        <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
+        <md-button ng-click="addItem()" ng-disabled="item.form.$invalid" aria-label="submit" class="md-primary">{{label}} Event</md-button>
+      </div>
+    </form>
   </md-dialog>
 </script>
 <script type="text/ng-template" id="/dialog/addtournament">
   <md-dialog>
-    <div class="md-dialog-content description-popup">
-      <h2 class="md-title">{{label}} Tournament</h2>
-      <p ng-if="item.form.$submitted &amp;&amp; item.form.$invalid" layout="row" layout-align="start center" class="md-warn">
-        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
-      </p>
-      <form name="item.form" ng-submit="addItem()">
+    <form name="item.form" ng-submit="addItem()">
+      <md-toolbar>
+        <div class="md-toolbar-tools">
+          <h2 class="md-title">{{label}} Tournament</h2>
+        </div>
+      </md-toolbar>
+      <div class="md-dialog-content description-popup">
+        <p ng-if="item.form.$submitted &amp;&amp; item.form.$invalid" layout="row" layout-align="start center" class="md-warn">
+          <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
+        </p>
         <div layout="row" class="input-row">
           <md-input-container flex="flex">
             <label>Name</label>
@@ -255,7 +263,7 @@
           </md-input-container>
         </div>
         <div layout="row" class="input-row">
-          <md-autocomplete flex="flex" required="required" md-input-name="game" md-selected-item="selectedGame" md-floating-label="Game" md-search-text="item.game" md-items="game in getGames(item.game)" md-item-text="game" md-input-maxlength="30">
+          <md-autocomplete flex="flex" md-input-name="game" md-selected-item="selectedGame" md-floating-label="Game" md-search-text="item.game" md-items="game in getGames(item.game)" md-item-text="game" md-input-maxlength="30">
             <md-item-template><span md-highlight-text="searchText">{{game}}</span></md-item-template>
             <md-not-found>No matches.</md-not-found>
           </md-autocomplete>
@@ -266,23 +274,27 @@
             <textarea ng-model="item.description" md-maxlength="1000" required="required"></textarea>
           </md-input-container>
         </div>
-      </form>
-    </div>
-    <div class="md-actions">
-      <md-button ng-click="addItem()" ng-disabled="item.form.$invalid" aria-label="submit" class="md-primary">{{label}} Tournament</md-button>
-      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
-    </div>
+      </div>
+      <div class="md-actions">
+        <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
+        <md-button ng-click="addItem()" ng-disabled="item.form.$invalid" aria-label="submit" class="md-primary md-raised">{{label}} Tournament</md-button>
+      </div>
+    </form>
   </md-dialog>
 </script>
 <script type="text/ng-template" id="/dialog/adduser">
   <md-dialog>
-    <div class="md-dialog-content">
-      <h2 ng-if="!viewOnly" class="md-title">{{label}} Player</h2>
-      <h2 ng-if="viewOnly" class="md-title">{{item.name}} {{item.location ? 'from ' + item.location : ''}}</h2>
-      <p ng-if="item.form.$submitted &amp;&amp; item.form.$invalid" layout="row" layout-align="start center" class="md-warn">
-        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
-      </p>
-      <form name="item.form" ng-submit="addItem()">
+    <form name="item.form" ng-submit="addItem()">
+      <md-toolbar>
+        <div class="md-toolbar-tools">
+          <h2 ng-if="!viewOnly" class="md-title">{{label}} Player</h2>
+          <h2 ng-if="viewOnly" class="md-title">{{item.name}} {{item.location ? 'from ' + item.location : ''}}</h2>
+        </div>
+      </md-toolbar>
+      <div class="md-dialog-content">
+        <p ng-if="item.form.$submitted &amp;&amp; item.form.$invalid" layout="row" layout-align="start center" class="md-warn">
+          <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
+        </p>
         <div layout-gt-sm="row" layout-sm="column" ng-if="!viewOnly" class="input-row">
           <md-input-container flex="flex">
             <label>Name</label>
@@ -312,88 +324,108 @@
           </md-chips>
           <md-chip ng-if="item.characters.length === 0 &amp;&amp; viewOnly">None</md-chip>
         </div>
-      </form>
-    </div>
-    <div ng-if="!viewOnly" class="md-actions">
-      <md-button ng-click="addItem()" ng-disabled="item.form.$invalid" aria-label="submit" class="md-primary">{{label}} Player</md-button>
-      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
-    </div>
-    <div ng-if="viewOnly" class="md-actions">
-      <md-button ng-click="cancel()" aria-label="close" class="md-primary">Close</md-button>
-    </div>
+      </div>
+      <div ng-if="!viewOnly" class="md-actions">
+        <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
+        <md-button ng-click="addItem()" ng-disabled="item.form.$invalid" aria-label="submit" class="md-primary md-raised">{{label}} Player</md-button>
+      </div>
+      <div ng-if="viewOnly" class="md-actions">
+        <md-button ng-click="cancel()" aria-label="close" class="md-primary">Close</md-button>
+      </div>
+    </form>
   </md-dialog>
 </script>
 <script type="text/ng-template" id="/dialog/bracket-information">
   <md-dialog>
-    <div class="md-dialog-content">
-      <h2 class="md-title">Match {{ title }}</h2>
-      <md-list>
-        <md-list-item ng-repeat="player in players" class="md-2-line">
-          <div class="md-avatar subhead">{{ player.ordinal }}</div>
-          <div class="md-list-item-text">
-            <h3>{{ player.displayName }}</h3>
-            <Total>Points Scored: {{ player.score }}</Total>
-          </div>
-        </md-list-item>
-      </md-list>
-    </div>
-    <div class="md-actions">
-      <md-button ng-click="cancel()" aria-label="close" class="md-primary">Close</md-button>
-    </div>
+    <form>
+      <md-toolbar>
+        <div class="md-toolbar-tools">
+          <h2 class="md-title">Match {{ title }}</h2>
+        </div>
+      </md-toolbar>
+      <div class="md-dialog-content">
+        <md-list>
+          <md-list-item ng-repeat="player in players" class="md-2-line">
+            <div class="md-avatar subhead">{{ player.ordinal }}</div>
+            <div class="md-list-item-text">
+              <h3>{{ player.displayName }}</h3>
+              <div>Total Points Scored: {{ player.score }}</div>
+            </div>
+          </md-list-item>
+        </md-list>
+      </div>
+      <div class="md-actions">
+        <md-button ng-click="cancel()" aria-label="close" class="md-primary">Close</md-button>
+      </div>
+    </form>
   </md-dialog>
 </script>
 <script type="text/ng-template" id="/dialog/input-prompt">
   <md-dialog>
-    <div class="md-dialog-content">
-      <h2 class="md-title">{{title}}</h2>
-      <p ng-if="form.$submitted &amp;&amp; form.$invalid" layout="row" layout-align="start center" class="md-warn">
-        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
-      </p>
-      <p ng-if="!isValid()" layout="row" layout-align="start center" class="md-warn">
-        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;Set name taken.</span>
-      </p>
-      <form name="form" ng-submit="submit()">
+    <form name="form" ng-submit="submit()">
+      <md-toolbar>
+        <div class="md-toolbar-tools">
+          <h2 class="md-title">{{title}}</h2>
+        </div>
+      </md-toolbar>
+      <div class="md-dialog-content">
+        <p ng-if="form.$submitted &amp;&amp; form.$invalid" layout="row" layout-align="start center" class="md-warn">
+          <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
+        </p>
+        <p ng-if="!isValid()" layout="row" layout-align="start center" class="md-warn">
+          <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;Set name taken.</span>
+        </p>
         <div layout="row" class="input-row">
           <md-input-container flex="flex">
             <label>{{label}}</label>
             <input name="string" ng-model="string" md-maxlength="30" required="required" autofocus="autofocus"/>
           </md-input-container>
         </div>
-      </form>
-    </div>
-    <div class="md-actions">
-      <md-button ng-click="submit()" ng-disabled="form.$invalid || !isValid()" aria-label="submit" class="md-primary">Submit</md-button>
-      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
-    </div>
+      </div>
+      <div class="md-actions">
+        <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
+        <md-button ng-click="submit()" ng-disabled="form.$invalid || !isValid()" aria-label="submit" class="md-primary md-raised">Submit</md-button>
+      </div>
+    </form>
   </md-dialog>
 </script>
 <script type="text/ng-template" id="/dialog/results">
   <md-dialog>
-    <h2 class="md-title">Results for {{tournamentName}}</h2>
-    <div class="md-dialog-content">
-      <md-list>
-        <md-list-item ng-repeat="result in results" class="md-2-line">
-          <div class="md-avatar subhead">{{toOrdinal(result.pos)}}</div>
-          <div class="md-list-item-text">
-            <h3>{{nameString(result.seed)}}</h3>
-            <p>Wins: {{result.wins}}, Total Points Scored: {{result.for}}</p>
-          </div>
-        </md-list-item>
-      </md-list>
-    </div>
-    <div class="md-actions">
-      <md-button ng-click="cancel()" aria-label="close" class="md-primary">Close</md-button>
-    </div>
+    <form>
+      <md-toolbar>
+        <div class="md-toolbar-tools">
+          <h2 class="md-title">Results for {{tournamentName}}</h2>
+        </div>
+      </md-toolbar>
+      <div class="md-dialog-content">
+        <md-list>
+          <md-list-item ng-repeat="result in results" class="md-2-line">
+            <div class="md-avatar subhead">{{toOrdinal(result.pos)}}</div>
+            <div class="md-list-item-text">
+              <h3>{{nameString(result.seed)}}</h3>
+              <p>Wins: {{result.wins}}, Total Points Scored: {{result.for}}</p>
+            </div>
+          </md-list-item>
+        </md-list>
+      </div>
+      <div class="md-actions">
+        <md-button ng-click="cancel()" aria-label="close" class="md-primary">Close</md-button>
+      </div>
+    </form>
   </md-dialog>
 </script>
 <script type="text/ng-template" id="/dialog/select-prompt">
   <md-dialog>
-    <div class="md-dialog-content">
-      <h2 class="md-title">{{title}}</h2>
-      <p ng-if="form.$submitted &amp;&amp; form.$invalid" layout="row" layout-align="start center" class="md-warn">
-        <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
-      </p>
-      <form name="form" ng-submit="submit()">
+    <form name="form" ng-submit="submit()">
+      <md-toolbar>
+        <div class="md-toolbar-tools">
+          <h2 class="md-title">{{title}}</h2>
+        </div>
+      </md-toolbar>
+      <div class="md-dialog-content">
+        <p ng-if="form.$submitted &amp;&amp; form.$invalid" layout="row" layout-align="start center" class="md-warn">
+          <ng-md-icon icon="error"></ng-md-icon><span>&nbsp;All fields are required.</span>
+        </p>
         <div layout="row" class="input-row">
           <md-input-container flex="flex">
             <label>{{label}}</label>
@@ -404,19 +436,23 @@
             </md-select>
           </md-input-container>
         </div>
-      </form>
-    </div>
-    <div class="md-actions">
-      <md-button ng-click="submit()" ng-disabled="form.$invalid" aria-label="submit" class="md-primary">Submit</md-button>
-      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
-    </div>
+      </div>
+      <div class="md-actions">
+        <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
+        <md-button ng-click="submit()" ng-disabled="form.$invalid" aria-label="submit" class="md-primary md-raised">Submit</md-button>
+      </div>
+    </form>
   </md-dialog>
 </script>
 <script type="text/ng-template" id="/dialog/share-prompt">
   <md-dialog>
-    <div class="md-dialog-content">
-      <h2 class="md-title">Share "{{title}}"</h2>
-      <form name="form" ng-submit="submit()">
+    <form name="form" ng-submit="submit()">
+      <md-toolbar>
+        <div class="md-toolbar-tools">
+          <h2 class="md-title">Share "{{title}}"</h2>
+        </div>
+      </md-toolbar>
+      <div class="md-dialog-content">
         <div layout="row" class="input-row">
           <md-chips flex="flex" ng-model="sharedWith" secondary-placeholder="Share with users" placeholder="+User" md-require-match="true" md-autocomplete-snap="md-autocomplete-snap">
             <md-autocomplete flex="flex" required="required" md-selected-item="sharedwith" md-search-text="searchKey" md-items="user in getUser(searchKey)" md-item-text="user.name">
@@ -426,23 +462,31 @@
             <md-chip-template><span>{{$chip.name}}</span></md-chip-template>
           </md-chips>
         </div>
-      </form>
-    </div>
-    <div class="md-actions">
-      <md-button ng-click="submit()" aria-label="submit" class="md-primary">Submit</md-button>
-      <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
-    </div>
+      </div>
+      <div class="md-actions">
+        <md-button ng-click="cancel()" aria-label="cancel" class="md-primary">Cancel</md-button>
+        <md-button ng-click="submit()" aria-label="submit" class="md-primary md-raised">Submit</md-button>
+      </div>
+    </form>
   </md-dialog>
 </script>
 <script type="text/ng-template" id="/dialog/tournament-info">
   <md-dialog>
-    <div class="md-dialog-content">
-      <h2 class="md-title">Match {{ title }}</h2>
-    </div>
-    <div layout="column" layout-align="center start" layout-padding="layout-padding">{{description}}	</div>
-    <div class="md-actions">
-      <md-button ng-click="cancel()" aria-label="close" class="md-primary">Close</md-button>
-    </div>
+    <form>
+      <md-toolbar>
+        <div class="md-toolbar-tools">
+          <h2 class="md-title">Tournament "{{ title }}"</h2>
+        </div>
+      </md-toolbar>
+      <div class="md-dialog-content">
+        <div layout="column" layout-align="center start" layout-padding="layout-padding">
+          <div>{{description}}</div>
+        </div>
+      </div>
+      <div class="md-actions">
+        <md-button ng-click="cancel()" aria-label="close" class="md-primary">Close</md-button>
+      </div>
+    </form>
   </md-dialog>
 </script>
 <script type="text/ng-template" id="/event-manage">
@@ -599,7 +643,7 @@
         <tbody>
           <tr md-auto-select="md-auto-select" ng-repeat="tournament in visibleTournaments">
             <td>{{tournament.name}}</td>
-            <td>{{tournament.game}}</td>
+            <td ng-class="{empty: !tournament.game }">{{tournament.game}}</td>
             <td ng-class="{empty: !tournamentName(tournament.event)}">{{tournamentName(tournament.event)}}</td>
             <td>{{tournament.status}}</td>
             <td ng-if="tournament.status === tStatus.NOT_STARTED">
