@@ -1,6 +1,16 @@
-<a name="0.6.9"></a>
-## [0.6.9](https://github.com/seiyria/tournamentmango/compare/0.6.8...v0.6.9) (2016-02-29)
+<a name="0.6.10"></a>
+## [0.6.10](https://github.com/seiyria/tournamentmango/compare/0.6.9...v0.6.10) (2016-02-29)
 
+
+
+
+<a name="0.6.10"></a>
+## [0.6.10](https://github.com/seiyria/tournamentmango/compare/0.6.9...0.6.10) (2016-02-29)
+
+
+### Bug Fixes
+
+* **display:** fixing the display of labels in the tournament setup view ([47552dc](https://github.com/seiyria/tournamentmango/commit/47552dc))
 
 
 
