@@ -115,15 +115,15 @@
     "dist": "./dist/"
   },
   "dependencies": {
-    "angular": "^1.4.6",
-    "angular-animate": "^1.4.6",
-    "angular-aria": "^1.4.6",
-    "angular-material": "^1.0.5",
-    "angular-material-data-table": "^0.8.11",
-    "angular-material-icons": "^0.6.0",
-    "angular-sanitize": "^1.4.7",
-    "angular-ui-router": "^0.2.15",
-    "angularfire": "^1.1.2",
-    "ngstorage": "^0.3.9"
+    "angular": "1.4.7",
+    "angular-animate": "1.4.7",
+    "angular-aria": "1.4.7",
+    "angular-material": "1.0.5",
+    "angular-material-data-table": "0.8.11",
+    "angular-material-icons": "0.6.0",
+    "angular-sanitize": "1.4.7",
+    "angular-ui-router": "0.2.15",
+    "angularfire": "1.1.2",
+    "ngstorage": "0.3.9"
   }
 }

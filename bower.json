@@ -6,21 +6,15 @@
   ],
   "dependencies": {
     "angular-material": "1.0.0",
-    "angular-sortable-view": "~0.0.13",
-    "clipboard": "~1.4.2",
+    "angular-sortable-view": "0.0.13",
+    "clipboard": "1.4.2",
     "FileSaver.js": "https://github.com/eligrey/FileSaver.js.git",
-    "firebase": "~2.3.0",
-    "jquery": "~2.1.4",
-    "jspdf": "~1.1.135",
-    "lodash": "~3.10.1",
-    "svg-morpheus": "~0.1.8",
-    "tournament": "~3.0.3",
-    "ng-inline-edit": "~0.7.0"
-  },
-  "resolutions": {
-    "tournament": "~3.0.2",
-    "jquery": "~2.1.4",
-    "angular-material": "1.0.0-rc7",
-    "clipboard": "~1.4.2"
+    "firebase": "2.3.0",
+    "jquery": "2.1.4",
+    "jspdf": "1.1.135",
+    "lodash": "3.10.1",
+    "svg-morpheus": "0.1.8",
+    "tournament": "3.0.3",
+    "ng-inline-edit": "0.7.0"
   }
 }
