@@ -17,7 +17,7 @@ site.controller('upcomingController', ($scope, $mdMedia, $state, $stateParams, $
   $scope.getString = (id, idx) => TournamentInformation.getString($scope.strings, id, idx);
   $scope.noRender = TournamentInformation.noRender;
   $scope.getMatchIdString = TournamentInformation.getMatchIdString;
-  $scope.getStation = (match) => $scope.ref.stations[TournamentInformation.getMatchStationIdString(match)];
+  $scope.getStation = (match) => ($scope.ref.stations || {})[TournamentInformation.getMatchStationIdString(match)];
 
   const hasAnyZeroes = (match) => _.any(match.p, p => p === 0);
 
