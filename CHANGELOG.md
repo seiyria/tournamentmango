@@ -1,6 +1,16 @@
-<a name="0.6.10"></a>
-## [0.6.10](https://github.com/seiyria/tournamentmango/compare/0.6.9...v0.6.10) (2016-02-29)
+<a name="0.6.11"></a>
+## [0.6.11](https://github.com/seiyria/tournamentmango/compare/0.6.11...v0.6.11) (2016-05-11)
 
+
+
+
+<a name="0.6.11"></a>
+## [0.6.11](https://github.com/seiyria/tournamentmango/compare/0.6.10...0.6.11) (2016-05-11)
+
+
+### Bug Fixes
+
+* **build:** changed path to ui router ([d39d576](https://github.com/seiyria/tournamentmango/commit/d39d576)), closes [#128](https://github.com/seiyria/tournamentmango/issues/128)
 
 
 
@@ -15,7 +25,7 @@
 
 
 <a name="0.6.9"></a>
-## [0.6.9](https://github.com/seiyria/tournamentmango/compare/0.6.8...0.6.9) (2016-02-29)
+## [0.6.9](https://github.com/seiyria/tournamentmango/compare/0.6.7...0.6.9) (2016-02-29)
 
 
 ### Bug Fixes
@@ -199,7 +209,7 @@
 
 
 <a name="0.4.2"></a>
-## [0.4.2](https://github.com/seiyria/tournamentmango/compare/0.4.1...0.4.2) (2015-10-10)
+## [0.4.2](https://github.com/seiyria/tournamentmango/compare/0.1.0...0.4.2) (2015-10-10)
 
 
 ### Bug Fixes
