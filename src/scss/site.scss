@@ -129,6 +129,8 @@ station {
 
 .upcoming-match {
 
+  min-height: 60px;
+
   &:not(.small) {
     @include all-widths(600px);
 
