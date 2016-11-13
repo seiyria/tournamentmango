@@ -5,6 +5,11 @@ site.controller('upcomingController', ($scope, $mdMedia, $state, $stateParams, $
   EnsureLoggedIn.check(false);
 
   $scope.$mdMedia = $mdMedia;
+  const authData = EnsureLoggedIn.check(false);
+
+  const defaultHasAccess = () => authData && authData.uid === atob($stateParams.userId);
+
+  $scope.hasAccess = defaultHasAccess();
 
   $scope.strings = [];
 
