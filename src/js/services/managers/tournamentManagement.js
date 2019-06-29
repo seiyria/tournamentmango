@@ -1,6 +1,6 @@
 import site from '../../app';
 
-site.service('TournamentManagement', (FirebaseURL, $mdDialog, Toaster, $filter, FilterUtils, CurrentEvents) => {
+site.service('TournamentManagement', ($mdDialog, Toaster, $filter, FilterUtils, CurrentEvents) => {
 
   const defaultMdDialogOptions = {
     controller: 'tournamentDialogController',

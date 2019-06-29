@@ -1,7 +1,7 @@
 import site from '../../app';
 
-site.service('CurrentTournaments', ($q, $firebaseArray, FirebaseURL, Auth, UserStatus, EnsureLoggedIn) => {
-
+site.service('CurrentTournaments', (db, $q, $firebaseArray, Auth, UserStatus, EnsureLoggedIn) => {
+  
   EnsureLoggedIn.check();
 
   const defer = $q.defer();
@@ -9,7 +9,7 @@ site.service('CurrentTournaments', ($q, $firebaseArray, FirebaseURL, Auth, UserS
   let ref = {};
 
   const load = () => {
-    ref = $firebaseArray(new Firebase(`${FirebaseURL}/users/${UserStatus.firebase.playerSetUid}/players/${UserStatus.firebase.playerSet}/tournaments`));
+    ref = $firebaseArray(db.ref(`users/${UserStatus.firebase.playerSetUid}/players/${UserStatus.firebase.playerSet}/tournaments`));
     defer.notify(ref);
   };
 

@@ -1,13 +1,14 @@
 import site from '../app';
+import { saveAs } from '../../../bower_components/FileSaver.js/dist/FileSaver';
 
-site.controller('userSettingsController', ($scope, SidebarManagement, EnsureLoggedIn, ShareToken, FirebaseURL, $firebaseObject, Toaster) => {
+site.controller('userSettingsController', (db, $scope, SidebarManagement, EnsureLoggedIn, ShareToken, $firebaseObject, Toaster) => {
 
   SidebarManagement.hasSidebar = true;
   const authData = EnsureLoggedIn.check();
 
   $scope.shareId = ShareToken(authData.uid);
 
-  const data = $firebaseObject(new Firebase(`${FirebaseURL}/users/${authData.uid}`));
+  const data = $firebaseObject(db.ref(`users/${authData.uid}`));
 
   const clipboard = new Clipboard('#copy-id');
   clipboard.on('success', () => {

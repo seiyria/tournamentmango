@@ -1,6 +1,6 @@
 import site from '../../app';
 
-site.service('SetManagement', (FirebaseURL, $mdDialog, InputPrompt, SelectPrompt, SharePrompt, Toaster) => {
+site.service('SetManagement', ($mdDialog, InputPrompt, SelectPrompt, SharePrompt, Toaster) => {
 
   const newSet = (event, invalidValues, callback) => {
     InputPrompt.show(event, {

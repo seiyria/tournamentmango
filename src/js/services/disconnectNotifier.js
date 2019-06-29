@@ -1,7 +1,8 @@
 import site from '../app';
 
-site.service('DisconnectNotifier', ($q, $window, FirebaseURL) => {
-  const firebase = new Firebase(`${FirebaseURL}/.info/connected`);
+site.service('DisconnectNotifier', ($q, db, $window) => {
+  
+  const firebase = db.ref('.info/connected');
   const defer = $q.defer();
 
   firebase.on('value', (snap) => {

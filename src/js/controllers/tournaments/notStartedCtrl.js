@@ -1,6 +1,6 @@
 import site from '../../app';
 
-site.controller('notStartedController', ($scope, Auth, EnsureLoggedIn, UserStatus, ShareToken, Toaster, TournamentStatus, FirebaseURL, $timeout, $firebaseObject, CurrentPlayerBucket, CurrentTournament, $state, $stateParams) => {
+site.controller('notStartedController', (db, $scope, Auth, EnsureLoggedIn, UserStatus, ShareToken, Toaster, TournamentStatus,  $timeout, $firebaseObject, CurrentPlayerBucket, CurrentTournament, $state, $stateParams) => {
 
   const authData = EnsureLoggedIn.check();
 
@@ -35,7 +35,7 @@ site.controller('notStartedController', ($scope, Auth, EnsureLoggedIn, UserStatu
   };
 
   Auth.ready.then(() => {
-    $scope.ref = $firebaseObject(new Firebase(`${FirebaseURL}/users/${UserStatus.firebase.playerSetUid}/players/${UserStatus.firebase.playerSet}/tournaments/${$stateParams.tournamentId}`));
+    $scope.ref = $firebaseObject(db.ref(`users/${UserStatus.firebase.playerSetUid}/players/${UserStatus.firebase.playerSet}/tournaments/${$stateParams.tournamentId}`));
 
     $scope.ref.$loaded().then(() => {
       $scope.tournamentOptions = $scope.ref.options || { type: 'singles' };

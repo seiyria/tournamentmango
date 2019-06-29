@@ -1,6 +1,6 @@
 import site from '../../app';
 
-site.controller('upcomingController', ($scope, $mdMedia, $state, $stateParams, $firebaseObject, $timeout, FirebaseURL, SidebarManagement, EnsureLoggedIn, TournamentInformation) => {
+site.controller('upcomingController', ($scope, db, $mdMedia, $state, $stateParams, $firebaseObject, $timeout, SidebarManagement, EnsureLoggedIn, TournamentInformation) => {
   SidebarManagement.hasSidebar = false;
   EnsureLoggedIn.check(false);
 
@@ -31,7 +31,7 @@ site.controller('upcomingController', ($scope, $mdMedia, $state, $stateParams, $
     return ~~!!$scope.getStation(match) + ~~!hasAnyZeroes(match);
   };
 
-  $scope.ref = $firebaseObject(new Firebase(`${FirebaseURL}/users/${atob($stateParams.userId)}/players/${$stateParams.setId}/tournaments/${$stateParams.tournamentId}`));
+  $scope.ref = $firebaseObject(db.ref(`users/${atob($stateParams.userId)}/players/${$stateParams.setId}/tournaments/${$stateParams.tournamentId}`));
 
   $scope.getName = (idx) => TournamentInformation.playerName($scope.bucket[idx]);
 
