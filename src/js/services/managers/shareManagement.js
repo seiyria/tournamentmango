@@ -1,8 +1,6 @@
 import site from '../../app';
 
-site.service('ShareManagement', (UserStatus, $firebaseArray, $window) => {
-
-  const db = $window.firebase.database();
+site.service('ShareManagement', (db, UserStatus, $firebaseArray) => {
 
   const manageSorting = (oldSortsPlucked, newSorts, docId) => {
     const me = UserStatus.authData.uid;
