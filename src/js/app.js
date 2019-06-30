@@ -9,13 +9,9 @@ app.run(($window) => {
 
   // set up your firebase details here
   const firebaseConfig = {
-    apiKey: '...',
-    authDomain: 'project-id.firebaseapp.com',
-    databaseURL: 'https://project-id.firebaseio.com',
-    projectId: 'project-id',
-    storageBucket: '',
-    messagingSenderId: '...',
-    appId: '...'
+    apiKey: 'AIzaSyAW9Kxe3eFHgI11qrMw2HXT8F1OJPtsFIs',
+    authDomain: 'openchallenge.firebaseapp.com',
+    databaseURL: 'https://openchallenge.firebaseio.com'
   };
 
   $window.firebase.initializeApp(firebaseConfig);
