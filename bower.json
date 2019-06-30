@@ -16,5 +16,8 @@
     "svg-morpheus": "0.1.8",
     "tournament": "3.0.3",
     "ng-inline-edit": "0.7.0"
+  },
+  "resolutions": {
+    "angular": "1.4.7"
   }
 }
