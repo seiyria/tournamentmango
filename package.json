@@ -59,7 +59,7 @@
     "watchify": "~3.4.0"
   },
   "scripts": {
-    "postinstall": "node ./node_modules/bower/bin/bower install",
+    "postinstall": "node ./node_modules/bower/bin/bower install --force-latest",
     "start": "node ./node_modules/gulp/bin/gulp.js",
     "build": "node ./node_modules/gulp/bin/gulp.js build:all",
     "test": "node ./node_modules/gulp/bin/gulp.js check:all"
