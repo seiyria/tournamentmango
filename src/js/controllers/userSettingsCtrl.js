@@ -1,7 +1,6 @@
 import site from '../app';
-import { saveAs } from '../../../bower_components/FileSaver.js/dist/FileSaver';
 
-site.controller('userSettingsController', (db, $scope, SidebarManagement, EnsureLoggedIn, ShareToken, $firebaseObject, Toaster) => {
+site.controller('userSettingsController', (db, $scope, SidebarManagement, EnsureLoggedIn, ShareToken, $firebaseObject, Toaster, FileSaver, Blob) => {
 
   SidebarManagement.hasSidebar = true;
   const authData = EnsureLoggedIn.check();
@@ -22,6 +21,6 @@ site.controller('userSettingsController', (db, $scope, SidebarManagement, Ensure
       tournaments: data.tournaments
     };
     const blob = new Blob([JSON.stringify(importantData)], { type: 'text/plain;charset=utf-8' });
-    saveAs(blob, `info-${Date.now()}.tournamentmango`);
+    FileSaver.saveAs(blob, `info-${Date.now()}.tournamentmango`);
   };
 });

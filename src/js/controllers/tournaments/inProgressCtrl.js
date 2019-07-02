@@ -131,10 +131,6 @@ site.controller('inProgressController', ($scope, db, $timeout, EnsureLoggedIn, S
     });
   };
 
-  $scope.toPDF = () => {
-    const pdf = new jsPDF();
-    pdf.fromHTML($('.duel-area').get(0), 15, 15);
-  };
 
   $scope.savePublicity = () => {
     $scope.ref.$save();
