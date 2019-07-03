@@ -64,7 +64,7 @@
     "postinstall": "node ./node_modules/bower/bin/bower install --force-latest",
     "start": "node ./node_modules/gulp/bin/gulp.js",
     "build": "node ./node_modules/gulp/bin/gulp.js build:all",
-    "test": "node ./node_modules/gulp/bin/gulp.js check:all"
+    "test": "node ./node_modules/gulp/bin/gulp.js check"
   },
   "gulp": {
     "sass": "src/scss/*.scss",
