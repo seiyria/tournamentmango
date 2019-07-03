@@ -135,7 +135,6 @@
     "jquery": "^2.1.4",
     "ng-inline-edit": "^0.7.0",
     "ngstorage": "0.3.9",
-    "svg-morpheus": "github:alexk111/SVG-Morpheus#v0.1.8",
-    "tournament": "^3.2.0"
+    "svg-morpheus": "github:alexk111/SVG-Morpheus#v0.1.8"
   }
 }

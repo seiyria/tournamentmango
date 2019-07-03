@@ -2,7 +2,7 @@
 const app = angular.module('openchallenge', [
   'ngAria', 'ngAnimate', 'ngMaterial', 'ngMdIcons', 'ngStorage',
   'ui.router', 'firebase', 'md.data.table', 'angular-sortable-view',
-  'ngSanitize', 'angularInlineEdit'
+  'ngSanitize', 'angularInlineEdit', 'ngFileSaver'
 ]);
 
 app.run(($window) => {
