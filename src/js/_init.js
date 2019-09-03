@@ -1,6 +1,6 @@
 
-import './constants/firebaseURL';
 import './constants/tournamentStatus';
+
 
 import './configs/color';
 import './configs/location';
@@ -13,6 +13,7 @@ import './directives/station';
 import './directives/background-highlight';
 import './directives/upcoming-highlight';
 
+import './services/db';
 import './services/scoring';
 import './services/userStatus';
 import './services/ensureLoggedIn';

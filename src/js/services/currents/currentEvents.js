@@ -1,12 +1,12 @@
 import site from '../../app';
 
-site.service('CurrentEvents', ($q, $firebaseArray, FirebaseURL, UserStatus) => {
+site.service('CurrentEvents', (db, $q, $firebaseArray, UserStatus) => {
   const defer = $q.defer();
-
-  let ref = $firebaseArray(new Firebase(`${FirebaseURL}/users/${UserStatus.firebase.playerSetUid}/players/${UserStatus.firebase.playerSet}/events`));
+  
+  let ref = $firebaseArray(db.ref(`users/${UserStatus.firebase.playerSetUid}/players/${UserStatus.firebase.playerSet}/events`));
 
   UserStatus.firebase.$watch(() => {
-    ref = $firebaseArray(new Firebase(`${FirebaseURL}/users/${UserStatus.firebase.playerSetUid}/players/${UserStatus.firebase.playerSet}/events`));
+    ref = $firebaseArray(db.ref(`users/${UserStatus.firebase.playerSetUid}/players/${UserStatus.firebase.playerSet}/events`));
     defer.notify(ref);
   });
 

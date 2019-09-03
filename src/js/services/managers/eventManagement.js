@@ -1,6 +1,6 @@
 import site from '../../app';
 
-site.service('EventManagement', (FirebaseURL, $mdDialog, Toaster, $filter, FilterUtils) => {
+site.service('EventManagement', ($mdDialog, Toaster, $filter, FilterUtils) => {
 
   const defaultMdDialogOptions = {
     controller: 'eventDialogController',

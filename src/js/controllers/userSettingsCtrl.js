@@ -1,13 +1,13 @@
 import site from '../app';
 
-site.controller('userSettingsController', ($scope, SidebarManagement, EnsureLoggedIn, ShareToken, FirebaseURL, $firebaseObject, Toaster) => {
+site.controller('userSettingsController', (db, $scope, SidebarManagement, EnsureLoggedIn, ShareToken, $firebaseObject, Toaster, FileSaver, Blob) => {
 
   SidebarManagement.hasSidebar = true;
   const authData = EnsureLoggedIn.check();
 
   $scope.shareId = ShareToken(authData.uid);
 
-  const data = $firebaseObject(new Firebase(`${FirebaseURL}/users/${authData.uid}`));
+  const data = $firebaseObject(db.ref(`users/${authData.uid}`));
 
   const clipboard = new Clipboard('#copy-id');
   clipboard.on('success', () => {
@@ -21,6 +21,6 @@ site.controller('userSettingsController', ($scope, SidebarManagement, EnsureLogg
       tournaments: data.tournaments
     };
     const blob = new Blob([JSON.stringify(importantData)], { type: 'text/plain;charset=utf-8' });
-    saveAs(blob, `info-${Date.now()}.tournamentmango`);
+    FileSaver.saveAs(blob, `info-${Date.now()}.tournamentmango`);
   };
 });

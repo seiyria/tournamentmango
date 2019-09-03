@@ -3,7 +3,7 @@ import site from '../../app';
 site.filter('inRound', () => (items, round) => _.filter(items, (i) => i.id.r === round));
 site.filter('inSection', () => (items, section) => _.filter(items, (i) => i.id.s === section));
 
-site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, SidebarManagement, TournamentInformation, Toaster, CurrentUsers, CurrentPlayerBucket, UserStatus, TournamentStatus, UrlShorten, FirebaseURL, $firebaseObject, $state, $stateParams, $mdDialog, ScoreManagement) => {
+site.controller('inProgressController', ($scope, db, $timeout, EnsureLoggedIn, SidebarManagement, TournamentInformation, Toaster, CurrentUsers, CurrentPlayerBucket, UserStatus, TournamentStatus, UrlShorten, $firebaseObject, $state, $stateParams, $mdDialog, ScoreManagement) => {
 
   SidebarManagement.hasSidebar = false;
   const authData = EnsureLoggedIn.check(false);
@@ -116,7 +116,7 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
   $scope.noRender = TournamentInformation.noRender;
   $scope.shouldMatchBeShown = (match) => !(_.all(match.p, p => p === 0) && $scope.trn.isDone());
 
-  $scope.ref = $firebaseObject(new Firebase(`${FirebaseURL}/users/${atob($stateParams.userId)}/players/${$stateParams.setId}/tournaments/${$stateParams.tournamentId}`));
+  $scope.ref = $firebaseObject(db.ref(`users/${atob($stateParams.userId)}/players/${$stateParams.setId}/tournaments/${$stateParams.tournamentId}`));
 
   $scope.reset = (ev) => {
     const confirm = $mdDialog.confirm()
@@ -131,10 +131,6 @@ site.controller('inProgressController', ($scope, $timeout, EnsureLoggedIn, Sideb
     });
   };
 
-  $scope.toPDF = () => {
-    const pdf = new jsPDF();
-    pdf.fromHTML($('.duel-area').get(0), 15, 15);
-  };
 
   $scope.savePublicity = () => {
     $scope.ref.$save();

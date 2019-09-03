@@ -1,6 +1,6 @@
 import site from '../../app';
 
-site.service('UserManagement', (FirebaseURL, $mdDialog, Toaster, FilterUtils) => {
+site.service('UserManagement', ($mdDialog, Toaster, FilterUtils) => {
 
   const defaultMdDialogOptions = {
     controller: 'userDialogController',

@@ -1,8 +1,8 @@
 import site from '../../app';
 
-site.controller('sharePromptController', ($scope, $mdDialog, $firebaseObject, FirebaseURL, title, defaultValue) => {
+site.controller('sharePromptController', ($scope, db, $mdDialog, $firebaseObject, title, defaultValue) => {
 
-  const allUsers = $firebaseObject(new Firebase(`${FirebaseURL}/users`));
+  const allUsers = $firebaseObject(db.ref('users'));
 
   $scope.cancel = $mdDialog.cancel;
 

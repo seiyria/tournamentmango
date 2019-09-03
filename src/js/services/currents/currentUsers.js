@@ -1,8 +1,9 @@
 import site from '../../app';
 
-site.service('CurrentUsers', ($q, $firebaseObject, FirebaseURL, Auth, UserStatus) => {
+site.service('CurrentUsers', (db, $q, $firebaseObject, Auth, UserStatus) => {
 
-  let users = UserStatus.firebase ? $firebaseObject(new Firebase(`${FirebaseURL}/users/${UserStatus.firebase.playerSetUid}/players/${UserStatus.firebase.playerSet}`)) : {};
+  
+  let users = UserStatus.firebase ? $firebaseObject(db.ref(`users/${UserStatus.firebase.playerSetUid}/players/${UserStatus.firebase.playerSet}`)) : {};
   const defer = $q.defer();
 
   let oldSetId = '';
@@ -10,7 +11,7 @@ site.service('CurrentUsers', ($q, $firebaseObject, FirebaseURL, Auth, UserStatus
   const newUsers = () => {
     const isNewSet = oldSetId !== UserStatus.firebase.playerSet;
     oldSetId = UserStatus.firebase.playerSet;
-    users = $firebaseObject(new Firebase(`${FirebaseURL}/users/${UserStatus.firebase.playerSetUid}/players/${UserStatus.firebase.playerSet}`));
+    users = $firebaseObject(db.ref(`users/${UserStatus.firebase.playerSetUid}/players/${UserStatus.firebase.playerSet}`));
     users.$loaded(() => {
       defer.notify({ users, isNewSet });
     });

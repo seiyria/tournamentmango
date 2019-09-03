@@ -1,6 +1,7 @@
 import site from '../../app';
 
-site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject, $state, $stateParams, Auth, FirebaseURL, CurrentUsers, InputPrompt, UserStatus, CurrentPlayerBucket, ShareManagement, SetManagement, SidebarManagement, EnsureLoggedIn, UserManagement, Toaster, ScoreManagement) => {
+site.controller('userManageController', (db, $scope, $firebaseArray, $firebaseObject, $state, $stateParams, Auth, CurrentUsers, InputPrompt, UserStatus, CurrentPlayerBucket, ShareManagement, SetManagement, SidebarManagement, EnsureLoggedIn, UserManagement, Toaster, ScoreManagement) => {
+ 
 
   $scope.canOnlySelectUsers = () => $stateParams.userSelectOnly;
   $scope.backToTournamentsetup = () => $state.go('setupTournament', { tournamentId: $stateParams.tournamentId });
@@ -143,7 +144,7 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
   $scope.exportToSet = (newSet) => {
     const players = $scope.selected;
 
-    const newSetPlayers = $firebaseArray(new Firebase(`${FirebaseURL}/users/${newSet.uid}/players/${newSet.short}/list`));
+    const newSetPlayers = $firebaseArray(db.ref(`users/${newSet.uid}/players/${newSet.short}/list`));
 
     const newPlayerObjs = _.map(players, p => _.omit(p, (v, key) => _.contains(key, '$') || _.contains(['wins', 'losses', 'points'], key)));
 
@@ -195,19 +196,19 @@ site.controller('userManageController', ($scope, $firebaseArray, $firebaseObject
   };
 
   $scope.loadAllLists = () => {
-    $scope.allLists = $firebaseObject(new Firebase(`${FirebaseURL}/users/${authData.uid}/players`));
+    $scope.allLists = $firebaseObject(db.ref(`users/${authData.uid}/players`));
     $scope.allLists.$watch($scope.resetListKeys);
   };
 
   $scope.loadSharedWithMe = () => {
-    const sharedWithMe = $firebaseObject(new Firebase(`${FirebaseURL}/shares/${authData.uid}`));
+    const sharedWithMe = $firebaseObject(db.ref(`shares/${authData.uid}`));
     sharedWithMe.$watch(() => {
       $scope.sharedLists = [];
 
       _.each(_.keys(sharedWithMe), (sharer) => {
 
         if(_.contains(sharer, '$')) return;
-        const sharedbase = $firebaseObject(new Firebase(`${FirebaseURL}/users/${sharer}`));
+        const sharedbase = $firebaseObject(db.ref(`users/${sharer}`));
 
         sharedbase.$loaded().then(() => {
           _.each(sharedWithMe[sharer], doc => {
