@@ -1,3 +1,7 @@
+# Notice
+
+This app is no longer maintained. It was never sustainable long term and now would require a rewrite due to firebase changing their API and angular 1 being sunsetted. If you would like to work on it, feel free to fork it.
+
 # TournamentMango [![Dependency Status](https://gemnasium.com/seiyria/tournamentmango.svg)](https://gemnasium.com/seiyria/tournamentmango) [![bitHound Score](https://www.bithound.io/github/seiyria/tournamentmango/badges/score.svg)](https://www.bithound.io/github/seiyria/tournamentmango) [![Build Status](https://travis-ci.org/seiyria/tournamentmango.svg)](https://travis-ci.org/seiyria/tournamentmango) [![Codacy Badge](https://api.codacy.com/project/badge/895044758aa34b70a6f4c5c3436e6a8c)](https://www.codacy.com/app/seiyria/tournamentmango)
 
 TournamentMango is an open source tournament bracket and user management system. You can build an archive of players and keep track of all their scores over time (as well as their regular characters, games, and aliases).
