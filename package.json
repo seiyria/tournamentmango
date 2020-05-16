@@ -119,7 +119,7 @@
     "dist": "./dist/"
   },
   "dependencies": {
-    "angular": "1.4.7",
+    "angular": "1.7.9",
     "angular-animate": "1.4.7",
     "angular-aria": "1.4.7",
     "angular-file-saver": "^1.1.3",
